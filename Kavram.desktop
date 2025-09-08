@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Kavram
+Comment=Kavram Application
+Exec=usr/bin/launcher.sh
+Icon=usr/share/icons/hicolor/256x256/apps/Kavram.png
+Terminal=false
+Type=Application
+Categories=Development;
+Path=.

@@ -1,2 +1,1 @@
-# Kavram
-Eğitim, gelişim, düşünce. bilgi, arşiv, şifreleme.
+# Kavram-1.0.1
