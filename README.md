@@ -1,4 +1,13 @@
-# Kavram
+# Kavram kurulun 
+<img width="1366" height="734" alt="kurulum" src="https://github.com/user-attachments/assets/0fa68e68-a051-467c-8150-65cc1eb7d8a4" />
+Kavram_arsivi.tar.gz dosyasının bu dizide olmasına ve orda açılmasına dikkat edin  
+,,,
+[proton1@proton-xx1 ~]$ ls
+Belgeler  Genel  İndirilenler  Kavram  Kavram_arsivi.tar.gz  Masaüstü  Müzik  Resimler  Şablonlar  Videolar
+[proton1@proton-xx1 ~]$ 
+,,,
+her şeyin doğru çalışması için bütün dosyaların 1 yerde toplanması ve yönetilmesinin kolay olması açısından bu önemlidir
+
 Kavram nedir ? 
 Bir kelime söylenirken akılda oluşan tasavvura kavram denir .
 Kavram proqramı nedir ve nasıl kullanılır ?
