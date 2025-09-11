@@ -60,4 +60,7 @@ temel seviye bir animasyon arcı
 <img width="1366" height="734" alt="wavcı" src="https://github.com/user-attachments/assets/e5bf226b-f124-495b-b393-31f6f49f35f9" />
 bütün media dosyalarını .wav dormatına dönütürür genel olarak saund editor için tasarlanmaıştır . bazı formatları desteklemez çünkü
 
-12
+12) Settings editor
+
+<img width="569" height="425" alt="set" src="https://github.com/user-attachments/assets/d6361705-9a46-4492-afd8-62f2dd0e6190" />
+temel seviye mavi ışık filtresi
