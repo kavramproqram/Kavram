@@ -13,9 +13,11 @@ Bir kelime söylenirken akılda oluşan tasavvura kavram denir .
 Kavram proqramı nedir ve nasıl kullanılır ?
 Kavram ücretsiz açık kaynaklı her tür dosyadan oluşan bir zihin haritası platformudur .
 12 editor den oluşmaktadır
-<img width="1366" height="734" alt="12editor" src="https://github.com/user-attachments/assets/45f3d131-c6ad-409d-b0e4-f7d4daf43465" />
 
 1) Sphere editoe:
+<img width="1366" height="734" alt="12editor" src="https://github.com/user-attachments/assets/45f3d131-c6ad-409d-b0e4-f7d4daf43465" />
+
+
 dosyaları kategorize etmeye ve bir görsel karita oluştimanın yanında dier ediroelarla iletişim kurmanızı sağlar
 yeni dosyalar eklemenize ve oluşan arşivi şifreliyerek dışa aktarmanızı sağlar
 
