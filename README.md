@@ -38,4 +38,26 @@ unutmayın ki temel seviyededir ve şimdilik bir bilince sahip değildir. zaten 
 ses dosyalarını kesmenizi kendi sesinizi eklemenizi sağlayan kendi sesinize filtreler uygulamanızı sağlayan güçlü bir araçtır 
 
 6) Media editor
-7) 
+<img width="1366" height="734" alt="sesvideoyyy" src="https://github.com/user-attachments/assets/d1cae0a4-daa4-4347-99a9-da393de89d74" />
+ses ve video sosyalarınızı aynı yerde yönetmenizi sağlayan tam bir arşiv proqramı bütün dosyaları ard - arda oynatmanızı ve olduğu sırayla kaydetmenizi sağlar
+
+7) Rec editor
+<img width="1366" height="735" alt="ekrankayıt" src="https://github.com/user-attachments/assets/60b1f129-c5f0-4b83-b949-c17afb24dad2" />
+obs kadar güçlü olmasa da eski bilgisayarlarda da kolayca ekran kayıdı yapması için tasarlandı x11 de tasarlanmıştır geliştirme aşamasındadır çalışma mantığı büyük dosya yerine vardayılan olarak 30 sanıyelik paketler halinde video ve sein kaydedilerek sonda hepsinin birleştirilmesi ve bu şekilde sistemin büyük bir dosya ile yorulmasını engellemekdir şimdilik en fazla 30 dakika kayıt yapa bilmektedir . hata olma ihtimali var eğer bilgisayarınız güçlüyse obs studio kullanmanız öneriler şimdilik
+
+8) Copy editor
+<img width="1366" height="735" alt="kopıpes" src="https://github.com/user-attachments/assets/61c33eec-cd5f-4a67-8660-6291fe87b45a" />
+basit bir kopya aracıdır
+
+9) Anime editor
+ <img width="1366" height="734" alt="animecik" src="https://github.com/user-attachments/assets/0241e467-a643-4ac0-abb0-f4f1b1ffcff1" />
+temel seviye bir animasyon arcı 
+
+10) Filter editor
+ <img width="1366" height="734" alt="kfiltre" src="https://github.com/user-attachments/assets/38c2a203-aa72-43aa-a705-5d6407d05c25" />
+
+11) Convert editor
+<img width="1366" height="734" alt="wavcı" src="https://github.com/user-attachments/assets/e5bf226b-f124-495b-b393-31f6f49f35f9" />
+bütün media dosyalarını .wav dormatına dönütürür genel olarak saund editor için tasarlanmaıştır . bazı formatları desteklemez çünkü
+
+12
