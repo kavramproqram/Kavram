@@ -56,7 +56,8 @@ basit bir kopya aracıdır
 temel seviye bir animasyon arcı 
 
 10) Filter editor
- <img width="1366" height="734" alt="kfiltre" src="https://github.com/user-attachments/assets/38c2a203-aa72-43aa-a705-5d6407d05c25" />
+<img width="1366" height="735" alt="filtre" src="https://github.com/user-attachments/assets/928907c5-0a01-4514-8ba8-2485795a858f" />
+
 
 11) Convert editor
 <img width="1366" height="734" alt="wavcı" src="https://github.com/user-attachments/assets/e5bf226b-f124-495b-b393-31f6f49f35f9" />
