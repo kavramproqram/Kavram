@@ -303,18 +303,20 @@ class AudioCleanerUI(QWidget):
         self.reset_btn.clicked.connect(self.reset_settings)
         top_bar_layout.addWidget(self.reset_btn)
 
-        self.export_btn = QPushButton("Export")
-        self.export_btn.clicked.connect(self.export_file)
-        self.export_btn.setEnabled(False)
-        top_bar_layout.addWidget(self.export_btn)
-
-        top_bar_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
-
         self.process_btn = QPushButton("Process")
         self.process_btn.clicked.connect(self.start_processing)
         self.process_btn.setEnabled(False)
         top_bar_layout.addWidget(self.process_btn)
 
+
+        top_bar_layout.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+
+        self.export_btn = QPushButton("Export")
+        self.export_btn.clicked.connect(self.export_file)
+        self.export_btn.setEnabled(False)
+        top_bar_layout.addWidget(self.export_btn)
+
+       
         main_layout.addWidget(top_bar_frame)
 
         self.file_label = QLabel("Selected: No file selected")
