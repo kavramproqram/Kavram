@@ -51,19 +51,15 @@ obs kadar güçlü olmasa da eski bilgisayarlarda da kolayca ekran kayıdı yapm
 <img width="1366" height="735" alt="kopıpes" src="https://github.com/user-attachments/assets/61c33eec-cd5f-4a67-8660-6291fe87b45a" />
 basit bir kopya aracıdır
 
-9) Anime editor
- <img width="1366" height="734" alt="animecik" src="https://github.com/user-attachments/assets/0241e467-a643-4ac0-abb0-f4f1b1ffcff1" />
-temel seviye bir animasyon arcı 
-
-10) Filter editor
+9) Filter editor
 <img width="1366" height="735" alt="filtre" src="https://github.com/user-attachments/assets/928907c5-0a01-4514-8ba8-2485795a858f" />
 
 
-11) Convert editor
+10) Convert editor
 <img width="1366" height="734" alt="wavcı" src="https://github.com/user-attachments/assets/e5bf226b-f124-495b-b393-31f6f49f35f9" />
 bütün media dosyalarını .wav dormatına dönütürür genel olarak saund editor için tasarlanmaıştır . bazı formatları desteklemez çünkü
 
-12) Settings editor
+11) Settings editor
 
 <img width="569" height="425" alt="set" src="https://github.com/user-attachments/assets/d6361705-9a46-4492-afd8-62f2dd0e6190" />
 temel seviye mavi ışık filtresi
