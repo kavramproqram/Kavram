@@ -40,6 +40,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtCore import Qt, QTimer
+import lupa
 
 # --- GÜNCELLENMİŞ FONKSİYON ---
 # Bu fonksiyon, programın hem normal çalışırken, hem PyInstaller ile paketlendiğinde,
@@ -59,6 +60,26 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 # --- GÜNCELLEME SONU ---
+
+# Lua motorunu ve betiğini uygulamaya dahil etmek için bir fonksiyon
+def initialize_lua_engine():
+    lua_file_path = resource_path('timeline_logic.lua')
+    
+    try:
+        global lua_runtime
+        lua_runtime = lupa.LuaRuntime()
+        with open(lua_file_path, 'r', encoding='utf-8') as f:
+            lua_runtime.execute(f.read())
+        print("Lua timeline_logic.lua successfully loaded.")
+        return lua_runtime
+    except FileNotFoundError:
+        print(f"Error: timeline_logic.lua not found at {lua_file_path}")
+        QMessageBox.critical(None, "Hata", f"timeline_logic.lua dosyası bulunamadı. Lütfen dosyanın uygulamanızla birlikte paketlendiğinden emin olun.")
+        sys.exit(1)
+    except lupa.LuaError as e:
+        print(f"Lua execution error: {e}")
+        QMessageBox.critical(None, "Hata", f"Lua motorunu başlatırken bir hata oluştu: {e}")
+        sys.exit(1)
 
 
 # CameraRecorderWindow ile birlikte yeni kütüphane yükleme fonksiyonunu da import ediyoruz
@@ -122,7 +143,7 @@ class EditorSwitcherDialog(QDialog):
             self.selected_name = items[0].text()
         self.accept()
 
-    def initUI(self):
+    def initUI(self, *args, **kwargs):
         from PyQt5.QtWidgets import QVBoxLayout
         layout = QVBoxLayout()
         self.list_widget = QListWidget()
@@ -212,7 +233,7 @@ class CoreWindow(QWidget):
         """)
 
         self.editors_order = [
-            "Sphere", "Text", "Drawing", "Sound", "Ai", "Media", "Rec", "Copy", "Anime", "Filter", "Convert", "Settings"
+            "Sphere", "Text", "Drawing", "Sound", "Ai", "Media", "Rec", "Copy", "Settings", "Filter", "Convert"
         ]
 
         self.editor_map = {
@@ -224,7 +245,6 @@ class CoreWindow(QWidget):
             "Media": "media_editor.MediaEditor",
             "Rec": "camera_editor.CameraRecorderWindow",
             "Copy": "copya.MainWindow",
-            "Anime": "Animation_editor.DrawingEditorWindow",
             "Settings": "Settings.SettingsWindow",
             "Filter": "filtre.AudioCleanerUI",
             "Convert": "convert.UniversalConverter"
@@ -256,7 +276,6 @@ class CoreWindow(QWidget):
         self.showMaximized()
 
     def switchToEditor(self, editor_name, close_current=False):
-        # ... (Bu fonksiyonun içeriği olduğu gibi kalıyor, değişiklik yok) ...
         current_widget = self.stack.currentWidget()
         current_editor_name = None
         for name, widget_instance in self.instantiated_editors.items():
@@ -264,7 +283,7 @@ class CoreWindow(QWidget):
                 current_editor_name = name
                 break
 
-        if close_current and current_editor_name and current_editor_name != editor_name and current_editor_name != "Settings" and current_editor_name != "Filter" and current_editor_name != "Convert" and current_editor_name != "Anime":
+        if close_current and current_editor_name and current_editor_name != editor_name and current_editor_name != "Settings" and current_editor_name != "Filter" and current_editor_name != "Convert":
             if hasattr(current_widget, 'save_state_to_temp_file'):
                 current_widget.save_state_to_temp_file()
 
@@ -309,7 +328,7 @@ class CoreWindow(QWidget):
                 QMessageBox.critical(self, "Hata", f"'{editor_name}' editörünü yüklerken bir hata oluştu.")
                 return
 
-            if editor_name in ["Sphere", "Text", "Ai", "Sound", "Media", "Rec", "Copy", "Anime"]:
+            if editor_name in ["Sphere", "Text", "Ai", "Sound", "Media", "Rec", "Copy"]:
                 w = editor_class(core_window_ref=self)
             else:
                 w = editor_class()
@@ -328,7 +347,6 @@ class CoreWindow(QWidget):
             self.editors_order.remove(editor_name)
             self.editors_order.insert(0, editor_name)
 
-    # ... (Geri kalan tüm fonksiyonlar olduğu gibi kalıyor, değişiklik yok) ...
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_S and (event.modifiers() & Qt.ControlModifier):
             self.switchToEditor("Sphere", close_current=True)
@@ -339,15 +357,29 @@ class CoreWindow(QWidget):
         elif event.key() == Qt.Key_Q and (event.modifiers() & Qt.ControlModifier):
             self.showSwitcher()
             event.accept()
+        elif event.key() == Qt.Key_Q and (event.modifiers() & Qt.ControlModifier and event.modifiers() & Qt.AltModifier):
+            # Yeni eklenen IDE listesini açar.
+            self.showIdeSwitcher()
+            event.accept()
         else:
             super().keyPressEvent(event)
 
     def showSwitcher(self):
-        dlg = EditorSwitcherDialog(self.editors_order, self)
+        editor_list = [name for name in self.editors_order]
+        dlg = EditorSwitcherDialog(editor_list, self)
         if dlg.exec_() == QDialog.Accepted:
             selected = dlg.selected_name
             if selected:
                 self.switchToEditor(selected, close_current=False)
+    
+    def showIdeSwitcher(self):
+        try:
+            from IDE_switcher import IDE_Switcher
+            self.ide_switcher_dialog = IDE_Switcher(core_window_ref=self)
+            self.ide_switcher_dialog.show()
+        except ImportError as e:
+            QMessageBox.critical(self, "Hata", f"IDE_switcher.py dosyası bulunamadı. Detay: {e}")
+
 
     def loadEditorFile(self, editor_name, file_path):
         print(f"DEBUG: CoreWindow.loadEditorFile called. editor_name: {editor_name}, file_path: {file_path}")
@@ -532,7 +564,9 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setApplicationName("Kavram")
 
+    # Uygulama başlangıcında C++ kütüphanesini ve Lua motorunu yükle
     load_cpp_library()
+    initialize_lua_engine()
 
     window = CoreWindow()
     window.show()
