@@ -15,7 +15,8 @@ Kavram ücretsiz açık kaynaklı her tür dosyadan oluşan bir zihin haritası 
 12 editor den oluşmaktadır
 
 1) Sphere editoe:
-<img width="1366" height="734" alt="12editor" src="https://github.com/user-attachments/assets/45f3d131-c6ad-409d-b0e4-f7d4daf43465" />
+<img width="1366" height="735" alt="sss" src="https://github.com/user-attachments/assets/941cbccd-9118-4566-b4ea-8de22b718e28" />
+
 
 
 dosyaları kategorize etmeye ve bir görsel karita oluştimanın yanında dier ediroelarla iletişim kurmanızı sağlar
