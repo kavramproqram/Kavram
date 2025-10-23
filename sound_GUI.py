@@ -30,59 +30,6 @@
 # Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
 # /Kavram/License/GPLv3.txt
 
-import sys
-import os
-import ctypes  # To call C++ library
-import json    # For saving and loading settings
-import noisereduce as nr # For AI noise reduction
-import soundfile as sf   # For reading/writing audio files
-import numpy as np       # For numerical operations
-
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame,
-    QPushButton, QFileDialog, QComboBox, QScrollArea, QSizePolicy, QMessageBox, QSlider, QSplitter
-)
-from PyQt5.QtCore import Qt, QTimer, QPointF, QRectF, QDir
-from PyQt5.QtGui import QPainter, QPen, QColor, QCursor, QBrush, QPainterPath
-
-# Constants
-BACKGROUND = QColor('#383838')
-WAVE_COLOR = QColor('#606060')
-CURSOR_COLOR = QColor('#F44336')
-SELECT_COLOR = QColor('#A0A0A0')
-
-# Define the path for the settings file
-SETTINGS_DIR = os.path.join(QDir.homePath(), '.config', 'concept_sound_editor')
-SETTINGS_FILE = os.path.join(SETTINGS_DIR, 'settings.json')
-
-# Temporary files for AI Noise Reduction
-TEMP_RAW_RECORDING_FILE = os.path.join(SETTINGS_DIR, "temp_raw_recording.wav")
-TEMP_CLEANED_RECORDING_FILE = os.path.join(SETTINGS_DIR, "temp_cleaned_recording.wav")
-
-
-# --- Load C++ Library ---
-lib = None
-try:
-    if sys.platform.startswith('win'):
-        lib_path = 'sound_engine.dll'
-    elif sys.platform.startswith('linux'):
-        lib_path = './libsound_engine.so'
-    elif sys.platform.startswith('darwin'):
-        lib_path = './libsound_engine.dylib'
-    else:
-        lib_path = 'sound_engine'
-
-    lib = ctypes.CDLL(lib_path)
-
-    # --- Define C++ Function Signatures ---
-    lib.create_audio_engine.restype = ctypes.c_void_p
-    lib.destroy_audio_engine.argtypes = [ctypes.c_void_p]
-    lib.destroy_audio_engine.restype = ctypes.c_int
-    lib.load_audio_files.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int]
-    lib.load_audio_files.restype = ctypes.c_int
-    lib.play_audio.argtypes = [ctypes.c_void_p]
-    lib.play_audio.restype = ctypes.c_int
-    lib.pause_audio.argtypes = [ctypes.c_void_p]
     lib.pause_audio.restype = ctypes.c_int
     lib.stop_audio.argtypes = [ctypes.c_void_p]
     lib.stop_audio.restype = ctypes.c_int
@@ -526,7 +473,7 @@ class SoundEditorWindow(QWidget):
         self.add_effect_descriptions_to_layout(self.effect_descriptions_layout)
         self.effect_descriptions_scroll_area.setWidget(self.effect_descriptions_widget)
         self.bottom_bar_main_layout.addWidget(self.effect_descriptions_scroll_area)
-        self.button_explanation_label = QLabel("<b>Save:</b> Mikrofon efekt ayarlarını kaydeder.\n<b>Reset:</b> Mikrofon efekt ayarlarını varsayılana sıfırlar ve kaydedilen ayarları siler.")
+        self.button_explanation_label = QLabel("<b>Save:</b> Mikrofon efekt ayarlarÄ±nÄ± kaydeder.\n<b>Reset:</b> Mikrofon efekt ayarlarÄ±nÄ± varsayÄ±lana sÄ±fÄ±rlar ve kaydedilen ayarlarÄ± siler.")
         self.button_explanation_label.setStyleSheet("font-size: 12px; color: #AAA; padding-top: 10px;")
         self.button_explanation_label.setWordWrap(True)
         self.button_explanation_label.setTextInteractionFlags(Qt.TextSelectableByMouse)
@@ -626,7 +573,7 @@ class SoundEditorWindow(QWidget):
                 json.dump(settings, f, indent=4)
             print(f"Ayarlar kaydedildi: {SETTINGS_FILE}")
         except Exception as e:
-            QMessageBox.critical(self, 'Save Settings Error', f'Ayarlar kaydedilirken bir hata oluştu: {e}')
+            QMessageBox.critical(self, 'Save Settings Error', f'Ayarlar kaydedilirken bir hata oluÅŸtu: {e}')
 
     def load_settings(self):
         if not os.path.exists(SETTINGS_FILE):
@@ -650,41 +597,41 @@ class SoundEditorWindow(QWidget):
             self.combo_eq_gain.setCurrentText(settings.get("eq_gain", "0dB"))
             self.combo_eq_frequency.setCurrentText(settings.get("eq_frequency", "1000Hz"))
             self.combo_eq_q.setCurrentText(settings.get("eq_q", "1.0"))
-            print(f"Ayarlar yüklendi: {SETTINGS_FILE}")
+            print(f"Ayarlar yÃ¼klendi: {SETTINGS_FILE}")
         except Exception as e:
-            QMessageBox.critical(self, 'Load Settings Error', f'Ayarlar yüklenirken bir hata oluştu: {e}\nVarsayılan ayarlar kullanılacak.')
+            QMessageBox.critical(self, 'Load Settings Error', f'Ayarlar yÃ¼klenirken bir hata oluÅŸtu: {e}\nVarsayÄ±lan ayarlar kullanÄ±lacak.')
             self.set_default_microphone_effects()
 
     def reset_settings(self):
-        reply = QMessageBox.question(self, 'Reset Settings', "Tüm ayarları varsayılana sıfırlamak istediğinizden emin misiniz? Kaydedilen ayarlar silinecek.", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        reply = QMessageBox.question(self, 'Reset Settings', "TÃ¼m ayarlarÄ± varsayÄ±lana sÄ±fÄ±rlamak istediÄŸinizden emin misiniz? Kaydedilen ayarlar silinecek.", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.No:
             return
         self.set_default_microphone_effects()
         try:
             if os.path.exists(SETTINGS_FILE):
                 os.remove(SETTINGS_FILE)
-            QMessageBox.information(self, 'Reset Settings', 'Ayarlar varsayılana sıfırlandı.')
+            QMessageBox.information(self, 'Reset Settings', 'Ayarlar varsayÄ±lana sÄ±fÄ±rlandÄ±.')
         except Exception as e:
-            QMessageBox.critical(self, 'Reset Settings Error', f'Ayar dosyası silinirken bir hata oluştu: {e}')
+            QMessageBox.critical(self, 'Reset Settings Error', f'Ayar dosyasÄ± silinirken bir hata oluÅŸtu: {e}')
 
     def add_effect_descriptions_to_layout(self, layout):
         descriptions = {
-            "Noise Gate:": "Gürültü Kapısı, belirli bir eşiğin altındaki sesleri keserek arka plan gürültüsünü azaltır. Fan sesi gibi sürekli gürültüler için etkilidir.",
-            "Release:": "Gürültü kapısı kapandıktan sonra sesin ne kadar süreyle kesileceğini belirler.",
-            "HP Filter:": "Yüksek Geçiren Filtre, belirli bir frekansın altındaki tüm sesleri keser.",
-            "LP Filter:": "Düşük Geçiren Filtre, belirli bir frekansın üzerindeki tüm sesleri keser.",
-            "Gain:": "Mikrofon giriş kazancını ayarlar. Ses seviyesini artırır veya azaltır.",
-            "Reverb Red.:": "Yankı Azaltma, kayıt ortamındaki yankıyı azaltmaya çalışır.",
-            "De-Esser:": "De-Esser, 's' ve 'ş' gibi seslerdeki sert tıslama seslerini (sibilans) azaltır.",
-            "De-Hum:": "De-Hum, elektrik şebekesinden kaynaklanan 50Hz veya 60Hz uğultu seslerini (hum) giderir.",
-            "AI Noise Red.:": "Yapay Zeka Destekli Gürültü Azaltma, gürültüleri etkili bir şekilde azaltır.",
-            "Comp. Ratio:": "Kompresör Oranı, eşiği aşan seslerin ne kadar sıkıştırılacağını belirler.",
-            "Comp. Attack:": "Kompresörün sıkıştırmaya başlaması için geçen süreyi belirler.",
-            "Comp. Release:": "Kompresörün sıkıştırmayı bırakması için geçen süreyi belirler.",
-            "Comp. Makeup:": "Kompresör sonrası kaybedilen ses seviyesini telafi etmek için eklenen kazançtır.",
-            "EQ Gain:": "Parametrik EQ bandının kazancını ayarlar.",
-            "EQ Freq.:": "Parametrik EQ bandının merkez frekansını ayarlar.",
-            "EQ Q:": "Parametrik EQ bandının Q faktörünü ayarlar (etki genişliği)."
+            "Noise Gate:": "GÃ¼rÃ¼ltÃ¼ KapÄ±sÄ±, belirli bir eÅŸiÄŸin altÄ±ndaki sesleri keserek arka plan gÃ¼rÃ¼ltÃ¼sÃ¼nÃ¼ azaltÄ±r. Fan sesi gibi sÃ¼rekli gÃ¼rÃ¼ltÃ¼ler iÃ§in etkilidir.",
+            "Release:": "GÃ¼rÃ¼ltÃ¼ kapÄ±sÄ± kapandÄ±ktan sonra sesin ne kadar sÃ¼reyle kesileceÄŸini belirler.",
+            "HP Filter:": "YÃ¼ksek GeÃ§iren Filtre, belirli bir frekansÄ±n altÄ±ndaki tÃ¼m sesleri keser.",
+            "LP Filter:": "DÃ¼ÅŸÃ¼k GeÃ§iren Filtre, belirli bir frekansÄ±n Ã¼zerindeki tÃ¼m sesleri keser.",
+            "Gain:": "Mikrofon giriÅŸ kazancÄ±nÄ± ayarlar. Ses seviyesini artÄ±rÄ±r veya azaltÄ±r.",
+            "Reverb Red.:": "YankÄ± Azaltma, kayÄ±t ortamÄ±ndaki yankÄ±yÄ± azaltmaya Ã§alÄ±ÅŸÄ±r.",
+            "De-Esser:": "De-Esser, 's' ve 'ÅŸ' gibi seslerdeki sert tÄ±slama seslerini (sibilans) azaltÄ±r.",
+            "De-Hum:": "De-Hum, elektrik ÅŸebekesinden kaynaklanan 50Hz veya 60Hz uÄŸultu seslerini (hum) giderir.",
+            "AI Noise Red.:": "Yapay Zeka Destekli GÃ¼rÃ¼ltÃ¼ Azaltma, gÃ¼rÃ¼ltÃ¼leri etkili bir ÅŸekilde azaltÄ±r.",
+            "Comp. Ratio:": "KompresÃ¶r OranÄ±, eÅŸiÄŸi aÅŸan seslerin ne kadar sÄ±kÄ±ÅŸtÄ±rÄ±lacaÄŸÄ±nÄ± belirler.",
+            "Comp. Attack:": "KompresÃ¶rÃ¼n sÄ±kÄ±ÅŸtÄ±rmaya baÅŸlamasÄ± iÃ§in geÃ§en sÃ¼reyi belirler.",
+            "Comp. Release:": "KompresÃ¶rÃ¼n sÄ±kÄ±ÅŸtÄ±rmayÄ± bÄ±rakmasÄ± iÃ§in geÃ§en sÃ¼reyi belirler.",
+            "Comp. Makeup:": "KompresÃ¶r sonrasÄ± kaybedilen ses seviyesini telafi etmek iÃ§in eklenen kazanÃ§tÄ±r.",
+            "EQ Gain:": "Parametrik EQ bandÄ±nÄ±n kazancÄ±nÄ± ayarlar.",
+            "EQ Freq.:": "Parametrik EQ bandÄ±nÄ±n merkez frekansÄ±nÄ± ayarlar.",
+            "EQ Q:": "Parametrik EQ bandÄ±nÄ±n Q faktÃ¶rÃ¼nÃ¼ ayarlar (etki geniÅŸliÄŸi)."
         }
         for label_text, description_text in descriptions.items():
             description_label = QLabel(f"<b>{label_text}</b> {description_text}")
@@ -695,39 +642,39 @@ class SoundEditorWindow(QWidget):
 
     def load_files(self):
         """
-        Dosya seçme diyaloğunu açar ve SADECE .wav dosyalarını C++ motoruna yükler.
+        Dosya seÃ§me diyaloÄŸunu aÃ§ar ve SADECE .wav dosyalarÄ±nÄ± C++ motoruna yÃ¼kler.
         """
         if not self.lib or not self.audio_engine:
             QMessageBox.warning(self, 'Warning', 'Audio engine is not available.')
             return
 
-        filter_str = "WAV Ses Dosyası (*.wav);;Tüm Dosyalar (*)"
+        filter_str = "WAV Ses DosyasÄ± (*.wav);;TÃ¼m Dosyalar (*)"
 
         QDir().mkpath(SoundEditorWindow.DEFAULT_BASE_DIR)
-        file_paths, _ = QFileDialog.getOpenFileNames(self, "WAV Dosyalarını Seç", SoundEditorWindow.DEFAULT_BASE_DIR, filter_str)
+        file_paths, _ = QFileDialog.getOpenFileNames(self, "WAV DosyalarÄ±nÄ± SeÃ§", SoundEditorWindow.DEFAULT_BASE_DIR, filter_str)
 
         if file_paths:
             self.load_wav_files_into_engine(file_paths)
 
     def load_files_from_path(self, file_paths):
         """
-        Verilen dosya yollarını doğrudan C++ motoruna yükler.
-        Sadece .wav dosyaları beklendiği varsayılır. Bu metod Kavram.py tarafından kullanılır.
+        Verilen dosya yollarÄ±nÄ± doÄŸrudan C++ motoruna yÃ¼kler.
+        Sadece .wav dosyalarÄ± beklendiÄŸi varsayÄ±lÄ±r. Bu metod Kavram.py tarafÄ±ndan kullanÄ±lÄ±r.
         """
         if not file_paths:
             return
 
-        # Sadece .wav dosyalarını filtrele, diğerlerini yoksay
+        # Sadece .wav dosyalarÄ±nÄ± filtrele, diÄŸerlerini yoksay
         wav_paths = [path for path in file_paths if path.lower().endswith('.wav')]
         if not wav_paths:
-            QMessageBox.warning(self, 'Uyarı', 'Seçilen dosyalar arasında .wav formatında dosya bulunamadı.')
+            QMessageBox.warning(self, 'UyarÄ±', 'SeÃ§ilen dosyalar arasÄ±nda .wav formatÄ±nda dosya bulunamadÄ±.')
             return
 
         self.load_wav_files_into_engine(wav_paths)
 
     def load_wav_files_into_engine(self, file_paths):
         """
-        Verilen .wav dosya yollarını C++ motoruna yükler.
+        Verilen .wav dosya yollarÄ±nÄ± C++ motoruna yÃ¼kler.
         """
         if not self.lib or not self.audio_engine:
             QMessageBox.warning(self, 'Warning', 'Audio engine is not available.')
@@ -809,53 +756,99 @@ class SoundEditorWindow(QWidget):
         self.waveform_widget.add_split_point(current_pos_ms)
 
     def delete_selected_segments(self):
-        if not self.lib or not self.audio_engine: return
-        selected_segments = self.waveform_widget.get_selected_segments()
-        if not selected_segments: return
+        if not self.lib or not self.audio_engine:
+            return
 
+        selected_segments = self.waveform_widget.get_selected_segments()
+        if not selected_segments:
+            print("No segments selected for deletion.")
+            return
+
+        # 1. Store original state
+        original_pos_ms = self.lib.get_position_ms(self.audio_engine)
         original_split_points = list(self.waveform_widget.split_points_ms)
-        new_split_points = []
+
+        # 2. Perform deletions. Sort by end time descending to avoid index shifting issues.
         segments_to_delete = sorted(selected_segments, key=lambda x: x[1], reverse=True)
         successful_deletions = []
 
         for start_ms, end_ms in segments_to_delete:
-            if self.lib.delete_audio_segment(self.audio_engine, start_ms, end_ms) == 0:
+            if self.lib.delete_audio_segment(self.audio_engine, ctypes.c_int(start_ms), ctypes.c_int(end_ms)) == 0:
+                print(f"Successfully deleted segment: {start_ms}-{end_ms}")
                 successful_deletions.append((start_ms, end_ms))
+            else:
+                print(f"Failed to delete segment: {start_ms}-{end_ms}")
 
-        current_shift = 0
-        deleted_segment_index = 0
-        for original_sp in original_split_points:
-            while deleted_segment_index < len(successful_deletions) and original_sp >= successful_deletions[deleted_segment_index][1]:
-                current_shift += successful_deletions[deleted_segment_index][1] - successful_deletions[deleted_segment_index][0]
-                deleted_segment_index += 1
-            is_inside_deleted = any(del_start < original_sp < del_end for del_start, del_end in successful_deletions)
-            if not is_inside_deleted:
-                new_sp = original_sp - current_shift
+        if not successful_deletions:
+            print("No deletions were successful.")
+            return
+
+        # 3. Calculate new playhead position
+        # Sort successful deletions by start time for logical processing
+        sorted_deletions = sorted(successful_deletions, key=lambda x: x[0])
+
+        new_pos_ms = original_pos_ms
+
+        for start_ms, end_ms in sorted_deletions:
+            length = end_ms - start_ms
+            if original_pos_ms > start_ms:
+                if original_pos_ms >= end_ms:
+                    # Playhead is after the deleted segment, shift it by the full length
+                    new_pos_ms -= length
+                else:
+                    # Playhead was inside the deleted segment. Move it to the segment's start.
+                    # The amount it shifts back is the distance from the start to the original position.
+                    new_pos_ms -= (original_pos_ms - start_ms)
+
+        new_pos_ms = max(0, new_pos_ms)  # Clamp to 0 to prevent negative position
+
+        # 4. Recalculate split points
+        new_split_points = []
+        for sp in original_split_points:
+            time_deleted_before_sp = 0
+            is_inside_deleted_segment = False
+            for start_ms, end_ms in sorted_deletions:
+                if sp > start_ms:
+                    if sp < end_ms:
+                        # Split point is inside a deleted segment, so it should be removed.
+                        is_inside_deleted_segment = True
+                        break
+                    else:  # sp is after the deleted segment
+                        time_deleted_before_sp += (end_ms - start_ms)
+
+            if not is_inside_deleted_segment:
+                new_sp = sp - time_deleted_before_sp
                 new_duration = self.lib.get_duration_ms(self.audio_engine)
+                # Check if the new split point is still valid and not a duplicate
                 if new_sp > 0 and new_sp < new_duration:
                     new_split_points.append(new_sp)
 
         self.waveform_widget.split_points_ms = sorted(list(set(new_split_points)))
 
-        if successful_deletions:
-            self.update_waveform()
-            self.update_ui()
-            self.waveform_widget.clear_selection()
+        # 5. Update the engine and UI
+        print(f"Original position: {original_pos_ms}ms. New position: {new_pos_ms}ms.")
+        self.lib.set_play_position_ms(self.audio_engine, ctypes.c_int(new_pos_ms))
+
+        self.update_waveform()
+        self.update_ui()  # This will now fetch the corrected position
+        self.waveform_widget.clear_selection()
+        print(f"New split points: {self.waveform_widget.split_points_ms}")
+
 
     def export_audio_file(self):
         if not self.lib or not self.audio_engine or self.lib.get_duration_ms(self.audio_engine) <= 0:
-            QMessageBox.warning(self, 'Warning', 'Dışa aktarılacak ses verisi yok.')
+            QMessageBox.warning(self, 'Warning', 'DÄ±ÅŸa aktarÄ±lacak ses verisi yok.')
             return
         QDir().mkpath(self.DEFAULT_BASE_DIR)
-        save_path, _ = QFileDialog.getSaveFileName(self, "Sesi WAV Olarak Dışa Aktar", os.path.join(self.DEFAULT_BASE_DIR, "untitled.wav"), "WAV Ses Dosyası (*.wav)")
+        save_path, _ = QFileDialog.getSaveFileName(self, "Sesi WAV Olarak DÄ±ÅŸa Aktar", os.path.join(self.DEFAULT_BASE_DIR, "untitled.wav"), "WAV Ses DosyasÄ± (*.wav)")
         if save_path:
             if not save_path.lower().endswith('.wav'):
                 save_path += '.wav'
             c_file_path = save_path.encode('utf-8')
             if self.lib.save_audio_to_file(self.audio_engine, c_file_path) == 0:
-                QMessageBox.information(self, 'Başarılı', f'Ses başarıyla kaydedildi:\n{save_path}')
+                QMessageBox.information(self, 'BaÅŸarÄ±lÄ±', f'Ses baÅŸarÄ±yla kaydedildi:\n{save_path}')
             else:
-                QMessageBox.critical(self, 'Hata', f'Ses kaydedilirken bir hata oluştu:\n{save_path}')
+                QMessageBox.critical(self, 'Hata', f'Ses kaydedilirken bir hata oluÅŸtu:\n{save_path}')
 
     def handle_record_insert(self):
         if not self.lib or not self.audio_engine: return
@@ -885,7 +878,7 @@ class SoundEditorWindow(QWidget):
                             sf.write(TEMP_CLEANED_RECORDING_FILE, reduced_noise_audio, samplerate)
                             file_to_insert = TEMP_CLEANED_RECORDING_FILE
                         except Exception as e:
-                            QMessageBox.warning(self, 'AI Error', f'AI Noise Reduction sırasında hata oluştu: {e}\nRaw kayıt eklenecek.')
+                            QMessageBox.warning(self, 'AI Error', f'AI Noise Reduction sÄ±rasÄ±nda hata oluÅŸtu: {e}\nRaw kayÄ±t eklenecek.')
                     if self.lib.insert_audio_file(self.audio_engine, file_to_insert.encode('utf-8'), ctypes.c_int(current_pos_ms)) == 0:
                         self.update_waveform()
                         self.update_ui()
