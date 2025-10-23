@@ -1,4 +1,36 @@
 # Kavram 1.0.0
+# Copyright (C) 2025-10-23 Kavram or Contributors
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see /Kavram/License/GPLv3.txt
+#
+# ---------------------------------------------
+#
+# Kavram 1.0.0
+# Copyright (C) 2025-10-23 Kavram veya Contributors
+#
+# Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
+# GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
+# daha sonraki herhangi bir sürümü kapsamında yeniden dağıtabilir ve/veya
+# değiştirebilirsiniz.
+#
+# Bu program, faydalı olacağı umuduyla dağıtılmaktadır, ancak HERHANGİ BİR
+# GARANTİ OLMADAN; hatta SATILABİLİRLİK veya BELİRLİ BİR AMACA UYGUNLUK
+# zımni garantisi olmaksızın.
+#
+# Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
+# /Kavram/License/GPLv3.txt
+
+# Kavram 1.0.0
 # Copyright (C) 2025-09-01 Kavram or Contributors
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,16 +50,16 @@
 # Kavram 1.0.0
 # Copyright (C) 2025-09-01 Kavram veya Contributors
 #
-# Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
-# GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
-# daha sonraki herhangi bir sürümü kapsamında yeniden dağıtabilir ve/veya
-# değiştirebilirsiniz.
+# Bu program Ã¶zgÃ¼r bir yazÄ±lÄ±mdÄ±r: Ã–zgÃ¼r YazÄ±lÄ±m VakfÄ± tarafÄ±ndan yayÄ±nlanan
+# GNU Genel Kamu LisansÄ±'nÄ±n 3. sÃ¼rÃ¼mÃ¼ veya (tercihinize baÄŸlÄ± olarak)
+# daha sonraki herhangi bir sÃ¼rÃ¼mÃ¼ kapsamÄ±nda yeniden daÄŸÄ±tabilir ve/veya
+# deÄŸiÅŸtirebilirsiniz.
 #
-# Bu program, faydalı olacağı umuduyla dağıtılmaktadır, ancak HERHANGİ BİR
-# GARANTİ OLMADAN; hatta SATILABİLİRLİK veya BELİRLİ BİR AMACA UYGUNLUK
-# zımni garantisi olmaksızın.
+# Bu program, faydalÄ± olacaÄŸÄ± umuduyla daÄŸÄ±tÄ±lmaktadÄ±r, ancak HERHANGÄ° BÄ°R
+# GARANTÄ° OLMADAN; hatta SATILABÄ°LÄ°RLÄ°K veya BELÄ°RLÄ° BÄ°R AMACA UYGUNLUK
+# zÄ±mni garantisi olmaksÄ±zÄ±n.
 #
-# Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
+# Bu programla birlikte GNU Genel Kamu LisansÄ±'nÄ±n bir kopyasÄ±nÄ± almÄ±ÅŸ olmanÄ±z gerekir:
 # /Kavram/License/GPLv3.txt
 
 import sys
@@ -45,7 +77,7 @@ from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame,
     QPushButton, QFileDialog, QMessageBox, QSizePolicy, QListWidget, QListWidgetItem, QDialog, QComboBox,
     QGraphicsView, QGraphicsScene, QGraphicsProxyWidget, QGraphicsPathItem, QGraphicsItem, QSpacerItem,
-    QMenu, QLineEdit, QProgressBar
+    QMenu, QLineEdit, QProgressBar, QCheckBox
 )
 from PyQt5.QtCore import Qt, QDir, QPoint, QPointF, QRectF, QByteArray, QSize, QLineF, QEvent, QTimer
 from PyQt5.QtGui import (
@@ -53,7 +85,7 @@ from PyQt5.QtGui import (
 )
 from PyQt5.QtSvg import QSvgRenderer
 
-# PyCryptodome kütüphanesini içe aktarmaya çalışın
+# PyCryptodome kÃ¼tÃ¼phanesini iÃ§e aktarmaya Ã§alÄ±ÅŸÄ±n
 try:
     from Crypto.Cipher import AES
     from Crypto.Protocol.KDF import PBKDF2
@@ -62,15 +94,15 @@ try:
     CRYPTO_AVAILABLE = True
 except ImportError:
     CRYPTO_AVAILABLE = False
-    print("Uyarı: PyCryptodome kütüphanesi bulunamadı. Şifreleme/Şifre Çözme işlevleri devre dışı bırakılacaktır.")
-    print("Yüklemek için: pip install pycryptodome")
+    print("UyarÄ±: PyCryptodome kÃ¼tÃ¼phanesi bulunamadÄ±. Åifreleme/Åifre Ã‡Ã¶zme iÅŸlevleri devre dÄ±ÅŸÄ± bÄ±rakÄ±lacaktÄ±r.")
+    print("YÃ¼klemek iÃ§in: pip install pycryptodome")
 
 
-# kare.py'den DraggableBox ve DraggableProxyWidget'ı içe aktarın
+# kare.py'den DraggableBox ve DraggableProxyWidget'Ä± iÃ§e aktarÄ±n
 try:
     from kare import DraggableBox, DraggableProxyWidget
 except ImportError:
-    # Dummy sınıflar, eğer kare.py bulunamazsa uygulamanın çökmemesi için
+    # Dummy sÄ±nÄ±flar, eÄŸer kare.py bulunamazsa uygulamanÄ±n Ã§Ã¶kmemesi iÃ§in
     print("Warning: kare.py or DraggableBox/DraggableProxyWidget not found. Some functionalities may be limited.")
     class DraggableProxyWidget(QGraphicsProxyWidget):
         def __init__(self, *args, **kwargs):
@@ -102,7 +134,7 @@ except ImportError:
         def _on_editor_selected(self, editor_name): pass
 
 
-# Core.py'dan CoreWindow'u içe aktarıyoruz
+# Core.py'dan CoreWindow'u iÃ§e aktarÄ±yoruz
 try:
     from Core import CoreWindow
 except ImportError:
@@ -119,7 +151,7 @@ except ImportError:
         def loadEditorFile(self, editor_name, file_path): pass
 
 
-# --- Yardımcı Fonksiyonlar ve Sabitler ---
+# --- YardÄ±mcÄ± Fonksiyonlar ve Sabitler ---
 
 def create_svg_icon(svg_content, size=24, color="#eee"):
     modified_svg_content = svg_content.replace('stroke="#eee"', f'stroke="{color}"').replace('fill="#eee"', f'fill="{color}"')
@@ -230,6 +262,19 @@ class MoveBoxCommand(Command):
         if self.box.proxy_widget: self.box.proxy_widget.setPos(self.new_pos)
     def undo(self):
         if self.box.proxy_widget: self.box.proxy_widget.setPos(self.old_pos)
+
+class MoveMultipleBoxesCommand(Command):
+    def __init__(self, moves):
+        # moves, {'box': box, 'old': old_pos, 'new': new_pos} sÃ¶zlÃ¼klerinden oluÅŸan bir listedir
+        self.moves = moves
+
+    def do(self):
+        for move in self.moves:
+            move['box'].proxy_widget.setPos(move['new'])
+
+    def undo(self):
+        for move in self.moves:
+            move['box'].proxy_widget.setPos(move['old'])
 
 class AddConnectionCommand(Command):
     def __init__(self, view, connection):
@@ -361,11 +406,13 @@ class SphereView(QGraphicsView):
         self.connecting_line = None
         self.start_connection_info = None
         self.selected_boxes_list = []
+        # Mouse move olaylarÄ±nÄ±, tuÅŸ basÄ±lÄ± olmasa bile almak iÃ§in
+        self.setMouseTracking(True)
 
     def addDraggableBox(self, pos=None, editor_name=None, file_path=None, box_data=None):
         if pos is None:
             pos = self.mapToScene(self.viewport().rect().center())
-        
+
         snapped_x = round(pos.x() / self.GRID_SPACING) * self.GRID_SPACING
         snapped_y = round(pos.y() / self.GRID_SPACING) * self.GRID_SPACING
         snapped_pos = QPointF(snapped_x, snapped_y)
@@ -400,7 +447,7 @@ class SphereView(QGraphicsView):
             box.editor_action_button.setText(editor_name)
             box.editor_action_button.show()
             box.select_editor_button.hide()
-        
+
         if not box_data:
             command = AddBoxCommand(self, box, snapped_pos - QPointF(box.width()/2, box.height()/2))
             self.undo_stack.push(command)
@@ -410,7 +457,7 @@ class SphereView(QGraphicsView):
             proxy.setPos(snapped_pos)
             proxy.xChanged.connect(self.update_connections_for_box)
             proxy.yChanged.connect(self.update_connections_for_box)
-            
+
         return box
 
     def removeBox(self, box_to_remove):
@@ -425,7 +472,7 @@ class SphereView(QGraphicsView):
         for conn in self.connections:
             if conn.start_box == box or conn.end_box == box:
                 conn.update_path()
-    
+
     def get_box_at(self, pos):
         item = self.itemAt(pos)
         while item:
@@ -470,7 +517,7 @@ class SphereView(QGraphicsView):
                     self.start_connection(box, port_name)
                     event.accept()
                     return
-        
+
         if event.button() == Qt.LeftButton:
             item = self.itemAt(event.pos())
             if isinstance(item, QGraphicsProxyWidget):
@@ -493,15 +540,53 @@ class SphereView(QGraphicsView):
                     box.proxy_widget.setSelected(False)
                     box.set_selected(False)
                 self.selected_boxes_list.clear()
-            
-            super().mousePressEvent(event) 
-            self.update_selection_visuals() 
+
+            super().mousePressEvent(event)
+            self.update_selection_visuals()
             return
 
         super().mousePressEvent(event)
         self.update_selection_visuals()
 
     def mouseMoveEvent(self, event):
+        # Shift'e basÄ±lÄ±yken tÄ±klama olmadan zoom yapma
+        if QApplication.keyboardModifiers() == Qt.ShiftModifier and not event.buttons():
+            center_x = self.viewport().width() / 2
+            delta_from_center = event.pos().x() - center_x
+
+            # Merkezde yakÄ±nlaÅŸtÄ±rmayÄ± durdurmak iÃ§in 50 piksellik bir "nÃ¶tr bÃ¶lge"
+            neutral_zone_width = 50
+
+            if abs(delta_from_center) < neutral_zone_width:
+                # NÃ¶tr bÃ¶lgedeyse hiÃ§bir ÅŸey yapma
+                event.accept()
+                return
+
+            # NÃ¶tr bÃ¶lgenin dÄ±ÅŸÄ±ndaki mesafeye gÃ¶re delta'yÄ± ayarla
+            if delta_from_center > 0:
+                adjusted_delta = delta_from_center - neutral_zone_width
+            else:
+                adjusted_delta = delta_from_center + neutral_zone_width
+
+            # Hassasiyeti dÃ¼ÅŸÃ¼rerek daha yavaÅŸ ve kontrollÃ¼ bir zoom saÄŸlayalÄ±m
+            sensitivity = 0.0007
+
+            zoom_factor = 1.0 - (adjusted_delta * sensitivity)
+
+            # Maksimum zoom hÄ±zÄ±nÄ± sÄ±nÄ±rlayarak ani sÄ±Ã§ramalarÄ± Ã¶nleyelim
+            # Bu, daha pÃ¼rÃ¼zsÃ¼z bir deneyim sunar
+            zoom_factor = max(0.99, min(1.01, zoom_factor))
+
+            original_anchor = self.transformationAnchor()
+            # YakÄ±nlaÅŸtÄ±rmanÄ±n merkezden yapÄ±lmasÄ±nÄ± saÄŸlÄ±yoruz
+            self.setTransformationAnchor(QGraphicsView.AnchorViewCenter)
+            self.scale(zoom_factor, zoom_factor)
+            # Orijinal anchor ayarÄ±nÄ± geri yÃ¼klÃ¼yoruz
+            self.setTransformationAnchor(original_anchor)
+
+            event.accept()
+            return
+
         if self.pan_active:
             delta = event.pos() - self.last_pan_pos
             self.last_pan_pos = event.pos()
@@ -509,7 +594,7 @@ class SphereView(QGraphicsView):
             self.verticalScrollBar().setValue(self.verticalScrollBar().value() - delta.y())
             event.accept()
             return
-            
+
         if self.connecting_line:
             p2 = self.mapToScene(event.pos())
             path = QPainterPath()
@@ -517,19 +602,20 @@ class SphereView(QGraphicsView):
             path.lineTo(p2)
             self.connecting_line.setPath(path)
             return
-        
+
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.MiddleButton and self.pan_active:
-            self.pan_active = False
-            self.setCursor(Qt.ArrowCursor)
-            event.accept()
-            return
-        
+        if event.button() == Qt.MiddleButton:
+            if self.pan_active:
+                self.pan_active = False
+                self.setCursor(Qt.ArrowCursor)
+                event.accept()
+                return
+
         if self.connecting_line and event.button() == Qt.RightButton:
             self.end_connection(self.mapToScene(event.pos()))
-        
+
         self.cancel_connection()
         super().mouseReleaseEvent(event)
 
@@ -575,6 +661,29 @@ class SphereView(QGraphicsView):
             box.set_selected(box in self.selected_boxes_list)
 
     def keyPressEvent(self, event):
+        if event.modifiers() == Qt.ShiftModifier and len(self.selected_boxes_list) > 0:
+            delta = QPointF(0, 0)
+            key_map = {
+                Qt.Key_Up: QPointF(0, -self.GRID_SPACING),
+                Qt.Key_Down: QPointF(0, self.GRID_SPACING),
+                Qt.Key_Left: QPointF(-self.GRID_SPACING, 0),
+                Qt.Key_Right: QPointF(self.GRID_SPACING, 0)
+            }
+            delta = key_map.get(event.key())
+
+            if delta:
+                moves = []
+                for box in self.selected_boxes_list:
+                    old_pos = box.proxy_widget.pos()
+                    new_pos = old_pos + delta
+                    moves.append({'box': box, 'old': old_pos, 'new': new_pos})
+
+                if moves:
+                    command = MoveMultipleBoxesCommand(moves)
+                    self.undo_stack.push(command)
+                event.accept()
+                return
+
         if event.modifiers() == Qt.AltModifier and event.key() == Qt.Key_F:
             self.connect_selected_boxes()
         elif event.key() == Qt.Key_Delete:
@@ -642,52 +751,77 @@ class SphereView(QGraphicsView):
 
 
 # --- Export/Import Dialogs ---
-class ProgressDialog(QDialog):
-    def __init__(self, title, parent=None):
+class PasswordDialog(QDialog):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle(title)
+        self.setWindowTitle("Åifre Gerekli")
         self.setModal(True)
-        self.setFixedSize(400, 150)
+        self.setFixedSize(350, 120)
         self.setStyleSheet("""
             QDialog { background-color: #2b2b2b; border: 2px solid #555; border-radius: 8px; }
             QLabel { color: #f0f0f0; font-size: 14px; }
             QLineEdit { background-color: #333; color: #eee; border: 1px solid #555; border-radius: 4px; padding: 5px; }
-            QPushButton { background-color: #3a3a3a; color: #ffffff; border: 1px solid #555; border-radius: 6px; padding: 6px 10px; }
+            QPushButton { background-color: #3a3a3a; color: #ffffff; border: 1px solid #555; border-radius: 6px; padding: 6px 15px; }
             QPushButton:hover { background-color: #555555; }
-            QProgressBar { border: 1px solid #555; border-radius: 5px; text-align: center; color: #fff; }
-            QProgressBar::chunk { background-color: #4CAF50; border-radius: 5px; }
         """)
         self.layout = QVBoxLayout(self)
         self.layout.setSpacing(10)
-        self.layout.setContentsMargins(20, 20, 20, 20)
-        
-        self.password_label = QLabel("Şifre")
-        self.password_label.setAlignment(Qt.AlignCenter)
+        self.layout.setContentsMargins(20, 15, 20, 15)
+
+        self.password_label = QLabel("LÃ¼tfen ÅŸifreyi girin:")
         self.layout.addWidget(self.password_label)
-        
+
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.Password)
         self.layout.addWidget(self.password_input)
-        
-        self.progress_label = QLabel("Başlatılıyor...")
-        self.progress_label.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.progress_label)
-        
-        self.progress_bar = QProgressBar()
-        self.progress_bar.setRange(0, 100)
-        self.progress_bar.setValue(0)
-        self.layout.addWidget(self.progress_bar)
-
         self.password_input.returnPressed.connect(self.accept)
+
+        self.button_layout = QHBoxLayout()
+        self.button_layout.addStretch()
+        self.ok_button = QPushButton("Tamam")
+        self.ok_button.clicked.connect(self.accept)
+        self.cancel_button = QPushButton("Ä°ptal")
+        self.cancel_button.clicked.connect(self.reject)
+        self.button_layout.addWidget(self.ok_button)
+        self.button_layout.addWidget(self.cancel_button)
+        self.layout.addLayout(self.button_layout)
 
     def get_password(self):
         return self.password_input.text()
 
+class OperationProgressDialog(QDialog):
+    def __init__(self, title, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(title)
+        self.setModal(True)
+        self.setFixedSize(400, 120)
+        self.setWindowFlags(self.windowFlags() & ~Qt.WindowContextHelpButtonHint & ~Qt.WindowCloseButtonHint)
+        self.setStyleSheet("""
+            QDialog { background-color: #2b2b2b; border: 2px solid #555; border-radius: 8px; }
+            QLabel { color: #f0f0f0; font-size: 14px; }
+            QProgressBar { border: 1px solid #555; border-radius: 5px; text-align: center; color: #fff; height: 25px;}
+            QProgressBar::chunk { background-color: #4CAF50; border-radius: 5px; }
+        """)
+        self.layout = QVBoxLayout(self)
+        self.layout.setSpacing(15)
+        self.layout.setContentsMargins(20, 20, 20, 20)
+        self.layout.addStretch()
+
+        self.progress_label = QLabel("Ä°ÅŸlem baÅŸlatÄ±lÄ±yor...")
+        self.progress_label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.progress_label)
+
+        self.progress_bar = QProgressBar()
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.layout.addWidget(self.progress_bar)
+        self.layout.addStretch()
+
     def update_progress(self, value, message=""):
         self.progress_bar.setValue(value)
-        self.progress_label.setText(message)
+        if message:
+            self.progress_label.setText(message)
         QApplication.processEvents()
-        time.sleep(0.05) # İlerlemenin görünür olması için küçük bir gecikme
 
 # --- Encryption/Decryption Functions ---
 SALT_SIZE = 16
@@ -730,7 +864,7 @@ class SphereWindow(QWidget):
         self.add_initial_boxes()
         self.update_connection_dropdown()
         if not CRYPTO_AVAILABLE:
-            self.show_error_message("PyCryptodome kütüphanesi bulunamadı. Lütfen yükleyin: pip install pycryptodome")
+            self.show_error_message("PyCryptodome kÃ¼tÃ¼phanesi bulunamadÄ±. LÃ¼tfen yÃ¼kleyin: pip install pycryptodome")
             self.export_button.setEnabled(False)
 
     def initUI(self):
@@ -780,7 +914,7 @@ class SphereWindow(QWidget):
         self.connection_dropdown.setFixedSize(180, 30)
         self.connection_dropdown.currentIndexChanged.connect(self.zoom_to_connection_by_index)
         self.toolbar_layout.addWidget(self.connection_dropdown)
-        
+
         self.toolbar_layout.addStretch()
 
         self.export_button = QPushButton("Export")
@@ -804,8 +938,8 @@ class SphereWindow(QWidget):
 
     def _handle_file_path(self, source_path):
         """
-        Dosyayı, varsayılan dizinde değilse, oraya kopyalar.
-        Her zaman varsayılan dizindeki dosyanın yolunu döndürür.
+        DosyayÄ±, varsayÄ±lan dizinde deÄŸilse, oraya kopyalar.
+        Her zaman varsayÄ±lan dizindeki dosyanÄ±n yolunu dÃ¶ndÃ¼rÃ¼r.
         """
         if not source_path or not os.path.exists(source_path):
             return None
@@ -815,46 +949,49 @@ class SphereWindow(QWidget):
         file_name = os.path.basename(source_path)
         dest_path = os.path.join(target_dir, file_name)
 
-        # Eğer dosya zaten hedef dizindeyse, kopyalamaya gerek yok.
+        # EÄŸer dosya zaten hedef dizindeyse, kopyalamaya gerek yok.
         if os.path.normpath(source_path) == os.path.normpath(dest_path):
             return source_path
 
         try:
             # shutil.copy2, meta verileri de korur.
             shutil.copy2(source_path, dest_path)
-            self.show_info_message(f"'{file_name}' dosyasının bir kopyası\n{target_dir} klasörüne oluşturuldu.")
+            self.show_info_message(f"'{file_name}' dosyasÄ±nÄ±n bir kopyasÄ±\n{target_dir} klasÃ¶rÃ¼ne oluÅŸturuldu.")
             return dest_path
         except Exception as e:
-            self.show_error_message(f"Dosya kopyalanamadı: {e}")
+            self.show_error_message(f"Dosya kopyalanamadÄ±: {e}")
             return None
 
     def export_data(self):
         if not CRYPTO_AVAILABLE:
-            self.show_error_message("Dışa aktarma için PyCryptodome kütüphanesi gerekli.")
+            self.show_error_message("DÄ±ÅŸa aktarma iÃ§in PyCryptodome kÃ¼tÃ¼phanesi gerekli.")
             return
 
         options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getSaveFileName(self, "Kavram Dosyasını Kaydet",
-            self.DEFAULT_BASE_DIR, # Varsayılan dizin
-            "Kavram Files (*.kavram);;All Files (*)", options=options)
+        file_name, _ = QFileDialog.getSaveFileName(self, "Kitap DosyasÄ±nÄ± Kaydet",
+            self.DEFAULT_BASE_DIR, # VarsayÄ±lan dizin
+            "Kitap Files (*.kitap);;All Files (*)", options=options)
 
         if not file_name: return
-        if not file_name.lower().endswith(".kavram"): file_name += ".kavram"
+        if not file_name.lower().endswith(".kitap"): file_name += ".kitap"
 
-        dialog = ProgressDialog("Dışa Aktar", self)
-        if dialog.exec_() != QDialog.Accepted: return
-        
-        password = dialog.get_password()
+        password_dialog = PasswordDialog(self)
+        if password_dialog.exec_() != QDialog.Accepted:
+            return
+        password = password_dialog.get_password()
+
+        progress_dialog = OperationProgressDialog("DÄ±ÅŸa AktarÄ±lÄ±yor", self)
+        progress_dialog.show()
+
         temp_dir = tempfile.mkdtemp()
-        
         try:
-            dialog.update_progress(10, "Veriler toplanıyor...")
+            progress_dialog.update_progress(10, "Veriler toplanÄ±yor...")
             boxes_data, files_to_copy = [], set()
             for box in self.view.boxes:
                 file_path = box.selected_file_path
                 file_basename = os.path.basename(file_path) if file_path and os.path.exists(file_path) else None
                 if file_basename: files_to_copy.add(file_path)
-                
+
                 proxy_pos = box.proxy_widget.pos()
                 boxes_data.append({
                     "box_id": box.box_id, "editor_name": box.selected_editor_name,
@@ -866,76 +1003,101 @@ class SphereWindow(QWidget):
             connections_data = [{"start_box_id": c.start_box.box_id, "start_port": c.start_port,
                                  "end_box_id": c.end_box.box_id, "end_port": c.end_port,
                                  "color_type": c.color_type} for c in self.view.connections]
-            
+
             final_data = json.dumps({"boxes": boxes_data, "connections": connections_data}, indent=4).encode('utf-8')
             with open(os.path.join(temp_dir, "data.json"), "wb") as f: f.write(final_data)
-            
-            dialog.update_progress(30, "Dosyalar arşivleniyor...")
+
+            progress_dialog.update_progress(30, "Dosyalar arÅŸivleniyor...")
             for file_path in files_to_copy:
-                # Dosyaları taşımak yerine kopyala
                 shutil.copy2(file_path, os.path.join(temp_dir, os.path.basename(file_path)))
 
-            dialog.update_progress(60, "Arşiv sıkıştırılıyor...")
+            progress_dialog.update_progress(60, "ArÅŸiv sÄ±kÄ±ÅŸtÄ±rÄ±lÄ±yor...")
             with tarfile.open(file_name + ".tmp", "w:xz") as tar:
                 tar.add(temp_dir, arcname='.')
 
-            dialog.update_progress(80, "Veri şifreleniyor...")
+            progress_dialog.update_progress(80, "Veri ÅŸifreleniyor...")
             with open(file_name + ".tmp", "rb") as f: tar_data = f.read()
             encrypted_data = encrypt_data(tar_data, password)
-            
-            with open(file_name, "wb") as f: f.write(b"KAVRAM_V3" + encrypted_data)
 
-            dialog.update_progress(100, "Tamamlandı!")
-            self.show_info_message(f"Proje başarıyla '{os.path.basename(file_name)}' olarak dışa aktarıldı.")
-            # Dışa aktarma sonrası sahneyi temizleme kaldırıldı, kullanıcı devam edebilir.
-            # self._clear_all_boxes_and_connections()
-            # self.add_initial_boxes()
+            with open(file_name, "wb") as f: f.write(b"KITAP_V1 " + encrypted_data)
+
+            progress_dialog.update_progress(100, "TamamlandÄ±!")
+            time.sleep(0.5)
+            self.show_info_message(f"Proje baÅŸarÄ±yla '{os.path.basename(file_name)}' olarak dÄ±ÅŸa aktarÄ±ldÄ±.")
 
         except Exception as e:
-            self.show_error_message(f"Dışa aktarma sırasında hata: {e}")
+            self.show_error_message(f"DÄ±ÅŸa aktarma sÄ±rasÄ±nda hata: {e}")
         finally:
             if os.path.exists(file_name + ".tmp"): os.remove(file_name + ".tmp")
             shutil.rmtree(temp_dir)
-            dialog.close()
+            progress_dialog.close()
 
-    def import_kavram_file(self, file_path):
+    def import_project_file(self, file_path):
         if not CRYPTO_AVAILABLE:
-            self.show_error_message("İçe aktarma için PyCryptodome kütüphanesi gerekli.")
+            self.show_error_message("Ä°Ã§e aktarma iÃ§in PyCryptodome kÃ¼tÃ¼phanesi gerekli.")
             return
 
-        dialog = ProgressDialog("İçe Aktar", self)
-        
+        progress_dialog = None
         try:
             with open(file_path, "rb") as f:
                 header = f.read(9)
-                if header != b"KAVRAM_V3":
-                    self.show_error_message("Geçersiz veya desteklenmeyen .kavram dosyası formatı.")
+                if header not in (b"KAVRAM_V3", b"KITAP_V1 "):
+                    self.show_error_message("GeÃ§ersiz veya desteklenmeyen .kitap veya .kavram dosyasÄ± formatÄ±.")
                     return
                 encrypted_data = f.read()
 
+            file_size = len(encrypted_data)
+            simulated_duration_ms = max(1500, min(10000, (file_size / (5 * 1024 * 1024)) * 1000))
+
+            import_successful = False
             for attempt in range(3):
-                if dialog.exec_() == QDialog.Accepted:
-                    password = dialog.get_password()
-                    dialog.update_progress(10, "Şifre çözülüyor...")
+                password_dialog = PasswordDialog(self)
+                if password_dialog.exec_() != QDialog.Accepted:
+                    return
+                password = password_dialog.get_password()
+
+                progress_dialog = OperationProgressDialog("Ä°Ã§e AktarÄ±lÄ±yor", self)
+                progress_dialog.show()
+
+                decryption_result = None
+                decryption_error = None
+
+                try:
+                    decrypted_data = decrypt_data(encrypted_data, password)
+                    decryption_result = decrypted_data
+                except Exception as e:
+                    decryption_error = e
+
+                start_time = time.time()
+                while (time.time() - start_time) * 1000 < simulated_duration_ms:
+                    elapsed_ms = (time.time() - start_time) * 1000
+                    progress_value = int((elapsed_ms / simulated_duration_ms) * 100)
+                    progress_dialog.update_progress(progress_value, "Dosya doÄŸrulanÄ±yor ve aÃ§Ä±lÄ±yor...")
+                    time.sleep(0.02)
+
+                progress_dialog.update_progress(100, "Ä°ÅŸlem tamamlanÄ±yor...")
+                time.sleep(0.1)
+
+                if decryption_error is None:
                     try:
-                        decrypted_data = decrypt_data(encrypted_data, password)
-                        dialog.update_progress(40, "Arşiv açılıyor...")
-                        with tarfile.open(fileobj=io.BytesIO(decrypted_data), mode="r:xz") as tar:
+                        progress_dialog.update_progress(100, "ArÅŸiv aÃ§Ä±lÄ±yor...")
+                        with tarfile.open(fileobj=io.BytesIO(decryption_result), mode="r:xz") as tar:
                             tar.extractall(path=self.DEFAULT_BASE_DIR)
-                        
+
                         json_path = os.path.join(self.DEFAULT_BASE_DIR, "data.json")
                         with open(json_path, "r", encoding='utf-8') as f:
                             loaded_data = json.load(f)
                         os.remove(json_path)
 
-                        dialog.update_progress(70, "Sahne yükleniyor...")
+                        progress_dialog.update_progress(100, "Sahne yÃ¼kleniyor...")
                         self._clear_all_boxes_and_connections()
                         recreated_boxes = {}
+
                         for box_data in loaded_data.get("boxes", []):
                             file_basename = box_data.get("file_path")
                             new_abs_path = os.path.join(self.DEFAULT_BASE_DIR, file_basename) if file_basename else None
                             if new_abs_path and not os.path.exists(new_abs_path):
-                                print(f"Uyarı: '{new_abs_path}' bulunamadı.")
+                                print(f"UyarÄ±: '{new_abs_path}' bulunamadÄ±.")
                                 new_abs_path = None
                             box_data["file_path"] = new_abs_path
                             box = self.view.addDraggableBox(box_data=box_data)
@@ -949,59 +1111,65 @@ class SphereWindow(QWidget):
                                 self.view.connections.append(conn)
                                 self.view.scene().addItem(conn)
                                 conn.update_path()
-                        
+
                         self.update_connection_dropdown()
-                        dialog.update_progress(100, "Tamamlandı!")
-                        self.show_info_message("Proje başarıyla içe aktarıldı.")
-                        return 
+                        progress_dialog.update_progress(100, "TamamlandÄ±!")
+                        time.sleep(0.5)
+                        import_successful = True
+                        break
                     except Exception as e:
-                        self.show_warning_message(f"Şifre yanlış veya dosya bozuk.\nHata: {e}", parent=dialog)
+                        progress_dialog.close()
+                        self.show_error_message(f"Dosya baÅŸarÄ±yla Ã§Ã¶zÃ¼ldÃ¼ ancak iÃ§eriÄŸi bozuk gÃ¶rÃ¼nÃ¼yor: {e}")
+                        return
                 else:
-                    self.show_info_message("İçe aktarma iptal edildi.")
-                    return
-            self.show_error_message("Çok fazla hatalı şifre denemesi.")
+                    progress_dialog.close()
+                    print(f"Ä°Ã§e aktarma hatasÄ± (deneme {attempt + 1}): {decryption_error}")
+                    self.show_warning_message(f"Åifre yanlÄ±ÅŸ veya dosya bozuk.\nKalan deneme hakkÄ±: {2 - attempt}")
+
+            if progress_dialog: progress_dialog.close()
+
+            if not import_successful and attempt == 2:
+                 self.show_error_message("3 hatalÄ± ÅŸifre denemesi. Ä°Ã§e aktarma iptal edildi.")
+
         except Exception as e:
-            self.show_error_message(f"İçe aktarma sırasında hata: {e}")
-        finally:
-            dialog.close()
+            self.show_error_message(f"Ä°Ã§e aktarma sÄ±rasÄ±nda beklenmedik bir hata oluÅŸtu: {e}")
+            if progress_dialog is not None and progress_dialog.isVisible():
+                 progress_dialog.close()
 
     def open_file_dialog_for_new_box(self):
         QDir().mkpath(self.DEFAULT_BASE_DIR)
         options = QFileDialog.Options()
-        file_filter = "All Supported Files (*.kavram *.txt *.png *.jpg *.jpeg *.bmp *.gif *.ai *.saund *.wav *.aiff *.flac *.ogg *.mp3 *.media *.mp4 *.avi *.mov *.mkv *.webm *.flv *.rec *.aac *.m4a *.copya);;Kavram Files (*.kavram);;All Files (*)"
-        
+        file_filter = "All Supported Files (*.kitap *.kavram *.txt *.png *.jpg *.jpeg *.bmp *.gif *.ai *.saund *.wav *.aiff *.flac *.ogg *.mp3 *.media *.mp4 *.avi *.mov *.mkv *.webm *.flv *.rec *.aac *.m4a *.copya);;Kitap Files (*.kitap);;Kavram Files (*.kavram);;All Files (*)"
+
         selected_file_paths, _ = QFileDialog.getOpenFileNames(
-            self, "Dosya Seç veya Kavram İçe Aktar", 
-            self.DEFAULT_BASE_DIR, # Varsayılan dizin
-            file_filter, 
+            self, "Dosya SeÃ§ veya Proje Ä°Ã§e Aktar",
+            self.DEFAULT_BASE_DIR, # VarsayÄ±lan dizin
+            file_filter,
             options=options
         )
 
         if not selected_file_paths:
             return
 
-        # .kavram dosyası kısıtlamalarını kontrol et
-        kavram_files = [path for path in selected_file_paths if path.lower().endswith(".kavram")]
-        
-        if len(kavram_files) > 1:
-            self.show_error_message("Aynı anda sadece bir tane .kavram dosyası içe aktarabilirsiniz.")
-            return
-        
-        if len(kavram_files) == 1 and len(selected_file_paths) > 1:
-            self.show_error_message(".kavram dosyası, diğer dosyalarla birlikte içe aktarılamaz.")
+        project_files = [path for path in selected_file_paths if path.lower().endswith((".kitap", ".kavram"))]
+
+        if len(project_files) > 1:
+            self.show_error_message("AynÄ± anda sadece bir tane proje dosyasÄ± (.kitap veya .kavram) iÃ§e aktarabilirsiniz.")
             return
 
-        # Tek .kavram dosyası içe aktarma işlemini yap
-        if len(kavram_files) == 1:
-            self.import_kavram_file(kavram_files[0])
+        if len(project_files) == 1 and len(selected_file_paths) > 1:
+            self.show_error_message("Proje dosyasÄ± (.kitap veya .kavram), diÄŸer dosyalarla birlikte iÃ§e aktarÄ±lamaz.")
             return
 
-        # Çoklu normal dosya işleme
+        if len(project_files) == 1:
+            self.import_project_file(project_files[0])
+            return
+
         unsupported_files = []
         for path in selected_file_paths:
             final_path = self._handle_file_path(path)
             if not final_path:
-                continue # Dosya kopyalama başarısız olduysa atla
+                continue
 
             file_extension = os.path.splitext(final_path)[1].lower()
             editor_map = {
@@ -1019,7 +1187,7 @@ class SphereWindow(QWidget):
                 unsupported_files.append(os.path.basename(path))
 
         if unsupported_files:
-            self.show_warning_message(f"Aşağıdaki dosyalar için desteklenen bir editör bulunamadı ve atlandı:\n\n" + "\n".join(unsupported_files))
+            self.show_warning_message(f"AÅŸaÄŸÄ±daki dosyalar iÃ§in desteklenen bir editÃ¶r bulunamadÄ± ve atlandÄ±:\n\n" + "\n".join(unsupported_files))
 
 
     def _clear_all_boxes_and_connections(self):
@@ -1085,10 +1253,10 @@ class SphereWindow(QWidget):
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.setStyleSheet(self.messageBoxStyle())
         msg_box.exec_()
-        
+
     def show_warning_message(self, text, parent=None):
         msg_box = QMessageBox(parent or self)
-        msg_box.setWindowTitle("Uyarı")
+        msg_box.setWindowTitle("UyarÄ±")
         msg_box.setText(text)
         msg_box.setIcon(QMessageBox.Warning)
         msg_box.setStandardButtons(QMessageBox.Ok)
@@ -1138,4 +1306,3 @@ if __name__ == "__main__":
     main_window = CoreWindow()
     main_window.show()
     sys.exit(app.exec_())
-
