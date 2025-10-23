@@ -16,7 +16,7 @@
 # ---------------------------------------------
 #
 # Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram veya Contributors
+# Copyright (C) 2025-10-23 Kavram veya Contributors
 #
 # Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
 # GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
