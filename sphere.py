@@ -30,37 +30,6 @@
 # Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
 # /Kavram/License/GPLv3.txt
 
-# Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram or Contributors
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see /Kavram/License/GPLv3.txt
-#
-# ---------------------------------------------
-#
-# Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram veya Contributors
-#
-# Bu program Ã¶zgÃ¼r bir yazÄ±lÄ±mdÄ±r: Ã–zgÃ¼r YazÄ±lÄ±m VakfÄ± tarafÄ±ndan yayÄ±nlanan
-# GNU Genel Kamu LisansÄ±'nÄ±n 3. sÃ¼rÃ¼mÃ¼ veya (tercihinize baÄŸlÄ± olarak)
-# daha sonraki herhangi bir sÃ¼rÃ¼mÃ¼ kapsamÄ±nda yeniden daÄŸÄ±tabilir ve/veya
-# deÄŸiÅŸtirebilirsiniz.
-#
-# Bu program, faydalÄ± olacaÄŸÄ± umuduyla daÄŸÄ±tÄ±lmaktadÄ±r, ancak HERHANGÄ° BÄ°R
-# GARANTÄ° OLMADAN; hatta SATILABÄ°LÄ°RLÄ°K veya BELÄ°RLÄ° BÄ°R AMACA UYGUNLUK
-# zÄ±mni garantisi olmaksÄ±zÄ±n.
-#
-# Bu programla birlikte GNU Genel Kamu LisansÄ±'nÄ±n bir kopyasÄ±nÄ± almÄ±ÅŸ olmanÄ±z gerekir:
-# /Kavram/License/GPLv3.txt
 
 import sys
 import os
