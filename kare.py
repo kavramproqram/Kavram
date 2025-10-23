@@ -1,5 +1,5 @@
 # Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram or Contributors
+# Copyright (C) 2025-0-1 Kavram or Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -134,6 +134,30 @@ SVG_FILE_ICON = """<svg width="24" height="24" viewBox="0 0 24 24" fill="none" x
 # stroke-width azaltıldı ve transform translate ayarlandı
 SVG_TICK_ICON = """<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path transform="translate(0, 6)" d="M6 12L10 16L18 8" stroke="#eee" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>"""
 
+# --- Not Alanı için Özel QTextEdit ---
+class PassthroughTextEdit(QTextEdit):
+    """
+    Orta ve sağ fare tıklamalarını yoksayarak üst widget'a (sürükleme için)
+    iletilmesini sağlayan ve istenmeyen yapıştırma eylemlerini engelleyen
+    özel bir QTextEdit sınıfı.
+    """
+    def mousePressEvent(self, event: QGraphicsSceneMouseEvent):
+        # Eğer tıklama sol tuş değilse, olayı yoksayarak ebeveyn widget'ın
+        # (DraggableProxyWidget) sürükleme gibi eylemleri işlemesine izin ver.
+        if event.button() != Qt.LeftButton:
+            event.ignore()
+        else:
+            # Sol tuş tıklaması ise normal QTextEdit davranışını uygula.
+            super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent):
+        # Normal bırakma olayını işle.
+        super().mouseReleaseEvent(event)
+        # Eğer bırakılan tuş orta tuş ise, olayı "kabul et".
+        # Bu, X11/Linux sistemlerinde orta tuşla yapıştırma eylemini engeller.
+        if event.button() == Qt.MiddleButton:
+            event.accept()
+
 # --- Özel Proxy Widget ---
 class DraggableProxyWidget(QGraphicsProxyWidget):
     """Sadece sürükleme tutamacından sürüklemeye izin veren özel QGraphicsProxyWidget."""
@@ -147,14 +171,28 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
         self.undo_stack = None
 
     def mousePressEvent(self, event: QGraphicsSceneMouseEvent): # Tip ipucunu ekledim
-        """Sadece sürükleme tutamacı üzerindeyse sürüklemeyi başlatır."""
+        """Sürükleme ve diğer fare olaylarını yönetir."""
         widget = self.widget()
         if not widget:
             super().mousePressEvent(event) # Fallback if no widget
             return
 
-        # Orta tuş ile sürükleme için
-        if event.button() == Qt.MiddleButton:
+        # Orta veya Sağ tuş ile sürükleme için
+        if event.button() == Qt.MiddleButton or event.button() == Qt.RightButton:
+            # Sağ tuş tıklaması bir port üzerinde mi diye kontrol et
+            if event.button() == Qt.RightButton:
+                # Sahnenin view'ini al
+                view = self.scene().views()[0] if self.scene().views() else None
+                # Eğer view, port kontrolü yapabiliyorsa (SphereView gibi)
+                if view and hasattr(view, 'get_port_at'):
+                    port_name = view.get_port_at(widget, event.scenePos())
+                    if port_name:
+                        # Tıklama bir port üzerinde. Olayı yoksayarak SphereView'in
+                        # bağlantı oluşturma mantığını tetiklemesine izin ver.
+                        event.ignore()
+                        return # Olayı daha fazla işleme
+
+            # Tıklama port üzerinde değil veya orta tuş, sürüklemeyi başlat
             self.mouse_press_scene_pos = event.scenePos()
             self.item_pos_at_press = self.pos() # Item's current scene position
             self.setFlag(QGraphicsItem.ItemIsMovable, True) # Ensure it's movable
@@ -190,8 +228,8 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event: QGraphicsSceneMouseEvent): # Tip ipucunu ekledim
-        # Sadece orta tuş basılıysa veya sol tuşla sürükleme yapılıyorsa (QGraphicsView tarafından başlatılan)
-        if event.buttons() & Qt.MiddleButton or (event.buttons() & Qt.LeftButton and self.flags() & QGraphicsItem.ItemIsMovable and not self.mouse_press_scene_pos.isNull()):
+        # Sadece orta veya sağ tuş basılıysa veya sol tuşla sürükleme yapılıyorsa (QGraphicsView tarafından başlatılan)
+        if event.buttons() & (Qt.MiddleButton | Qt.RightButton) or (event.buttons() & Qt.LeftButton and self.flags() & QGraphicsItem.ItemIsMovable and not self.mouse_press_scene_pos.isNull()):
             # Başlangıç pozisyonları ayarlanmamışsa, varsayılan davranışı kullan
             if self.mouse_press_scene_pos.isNull() or self.item_pos_at_press.isNull():
                 super().mouseMoveEvent(event)
@@ -222,14 +260,13 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
             super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event: QGraphicsSceneMouseEvent): # Tip ipucunu ekledim
-        # Orta tuş sürüklemesi bittiğinde veya normal sürükleme bittiğinde MoveBoxCommand ekle
-        if (event.button() == Qt.MiddleButton or event.button() == Qt.LeftButton) and self.flags() & QGraphicsItem.ItemIsMovable:
+        # Orta, Sağ veya Sol tuş sürüklemesi bittiğinde MoveBoxCommand ekle
+        is_drag_button_release = event.button() in [Qt.LeftButton, Qt.MiddleButton, Qt.RightButton]
+
+        if is_drag_button_release and self.flags() & QGraphicsItem.ItemIsMovable:
             current_pos = self.pos()
             # Sadece öğe başlangıç pozisyonundan hareket ettiyse komutu push et
             if not self.item_pos_at_press.isNull() and self.item_pos_at_press != current_pos and self.undo_stack:
-                # MoveBoxCommand'i burada tanımlamıyoruz, SphereView'den bekliyoruz.
-                # Bu kısım SphereView'in bu proxy'yi kullanırken MoveBoxCommand'i tanımlaması gerektiğini varsayar.
-                # Şimdilik, bu dosyanın bağımsız çalışabilmesi için Command'ı burada tanımlıyoruz.
                 try:
                     from sphere import MoveBoxCommand # sphere.py'den içe aktarmaya çalış
                 except ImportError:
@@ -248,9 +285,18 @@ class DraggableProxyWidget(QGraphicsProxyWidget):
 
                 command = MoveBoxCommand(self.widget(), self.item_pos_at_press, current_pos)
                 self.undo_stack.push(command)
-            self.item_pos_at_press = QPointF() # Sonraki sürükleme için sıfırla
-            self.mouse_press_scene_pos = QPointF() # Sonraki sürükleme için sıfırla
+
+            # Sürükleme ile ilgili durumu sıfırla
+            self.item_pos_at_press = QPointF()
+            self.mouse_press_scene_pos = QPointF()
+
         super().mouseReleaseEvent(event)
+
+        # İstek 1: Orta tuş bırakıldığında olayı kabul ederek yapıştırma eylemini engelle.
+        # Bu, super() çağrısından sonra yapılmalı ki Qt'nin kendi işlemleri tamamlansın,
+        # ancak olay daha fazla yayılmasın.
+        if event.button() == Qt.MiddleButton:
+            event.accept()
 
 # --- DraggableBox ---
 class DraggableBox(QFrame):
@@ -469,9 +515,10 @@ class DraggableBox(QFrame):
         self.file_list_widget.itemClicked.connect(self.on_file_list_item_clicked) # Sinyal bağlandı
         self.main_layout.addWidget(self.file_list_widget)
 
-        # Yeni eklenen tek isim/metin alanı (QTextEdit)
-        self.name_input_area = QTextEdit()
-        # self.name_input_area.setPlaceholderText("Enter name or description...") # İsteğe bağlı placeholder
+        # Not alanı artık özel PassthroughTextEdit sınıfını kullanıyor
+        self.name_input_area = PassthroughTextEdit()
+        # Sağ tık menüsünü de kesin olarak engelliyoruz
+        self.name_input_area.setContextMenuPolicy(Qt.NoContextMenu)
         self.name_input_area.setFixedHeight(60) # 3 satır için yeterli yükseklik
         self.name_input_area.hide() # Başlangıçta gizli
         self.main_layout.addWidget(self.name_input_area)
