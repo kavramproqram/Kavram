@@ -30,6 +30,91 @@
 # Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
 # /Kavram/License/GPLv3.txt
 
+# Kavram 1.0.0
+# Copyright (C) 2025-09-01 Kavram or Contributors
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see /Kavram/License/GPLv3.txt
+#
+# ---------------------------------------------
+#
+# Kavram 1.0.0
+# Copyright (C) 2025-09-01 Kavram veya Contributors
+#
+# Bu program Ã¶zgÃ¼r bir yazÄ±lÄ±mdÄ±r: Ã–zgÃ¼r YazÄ±lÄ±m VakfÄ± tarafÄ±ndan yayÄ±nlanan
+# GNU Genel Kamu LisansÄ±'nÄ±n 3. sÃ¼rÃ¼mÃ¼ veya (tercihinize baÄŸlÄ± olarak)
+# daha sonraki herhangi bir sÃ¼rÃ¼mÃ¼ kapsamÄ±nda yeniden daÄŸÄ±tabilir ve/veya
+# deÄŸiÅŸtirebilirsiniz.
+#
+# Bu program, faydalÄ± olacaÄŸÄ± umuduyla daÄŸÄ±tÄ±lmaktadÄ±r, ancak HERHANGÄ° BÄ°R
+# GARANTÄ° OLMADAN; hatta SATILABÄ°LÄ°RLÄ°K veya BELÄ°RLÄ° BÄ°R AMACA UYGUNLUK
+# zÄ±mni garantisi olmaksÄ±zÄ±n.
+#
+# Bu programla birlikte GNU Genel Kamu LisansÄ±'nÄ±n bir kopyasÄ±nÄ± almÄ±ÅŸ olmanÄ±z gerekir:
+# /Kavram/License/GPLv3.txt
+
+import sys
+import os
+import ctypes  # To call C++ library
+import json    # For saving and loading settings
+import noisereduce as nr # For AI noise reduction
+import soundfile as sf   # For reading/writing audio files
+import numpy as np       # For numerical operations
+
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame,
+    QPushButton, QFileDialog, QComboBox, QScrollArea, QSizePolicy, QMessageBox, QSlider, QSplitter
+)
+from PyQt5.QtCore import Qt, QTimer, QPointF, QRectF, QDir
+from PyQt5.QtGui import QPainter, QPen, QColor, QCursor, QBrush, QPainterPath
+
+# Constants
+BACKGROUND = QColor('#383838')
+WAVE_COLOR = QColor('#606060')
+CURSOR_COLOR = QColor('#F44336')
+SELECT_COLOR = QColor('#A0A0A0')
+
+# Define the path for the settings file
+SETTINGS_DIR = os.path.join(QDir.homePath(), '.config', 'concept_sound_editor')
+SETTINGS_FILE = os.path.join(SETTINGS_DIR, 'settings.json')
+
+# Temporary files for AI Noise Reduction
+TEMP_RAW_RECORDING_FILE = os.path.join(SETTINGS_DIR, "temp_raw_recording.wav")
+TEMP_CLEANED_RECORDING_FILE = os.path.join(SETTINGS_DIR, "temp_cleaned_recording.wav")
+
+
+# --- Load C++ Library ---
+lib = None
+try:
+    if sys.platform.startswith('win'):
+        lib_path = 'sound_engine.dll'
+    elif sys.platform.startswith('linux'):
+        lib_path = './libsound_engine.so'
+    elif sys.platform.startswith('darwin'):
+        lib_path = './libsound_engine.dylib'
+    else:
+        lib_path = 'sound_engine'
+
+    lib = ctypes.CDLL(lib_path)
+
+    # --- Define C++ Function Signatures ---
+    lib.create_audio_engine.restype = ctypes.c_void_p
+    lib.destroy_audio_engine.argtypes = [ctypes.c_void_p]
+    lib.destroy_audio_engine.restype = ctypes.c_int
+    lib.load_audio_files.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_char_p), ctypes.c_int]
+    lib.load_audio_files.restype = ctypes.c_int
+    lib.play_audio.argtypes = [ctypes.c_void_p]
+    lib.play_audio.restype = ctypes.c_int
+    lib.pause_audio.argtypes = [ctypes.c_void_p]
     lib.pause_audio.restype = ctypes.c_int
     lib.stop_audio.argtypes = [ctypes.c_void_p]
     lib.stop_audio.restype = ctypes.c_int
