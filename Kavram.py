@@ -1,5 +1,5 @@
 # Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram or Contributors
+# Copyright (C) 2025-10-23 Kavram or Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # ---------------------------------------------
 #
 # Kavram 1.0.0
-# Copyright (C) 2025-09-01 Kavram veya Contributors
+# Copyright (C) 2025-10-23 Kavram veya Contributors
 #
 # Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
 # GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
@@ -64,7 +64,7 @@ def resource_path(relative_path):
 # Lua motorunu ve betiğini uygulamaya dahil etmek için bir fonksiyon
 def initialize_lua_engine():
     lua_file_path = resource_path('timeline_logic.lua')
-    
+
     try:
         global lua_runtime
         lua_runtime = lupa.LuaRuntime()
@@ -371,7 +371,7 @@ class CoreWindow(QWidget):
             selected = dlg.selected_name
             if selected:
                 self.switchToEditor(selected, close_current=False)
-    
+
     def showIdeSwitcher(self):
         try:
             from IDE_switcher import IDE_Switcher
