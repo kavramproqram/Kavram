@@ -1,5 +1,5 @@
 # kendime not kurulum için bunu goş ver . sadece linux mint mate kur ve komutlar.txt dosyasının içeriğini kopyala 
-# terminal üzerine yapıştır bütün izünleri ver ve  kurulum tamamlanır .
+# terminal üzerine yapıştır bütün izinleri ver ve  kurulum tamamlanır .
 
 apt install python3.12-venv
 
