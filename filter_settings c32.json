@@ -1,0 +1,17 @@
+{
+    "ai_noise_reduction": "On",
+    "noise_gate_threshold": "-70dB",
+    "hp_filter": "150Hz",
+    "lp_filter_mic": "10000Hz",
+    "gain": "-12dB",
+    "reverb_reduction": "Off",
+    "de_esser": "Off",
+    "de_hum": "Off",
+    "comp_threshold": "Off",
+    "comp_ratio": "3:1",
+    "comp_attack": "5ms",
+    "comp_release": "50ms",
+    "eq_gain": "0dB",
+    "eq_freq": "1000Hz",
+    "eq_q": "1.0"
+}

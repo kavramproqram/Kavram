@@ -1,0 +1,95 @@
+apt install python3.12-venv
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install PyQt5
+
+pip install pyinstaller
+
+pip install lupa
+
+pip install opencv-python
+
+pip install soundfile numpy noisereduce scipy librosa pydub
+
+pip uninstall opencv-python
+
+pip install pycryptodome
+
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms
+
+mv ~/Kavram/venv/lib/python3.12/site-packages/cv2/qt/plugins ~/Kavram/venv/lib/python3.12/site-packages/cv2/qt/plugins_bak
+
+pip install pyluaparser pyyaml tqdm matplotlib
+
+pip uninstall opencv-python
+pip install opencv-python-headless
+
+
+pip install pyaudio
+
+pip install pipwin
+pipwin install pyaudio
+
+python3 -c "import pyaudio; print('PyAudio OK')"
+
+pip install pyaudio
+
+pip install lupa
+
+pip install lupa
+
+pip install PyPDF2 numpy soundfile librosa scipy pyqt5 pyqtgraph opencv-python \
+            tqdm pyyaml lupa matplotlib
+pip install pyaudio
+
+pip install pyaudio
+
+pip install sounddevice soundfile
+
+import pyaudio
+
+g++ -std=c++20 -O2 -fPIC -shared libmediaengine.cpp -o libmediaengine.so \
+  -I/usr/include/opencv4 -I/usr/include/lua5.4 \
+  -L/usr/lib \
+  -lopencv_core -lopencv_imgproc -lopencv_highgui \
+  -lsndfile -llua5.4 -lm -lpthread \
+  -Wno-deprecated-enum-enum-conversion
+
+ls -lh libmediaengine.so
+
+sudo apt install libportaudio2 libportaudiocpp0 portaudio19-dev
+
+g++ -std=c++20 -O2 -fPIC -shared libmediaengine.cpp -o libmediaengine.so \
+  -I/usr/include/opencv4 -I/usr/include/lua5.4 \
+  -L/usr/lib \
+  -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_videoio \
+  -lsndfile -llua5.4 -lportaudio -lm -lpthread \
+  -Wno-deprecated-enum-enum-conversion
+
+
+ldd libmediaengine.so | grep portaudio
+
+
+g++ -Wall -Wextra -std=c++17 -fPIC sound_Engine.cpp -o libsound_engine.so -shared     $(pkg-config --cflags --libs portaudio-2.0 sndfile)
+
+
+
+
+sudo apt update
+sudo apt install libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0
+
+pip uninstall opencv-python opencv-contrib-python opencv-python-headless
+
+pip install opencv-python-headless
+
+source venv/bin/activate
+
+QT_QPA_PLATFORM=xcb python3 Kavram.py
+
+

@@ -1,0 +1,17 @@
+{
+    "ai_nr_enabled": true,
+    "noise_gate_threshold_db": -70.0,
+    "hp_cutoff_hz": 150,
+    "lp_cutoff_hz": 10000,
+    "gain_db": 6.0,
+    "reverb_reduction_level": 0,
+    "de_esser_level": 0,
+    "de_hum_level": 0,
+    "compressor_threshold_db": 0.0,
+    "compressor_ratio": 3.0,
+    "compressor_attack_ms": 5.0,
+    "compressor_release_ms": 150.0,
+    "eq_gain_db": 0.0,
+    "eq_freq_hz": 1000.0,
+    "eq_q": 1.0
+}
