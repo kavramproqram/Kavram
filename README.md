@@ -53,14 +53,17 @@ obs kadar güçlü olmasa da eski bilgisayarlarda da kolayca ekran kayıdı yapm
 basit bir kopya aracıdır
 
 9) Filter editor
-<img width="1366" height="735" alt="filtre" src="https://github.com/user-attachments/assets/928907c5-0a01-4514-8ba8-2485795a858f" />
-
+<img width="860" height="682" alt="dfdfsd" src="https://github.com/user-attachments/assets/281c35d6-84bf-4c6c-a42f-7b91b96a81bd" />
+video ve ses dosyalarında ses gütültü filtfesi uygulamanızı sağlayar bir aracdır
 
 10) Convert editor
-<img width="1366" height="734" alt="wavcı" src="https://github.com/user-attachments/assets/e5bf226b-f124-495b-b393-31f6f49f35f9" />
-bütün media dosyalarını .wav dormatına dönütürür genel olarak saund editor için tasarlanmaıştır . bazı formatları desteklemez çünkü
+<img width="560" height="634" alt="sdfghjkl" src="https://github.com/user-attachments/assets/6a8b15bb-905e-46ee-9295-c048c067c456" />
+video dosyalarını ses dosyasına dönüştürmenize ve sesin yapısını değiştirmenizi sağlayan araçtır .  
 
 11) Settings editor
 
-<img width="569" height="425" alt="set" src="https://github.com/user-attachments/assets/d6361705-9a46-4492-afd8-62f2dd0e6190" />
-temel seviye mavi ışık filtresi
+<img width="710" height="534" alt="asdyuı" src="https://github.com/user-attachments/assets/ef9d0ffb-d658-4fd8-858f-51b25d544d6a" />
+
+
+temel seviye mavi ışık filtresi 
+geliştirme aşamasındadır.
