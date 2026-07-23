@@ -1,0 +1,9 @@
+{
+  "red": 100,
+  "green": 100,
+  "blue_filter": 40,
+  "brightness": 100,
+  "darkness": 0,
+  "gray": true,
+  "reading": false
+}

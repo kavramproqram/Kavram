@@ -1,0 +1,4 @@
+Miniforge3-Linux-x86_64.sh
+bin/ffmpeg
+bin/ffplay
+bin/ffprobe

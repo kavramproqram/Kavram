@@ -1,0 +1,13 @@
+{
+    "noise_reduction_strength": 5,
+    "aggressiveness": 50,
+    "enable_sibilance_removal": true,
+    "auto_gain": true,
+    "ai_enabled": true,
+    "ai_mode": "Both",
+    "ai_aggressive": false,
+    "last_input_dir": "/home/meruem/Kavram/Export",
+    "last_output_dir": "/home/meruem/Kavram/Export",
+    "auto_export_enabled": true,
+    "export_format": "wav"
+}

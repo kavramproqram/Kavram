@@ -1,0 +1,234 @@
+# bash -c "cd ~/Kavram && source venv/bin/activate && QT_QPA_PLATFORM=xcb python3 Kavram.py"
+
+apt install python3.12-venv
+
+sudo apt install python3-pip
+
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install PyQt5
+
+pip install pymupdf
+
+pip install pytesseract pillow
+
+pip install pynput
+
+pip install pynput
+
+pip install sounddevice
+
+pip install pyinstaller
+
+pip install lupa
+
+pip install pdf2image
+
+pip install img2pdf
+
+pip install opencv-python
+
+pip install soundfile numpy noisereduce scipy librosa pydub
+
+deactivate
+
+sudo apt update
+
+sudo apt install libxcb-xinerama0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-sync1 libxcb-util1 libxcb-xfixes0 libxcb-cursor0
+
+sudo apt install ffmpeg
+
+sudo apt install tesseract-ocr tesseract-ocr-tur
+
+sudo apt install poppler-utils
+
+source venv/bin/activate
+
+deactivate
+
+sudo apt install libxkbcommon-x11-0 libgl1-mesa-glx
+
+
+sudo apt install libxkbcommon-x11-0 libgl1
+
+source venv/bin/activate
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=
+
+pip uninstall opencv-python
+
+sudo apt install python3-opencv
+
+source venv/bin/activate
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=
+
+pip install opencv-python
+
+export QT_PLUGIN_PATH=
+
+/usr/lib/x86_64-linux-gnu/qt5/plugins
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins
+
+pip install pycryptodome
+
+sudo apt update
+sudo apt install -y libxcb-xinerama0 libxcb-cursor0 libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0
+
+sudo apt install -y libegl1 libopengl0
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms
+
+export QT_QPA_PLATFORM_PLUGIN_PATH=/usr/lib/x86_64-linux-gnu/qt5/plugins/platforms
+
+mv ~/Kavram/venv/lib/python3.12/site-packages/cv2/qt/plugins ~/Kavram/venv/lib/python3.12/site-packages/cv2/qt/plugins_bak
+
+sudo apt install --reinstall qtbase5-dev qtbase5-dev-tools qt5-qmake
+
+
+pip uninstall opencv-python
+pip install opencv-python-headless
+
+sudo apt update
+sudo apt install -y portaudio19-dev libasound-dev libjack-jackd2-dev
+
+pip install pyaudio PyPDF2 numpy soundfile librosa scipy pyqt5 pyqtgraph opencv-python
+
+pip install pyluaparser pyyaml tqdm matplotlib
+
+sudo apt install -y libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediawidgets5
+
+sudo apt update
+sudo apt install -y python3.12-dev portaudio19-dev
+
+pip install pyaudio
+
+pip install pipwin
+pipwin install pyaudio
+
+python3 -c "import pyaudio; print('PyAudio OK')"
+
+sudo apt install -y python3.12-dev portaudio19-dev
+
+pip install pyaudio
+
+sudo apt install picom
+
+pip install lupa
+
+pip install lupa
+
+sudo apt update
+sudo apt install -y python3.12-dev portaudio19-dev libasound-dev libjack-jackd2-dev \
+                   libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediawidgets5
+
+pip install PyPDF2 numpy soundfile librosa scipy pyqt5 pyqtgraph opencv-python \
+            tqdm pyyaml lupa matplotlib
+pip install pyaudio
+
+sudo apt install python3.12-dev portaudio19-dev
+
+pip install pyaudio
+
+deactivate
+
+sudo apt install python3-dev portaudio19-dev
+
+pip install sounddevice soundfile
+
+import pyaudio
+
+sudo apt install libopencv-dev
+
+sudo apt install ffmpeg g++ python3-pip
+
+sudo apt install libsndfile1-dev
+
+sudo apt install liblua5.3-dev
+
+sudo apt update
+sudo apt upgrade
+
+source venv/bin/activate
+
+sudo apt install libopencv-dev
+
+sudo apt update && sudo apt install -y g++ pkg-config libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libswscale-dev
+
+sudo apt install gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-plugins-good ubuntu-restricted-extras
+
+sudo apt install libsndfile1-dev
+
+sudo apt install liblua5.3-dev
+
+sudo apt install liblua5.4-dev
+
+sudo apt install autoconf automake libtool m4 libncurses-dev libreadline-dev
+
+g++ -std=c++20 -O2 -fPIC -shared libmediaengine.cpp \
+-o libmediaengine.so \
+$(pkg-config --cflags --libs opencv4) \
+$(pkg-config --cflags --libs portaudio-2.0) \
+$(pkg-config --libs sndfile) \
+-I/usr/include/lua5.4 \
+-llua5.4 \
+-ldl \
+-lpthread \
+-Wno-deprecated-enum-enum-conversion
+
+ls -lh libmediaengine.so
+
+sudo apt install libportaudio2 libportaudiocpp0 portaudio19-dev
+
+ldd libmediaengine.so | grep portaudio
+
+chmod +x build_engine.sh && ./build_engine.sh
+
+g++ -Wall -Wextra -std=c++17 -fPIC sound_Engine.cpp -o libsound_engine.so -shared     $(pkg-config --cflags --libs portaudio-2.0 sndfile)
+
+g++ -O3 -march=native -mtune=native -flto -ffast-math -fPIC -shared -std=c++17 sound_Engine.cpp -o libsound_engine.so -lsndfile -lportaudio -pthread
+
+mkdir -p lib
+cp libsound_engine.so lib/
+
+g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -pthread camera_recorder.cpp -o camera_recorder
+
+g++ -O2 -shared -fPIC -o libconverter_engine.so converter_engine.cpp -lm $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale)
+
+sudo apt install libavformat-dev libavcodec-dev libavutil-dev \
+                 libswresample-dev libswscale-dev
+
+sudo apt update
+sudo apt install libxcb-xinerama0 libxcb-xkb1 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0
+
+pip uninstall opencv-python opencv-contrib-python opencv-python-headless
+
+pip3 install PyQt5 PyQt5-sip PyQtMultimedia pynput soundfile numpy noisereduce scipy librosa pydub
+
+pip install opencv-python-headless
+
+pip install pillow
+
+pip install psutil
+
+pip install pyloudnorm
+
+pip install webrtcvad-wheels
+
+source venv/bin/activate
+
+chmod +x /home/k12/Kavram/bin/ffmpeg
+
+chmod +x /home/k12/Kavram/bin/ffprobe
+
+chmod +x /home/k12/Kavram/bin/ffplay
+
+QT_QPA_PLATFORM=xcb python3 Kavram.py
+
+
+
+
+
