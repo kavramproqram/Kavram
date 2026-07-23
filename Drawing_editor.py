@@ -1900,8 +1900,11 @@ class DrawingArea(QWidget):
                                 cw = final_rect_1.width() * scale_x
                                 ch = final_rect_1.height() * scale_y
                                 cropped_1 = orig_img.copy(int(off_x), int(off_y), int(cw), int(ch))
-                                b1 = QByteArray(); bu1 = QBuffer(b1); bu1.open(QIODevice.WriteOnly); cropped_1.save(bu1, "PNG")
-                                b64_1 = base64.b64encode(bytes(b1.data())).decode('utf-8')
+                                b1 = QByteArray()
+                                bu1 = QBuffer(b1)
+                                bu1.open(QIODevice.WriteOnly)
+                                cropped_1.save(bu1, "PNG")
+                                b64_1 = base64.b64encode(b1.data()).decode('utf-8')
                                 self.drawing_elements.append({
                                     "type": "image", "base64_data": b64_1,
                                     "position": [final_rect_1.x(), final_rect_1.y()],
@@ -1924,8 +1927,11 @@ class DrawingArea(QWidget):
                                 cw_2 = final_rect_2.width() * scale_x
                                 ch_2 = final_rect_2.height() * scale_y
                                 cropped_2 = full_mirrored.copy(int(off_x_2), int(off_y_2), int(cw_2), int(ch_2))
-                                b2 = QByteArray(); bu2 = QBuffer(b2); bu2.open(QIODevice.WriteOnly); cropped_2.save(b2, "PNG")
-                                b64_2 = base64.b64encode(bytes(b2.data())).decode('utf-8')
+                                b2 = QByteArray()
+                                bu2 = QBuffer(b2)
+                                bu2.open(QIODevice.WriteOnly)
+                                cropped_2.save(bu2, "PNG")
+                                b64_2 = base64.b64encode(b2.data()).decode('utf-8')
                                 self.drawing_elements.append({
                                     "type": "image", "base64_data": b64_2,
                                     "position": [final_rect_2.x(), final_rect_2.y()],
@@ -1945,8 +1951,11 @@ class DrawingArea(QWidget):
                                 cw = final_rect_1.width() * scale_x
                                 ch = final_rect_1.height() * scale_y
                                 cropped_1 = orig_img.copy(int(off_x), int(off_y), int(cw), int(ch))
-                                b1 = QByteArray(); bu1 = QBuffer(b1); bu1.open(QIODevice.WriteOnly); cropped_1.save(bu1, "PNG")
-                                b64_1 = base64.b64encode(bytes(b1.data())).decode('utf-8')
+                                b1 = QByteArray()
+                                bu1 = QBuffer(b1)
+                                bu1.open(QIODevice.WriteOnly)
+                                cropped_1.save(bu1, "PNG")
+                                b64_1 = base64.b64encode(b1.data()).decode('utf-8')
                                 self.drawing_elements.append({
                                     "type": "image", "base64_data": b64_1,
                                     "position": [final_rect_1.x(), final_rect_1.y()],
@@ -1969,8 +1978,11 @@ class DrawingArea(QWidget):
                                 cw_2 = final_rect_2.width() * scale_x
                                 ch_2 = final_rect_2.height() * scale_y
                                 cropped_2 = full_mirrored.copy(int(off_x_2), int(off_y_2), int(cw_2), int(ch_2))
-                                b2 = QByteArray(); bu2 = QBuffer(b2); bu2.open(QIODevice.WriteOnly); cropped_2.save(b2, "PNG")
-                                b64_2 = base64.b64encode(bytes(b2.data())).decode('utf-8')
+                                b2 = QByteArray()
+                                bu2 = QBuffer(b2)
+                                bu2.open(QIODevice.WriteOnly)
+                                cropped_2.save(bu2, "PNG")
+                                b64_2 = base64.b64encode(b2.data()).decode('utf-8')
                                 self.drawing_elements.append({
                                     "type": "image", "base64_data": b64_2,
                                     "position": [final_rect_2.x(), final_rect_2.y()],
@@ -1979,8 +1991,11 @@ class DrawingArea(QWidget):
                                     "layer": self.current_layer_name
                                 })
                     else:
-                        buffer = QByteArray(); buffer_io = QBuffer(buffer); buffer_io.open(QIODevice.WriteOnly); self.original_image_for_placement.save(buffer_io, "PNG")
-                        base64_data = base64.b64encode(bytes(buffer.data())).decode('utf-8')
+                        buffer = QByteArray()
+                        buffer_io = QBuffer(buffer)
+                        buffer_io.open(QIODevice.WriteOnly)
+                        self.original_image_for_placement.save(buffer_io, "PNG")
+                        base64_data = base64.b64encode(buffer.data()).decode('utf-8')
                         self.drawing_elements.append({
                             "type": "image", "base64_data": base64_data,
                             "position": [self.image_placement_offset.x(), self.image_placement_offset.y()],
@@ -2354,8 +2369,11 @@ class DrawingArea(QWidget):
                 path_translated.closeSubpath()
                 p_painter.drawPath(path_translated); p_painter.end()
                 if is_mirrored_shape: pattern_img = pattern_img.mirrored(True, False)
-                buffer = QByteArray(); buffer_io = QBuffer(buffer); buffer_io.open(QIODevice.WriteOnly); pattern_img.save(buffer_io, "PNG")
-                texture_b64 = base64.b64encode(bytes(buffer.data())).decode('utf-8')
+                buffer = QByteArray()
+                buffer_io = QBuffer(buffer)
+                buffer_io.open(QIODevice.WriteOnly)
+                pattern_img.save(buffer_io, "PNG")
+                texture_b64 = base64.b64encode(buffer.data()).decode('utf-8')
             else:
                 pattern_img = QImage(w, h, QImage.Format_ARGB32); pattern_img.fill(final_fill_color)
                 p_painter = QPainter(pattern_img); p_painter.setRenderHint(QPainter.Antialiasing)
@@ -2370,8 +2388,11 @@ class DrawingArea(QWidget):
                     p_painter.setBrush(QBrush(color)); p_painter.setPen(Qt.NoPen); r = random.randint(5, 25); p_painter.drawEllipse(bx, by, r, r)
                 p_painter.end()
                 if is_mirrored_shape: pattern_img = pattern_img.mirrored(True, False)
-                buffer = QByteArray(); buffer_io = QBuffer(buffer); buffer_io.open(QIODevice.WriteOnly); pattern_img.save(buffer_io, "PNG")
-                texture_b64 = base64.b64encode(bytes(buffer.data())).decode('utf-8')
+                buffer = QByteArray()
+                buffer_io = QBuffer(buffer)
+                buffer_io.open(QIODevice.WriteOnly)
+                pattern_img.save(buffer_io, "PNG")
+                texture_b64 = base64.b64encode(buffer.data()).decode('utf-8')
                 brush = QBrush(pattern_img); painter.translate(min_x, min_y)
                 path_translated = QPainterPath(); path_translated.moveTo(points_to_draw[0] - QPoint(min_x, min_y))
                 for p in points_to_draw[1:]: path_translated.lineTo(p - QPoint(min_x, min_y))
@@ -3078,8 +3099,11 @@ class DrawingArea(QWidget):
         if mode == 'global': self.replaceColorGlobally(target_color, new_color, is_delete)
         elif mode == 'connected' and pos is not None:
             self.floodFill(pos, target_color, new_color if not is_delete else QColor(0,0,0,0))
-            buffer = QByteArray(); buffer_io = QBuffer(buffer); buffer_io.open(QIODevice.WriteOnly); self.image.save(buffer_io, "PNG")
-            base64_data = base64.b64encode(bytes(buffer.data())).decode('utf-8')
+            buffer = QByteArray()
+            buffer_io = QBuffer(buffer)
+            buffer_io.open(QIODevice.WriteOnly)
+            self.image.save(buffer_io, "PNG")
+            base64_data = base64.b64encode(buffer.data()).decode('utf-8')
             w, h = self.image.width(), self.image.height()
             self.drawing_elements = [{"type": "image", "base64_data": base64_data, "position": [0, 0], "original_width": w, "original_height": h, "current_width": w, "current_height": h, "layer": self.current_layer_name}]
             self.updateImageFromElements()
@@ -3111,8 +3135,11 @@ class DrawingArea(QWidget):
                              else: temp_image.setPixelColor(x, y, new_color)
                              modified = True
                 if modified:
-                    buffer = QByteArray(); buffer_io = QBuffer(buffer); buffer_io.open(QIODevice.WriteOnly); temp_image.save(buffer_io, "PNG")
-                    element["base64_data"] = base64.b64encode(bytes(buffer.data())).decode('utf-8')
+                    buffer = QByteArray()
+                    buffer_io = QBuffer(buffer)
+                    buffer_io.open(QIODevice.WriteOnly)
+                    temp_image.save(buffer_io, "PNG")
+                    element["base64_data"] = base64.b64encode(buffer.data()).decode('utf-8')
         self.updateImageFromElements()
 
     def floodFill(self, pos, target_color, replacement_color, tolerance=20):
