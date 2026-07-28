@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Kavram
+Exec=Kavram
+Icon=Kavram
+Type=Application
+Categories=Utility;
+Terminal=false
+EOF
+
