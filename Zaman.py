@@ -1,3 +1,35 @@
+# Kavram 2.2.2
+# Copyright (C) 2026-07-22 Kavram or Contributors
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see /Kavram/License/GPLv3.txt
+#
+# ---------------------------------------------
+#
+# Kavram 2.2.2
+# Copyright (C) 2026-07-22 Kavram veya Contributors
+#
+# Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
+# GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
+# daha sonraki herhangi bir sürümü kapsamında yeniden dağıtabilir ve/veya
+# değiştirebilirsiniz.
+#
+# Bu program, faydalı olacağı umuduyla dağıtılmaktadır, ancak HERHANGİ BİR
+# GARANTİ OLMADAN; hatta SATILABİLİRLİK veya BELİRLİ BİR AMACA UYGUNLUK
+# zımni garantisi olmaksızın.
+#
+# Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
+# /Kavram/License/GPLv3.txt
+
 import sys
 import os
 import json
