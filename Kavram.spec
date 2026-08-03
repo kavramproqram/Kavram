@@ -4,13 +4,13 @@ import sys
 import os
 import glob
 import ctypes.util
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_submodules, collect_data_files
 
 block_cipher = None
 base_path = os.path.abspath(".")
 
 def find_sys_lib(lib_name, fallback_paths):
-    """Sistemdeki .so dosyasını dinamik bulur."""
+    """Sistemdeki veya yerel dizindeki .so dosyasını dinamik bulur."""
     found = ctypes.util.find_library(lib_name)
     if found:
         if os.path.isabs(found) and os.path.exists(found):
@@ -21,6 +21,7 @@ def find_sys_lib(lib_name, fallback_paths):
             return matches[0]
     return None
 
+# --- HIDDEN IMPORTS ---
 hiddenimports = (
     collect_submodules('PyQt5') +
     collect_submodules('cv2') +
@@ -57,6 +58,7 @@ hiddenimports = (
     ]
 )
 
+# --- BINARIES (.so & Kütüphaneler) ---
 binaries = []
 
 custom_libs = [
@@ -68,22 +70,30 @@ custom_libs = [
     'libKavramAudioEngine.so',
     'camera_backend.so',
     'camera_backend.cpython-312-x86_64-linux-gnu.so',
+    'librnnoise.so',
+    'librnnoise.so.0',
+    'libdeepfilter.so'
 ]
 
 for lib in custom_libs:
-    src = os.path.join(base_path, lib)
-    if os.path.exists(src):
+    src_candidates = [
+        os.path.join(base_path, lib),
+        os.path.join(base_path, 'lib', lib)
+    ]
+    src = next((c for c in src_candidates if os.path.exists(c)), None)
+    if src:
         binaries.append((src, 'lib'))
     else:
-        print(f"[UYARI] Kütüphane bulunamadı: {lib}")
+        print(f"[UYARI] Özel kütüphane dizinde bulunamadı: {lib}")
 
+# Sistem ses kütüphaneleri (PortAudio, ALSA)
 portaudio_path = find_sys_lib('portaudio', [
     '/usr/lib*/libportaudio.so*',
     '/usr/lib/*-linux-gnu/libportaudio.so*'
 ])
 if portaudio_path:
     binaries.append((portaudio_path, 'lib'))
-    print(f"[BİLGİ] PortAudio bulundu: {portaudio_path}")
+    print(f"[BİLGİ] PortAudio eklendi: {portaudio_path}")
 
 alsa_path = find_sys_lib('asound', [
     '/usr/lib*/libasound.so*',
@@ -91,15 +101,30 @@ alsa_path = find_sys_lib('asound', [
 ])
 if alsa_path:
     binaries.append((alsa_path, 'lib'))
-    print(f"[BİLGİ] ALSA bulundu: {alsa_path}")
+    print(f"[BİLGİ] ALSA eklendi: {alsa_path}")
 
-executables = ['camera_recorder', 'ffmpeg', 'ffprobe', 'ffplay']
+# FFmpeg ve Yardımcı İcrada Edilebilir Dosyalar (Kavram/ffmpeg/ altında taşınır)
+executables = ['ffmpeg', 'ffprobe', 'ffplay']
 for exe in executables:
-    src_candidates = [os.path.join(base_path, exe), os.path.join(base_path, 'bin', exe)]
+    src_candidates = [
+        os.path.join(base_path, 'ffmpeg', exe),
+        os.path.join(base_path, exe),
+        os.path.join(base_path, 'bin', exe)
+    ]
     src = next((c for c in src_candidates if os.path.exists(c)), None)
     if src:
-        binaries.append((src, 'bin'))
+        # ffmpeg klasörü altında çalışacak şekilde paketlenir
+        binaries.append((src, 'ffmpeg'))
+        print(f"[BİLGİ] {exe} paketlendi -> ffmpeg/{exe}")
+    else:
+        print(f"[UYARI] {exe} bulunamadı! Lütfen projenin ffmpeg/ dizinine ekleyin.")
 
+# Kamera ve diğer harici çalıştırılabilirler
+camera_rec = os.path.join(base_path, 'camera_recorder')
+if os.path.exists(camera_rec):
+    binaries.append((camera_rec, 'bin'))
+
+# GStreamer Scanner
 gst_scanners = [
     '/usr/lib*/gstreamer-1.0/gst-plugin-scanner',
     '/usr/lib/*-linux-gnu/gstreamer-1.0/gst-plugin-scanner',
@@ -113,40 +138,48 @@ for pattern in gst_scanners:
         print(f"[BİLGİ] GStreamer scanner eklendi: {matches[0]}")
         break
 
+# --- DATAS (Modeller, Statik Dosyalar, Qt Pluginleri) ---
 datas = []
 
-readonly_files = ['.lua', '.json', '.png', '.glsl', '.txt', '.cfg', '.md']
+# Yapılandırma ve Statik Dosyalar
+readonly_files = ['.lua', '.json', '.png', '.glsl', '.txt', '.cfg', '.md', '.onnx', '.pth', '.bin']
 for f in os.listdir(base_path):
     full = os.path.join(base_path, f)
     if os.path.isfile(full) and any(f.endswith(ext) for ext in readonly_files):
         datas.append((full, '.'))
 
-folders = ['ikon', 'veri']
+# Klasörler (İkon, Veri, Modeller: RNNoise & DeepFilterNet)
+folders = ['ikon', 'veri', 'modeller', 'models', 'rnnoise', 'deepfilter']
 for folder in folders:
     src = os.path.join(base_path, folder)
     if os.path.exists(src):
         datas.append((src, folder))
+        print(f"[BİLGİ] Klasör paketlendi: {folder}")
 
+# Qt Pluginlerinin Eksiksiz Paketlenmesi (xcb, imageformats, styles, xcbglintegrations vs.)
 qt_plugin_dirs = [
+    os.path.join(sys.prefix, 'lib', f'python{sys.version_info.major}.{sys.version_info.minor}', 'site-packages', 'PyQt5', 'Qt5', 'plugins'),
     '/usr/lib*/qt5/plugins',
     '/usr/lib/*-linux-gnu/qt5/plugins',
     '/usr/lib*/qt/plugins'
 ]
 base_qt_dir = None
 for d in qt_plugin_dirs:
-    matches = glob.glob(d)
-    if matches:
-        base_qt_dir = matches[0]
+    if os.path.exists(d):
+        base_qt_dir = d
+        print(f"[BİLGİ] Qt Plugin dizini bulundu: {d}")
         break
 
 if base_qt_dir:
-    subdirs = ['platforms', 'imageformats', 'mediaservice', 'audio', 'iconengines']
+    subdirs = ['platforms', 'imageformats', 'styles', 'xcbglintegrations', 'mediaservice', 'audio', 'iconengines', 'platformthemes', 'platforminputcontexts']
     for sd in subdirs:
         target_dir = os.path.join(base_qt_dir, sd)
         if os.path.exists(target_dir):
             for file_path in glob.glob(os.path.join(target_dir, '*')):
-                datas.append((file_path, f'PyQt5/Qt5/plugins/{sd}'))
+                if os.path.isfile(file_path):
+                    datas.append((file_path, f'PyQt5/Qt5/plugins/{sd}'))
 
+# GStreamer Pluginleri
 gst_plugin_dirs = ['/usr/lib*/gstreamer-1.0', '/usr/lib/*-linux-gnu/gstreamer-1.0']
 for d in gst_plugin_dirs:
     matches = glob.glob(d)
@@ -155,53 +188,9 @@ for d in gst_plugin_dirs:
             datas.append((plugin, 'gstreamer-1.0'))
         break
 
-hook_content = '''import os
-import sys
-import glob
-
-if hasattr(sys, '_MEIPASS'):
-    meipass = sys._MEIPASS
-
-    qt_plugin_path = os.path.join(meipass, 'PyQt5', 'Qt5', 'plugins')
-    if os.path.exists(qt_plugin_path):
-        os.environ['QT_PLUGIN_PATH'] = qt_plugin_path
-
-    gst_path = os.path.join(meipass, 'gstreamer-1.0')
-    if os.path.exists(gst_path):
-        os.environ['GST_PLUGIN_SYSTEM_PATH'] = gst_path
-        os.environ['GST_PLUGIN_PATH'] = gst_path
-
-    gst_scanner = os.path.join(meipass, 'gst-plugin-scanner')
-    if os.path.exists(gst_scanner):
-        os.environ['GST_PLUGIN_SCANNER'] = gst_scanner
-
-    bin_dir = os.path.join(meipass, 'bin')
-    if os.path.exists(bin_dir):
-        os.environ['PATH'] = bin_dir + os.pathsep + os.environ.get('PATH', '')
-
-    lib_dir = os.path.join(meipass, 'lib')
-    if os.path.exists(lib_dir):
-        os.environ['LD_LIBRARY_PATH'] = lib_dir + os.pathsep + os.environ.get('LD_LIBRARY_PATH', '')
-
-    session_type = os.environ.get('XDG_SESSION_TYPE', '').lower()
-    if session_type == 'wayland' and 'WAYLAND_DISPLAY' in os.environ:
-        pass
-    else:
-        os.environ['QT_QPA_PLATFORM'] = 'xcb'
-        if 'DISPLAY' not in os.environ:
-            x_sockets = glob.glob('/tmp/.X11-unix/X*')
-            if x_sockets:
-                x_sockets.sort(key=lambda s: int(s.replace('/tmp/.X11-unix/X', '')))
-                os.environ['DISPLAY'] = ':' + x_sockets[-1].replace('/tmp/.X11-unix/X', '')
-            else:
-                os.environ['DISPLAY'] = ':0'
-'''
-
+# --- RUNTIME HOOK ---
 hook_path = os.path.join(base_path, 'auto_env_hook.py')
-with open(hook_path, 'w', encoding='utf-8') as f:
-    f.write(hook_content)
-
-runtime_hooks = ['auto_env_hook.py']
+runtime_hooks = [hook_path]
 
 a = Analysis(
     ['Kavram.py'],
@@ -237,7 +226,7 @@ exe = EXE(
     target_arch='x86_64',
     codesign_identity=None,
     entitlements_file=None,
-    icon='ikon/Kavram.png' # Derlenmiş dosya ikonu (Masaüstü için de geçerli)
+    icon='ikon/Kavram.png'
 )
 
 coll = COLLECT(

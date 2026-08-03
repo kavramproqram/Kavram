@@ -39,6 +39,11 @@
 #include <algorithm> // For std::min/max
 #include <stdexcept> // For exceptions
 #include <numeric>   // For std::accumulate
+#include <fstream>   // For EDL logging and text export
+#include <sstream>   // For string stream manipulation
+#include <chrono>    // For timestamps in EDL metadata
+#include <iomanip>   // For std::put_time and std::setfill
+#include <filesystem> // For project directory and safe copy operations
 
 // libsndfile kütüphanesini dahil edin.
 #include <sndfile.h> // Libsndfile başlık dosyası
@@ -47,6 +52,33 @@
 // Kurulum: Arch Linux'ta `sudo pacman -S portaudio`
 // Derleme sırasında `-lportaudio` eklemeniz gerekecek.
 #include <portaudio.h> // PortAudio başlık dosyası
+
+namespace fs = std::filesystem;
+
+// Edit Decision List (EDL) ve Memento / Komut deseni için veri modelleri
+enum class ActionType {
+    LOAD_FILE,
+    DELETE_SEGMENT,
+    DELETE_SIMILAR_SEGMENTS,
+    DELETE_BY_THICKNESS,
+    INSERT_AUDIO,
+    INSERT_RECORDING,
+    UNDO,
+    REDO
+};
+
+// EDL üzerinde saklanacak her bir düzenleme kararı (Command / Metadata)
+struct AudioEditCommand {
+    uint64_t id;
+    ActionType type;
+    std::string type_name;
+    int start_ms;
+    int end_ms;
+    std::string timestamp;
+    std::string description;
+    std::string source_file_path;
+    std::vector<float> saved_segment_data; // Undo/memento için saklanan orijinal ham ses parçası
+};
 
 // AudioEngine yapısının ileri bildirimi
 // pa_record_callback ve pa_playback_callback fonksiyonlarında kullanılacağı için gereklidir.
@@ -65,10 +97,15 @@ static int pa_playback_callback(const void *inputBuffer, void *outputBuffer,
                                 PaStreamCallbackFlags statusFlags,
                                 void *userData);
 
-
 // Structure to hold all audio engine related data and methods
 // AudioEngine struct tanımı
 struct AudioEngine {
+    // --- PROJE DİZİNİ VE GÜVENLİ KOPYALAMA (COW / EDL) VERİLERİ ---
+    std::string project_directory;        // varsayılan: "export/saund"
+    std::string original_copy_path;       // varsayılan: "export/saund/original.wav"
+    std::vector<AudioEditCommand> edl_log; // Chronological Edit Decision List
+    uint64_t command_counter;
+
     // Gerçek ses verileri için depolama
     std::vector<float> audio_buffer; // Tüm ana ses verisi (interleaved float formatında)
     int sample_rate;                 // Sesin örnekleme oranı (Hz)
@@ -84,7 +121,7 @@ struct AudioEngine {
     // Güvenlik ve stabilite için maks. 5 adım hafızada tutulacak. RAM şişmesi engellenir.
     std::vector<std::vector<float>> history_stack;
     int history_index;
-    const int MAX_HISTORY_STEPS = 5;
+    const size_t MAX_HISTORY_STEPS = 5;
 
     // Mikrofon kaydı için PortAudio özel değişkenleri
     PaStream *record_stream;            // PortAudio kayıt akışı
@@ -157,19 +194,28 @@ struct AudioEngine {
     std::vector<float> eq_y_prev, eq_y_prev2; // EQ filter state
 
     // Constructor
-    // DÜZELTME: -Wreorder uyarısını düzeltmek için başlatma sırası, struct içindeki bildirim sırasıyla eşleştirildi.
-    AudioEngine() : sample_rate(44100), channels(2), // Varsayılan değerler, bildirim sırasına göre önce başlatıldı
+    AudioEngine() : project_directory("export/saund"),
+                    original_copy_path("export/saund/original.wav"),
+                    command_counter(0),
+                    sample_rate(44100), channels(2),
                     current_play_position_ms(0), total_duration_ms(0),
                     is_playing_flag(false), current_speed(1.0f),
                     history_index(-1),
                     record_stream(nullptr), is_recording_flag(false),
-                    play_stream(nullptr), playback_frame_index(0), playback_position_frames(0.0) { // Yeni üyeleri başlat
-        std::cout << "AudioEngine created." << std::endl;
+                    play_stream(nullptr), playback_frame_index(0), playback_position_frames(0.0) {
+        std::cout << "AudioEngine created with Safe Non-Destructive Storage & EDL support." << std::endl;
+        
+        // Proje dizin yapısını oluştur
+        try {
+            fs::create_directories(project_directory);
+        } catch (const std::exception& e) {
+            std::cerr << "Directory creation warning: " << e.what() << std::endl;
+        }
+
         // PortAudio'yu başlat
         PaError err = Pa_Initialize();
         if (err != paNoError) {
             std::cerr << "PortAudio error during initialization: " << Pa_GetErrorText(err) << std::endl;
-            // Hata durumunda uygun şekilde ele alın
         }
 
         // Düşük Geçiren Filtre (Playback) parametrelerini başlat
@@ -179,41 +225,40 @@ struct AudioEngine {
         lp_filter_prev_output.resize(channels, 0.0f);
 
         // --- Mikrofon İşleme Parametrelerini Başlat ---
-        mic_noise_gate_threshold = 0.0001f; // -80dB (çok agresif)
-        mic_noise_gate_release_ms = 20.0f; // 20 ms (hızlı bırakma)
-        mic_noise_gate_gain.resize(channels, 0.0f); // Başlangıçta kapalı
+        mic_noise_gate_threshold = 0.0001f; // -80dB
+        mic_noise_gate_release_ms = 20.0f; // 20 ms
+        mic_noise_gate_gain.resize(channels, 0.0f);
         mic_noise_gate_prev_sample.resize(channels, 0.0f);
 
-        // mic_hp_filter_alpha'yı varsayılan olarak etkinleştir ve bir kesme frekansı ata
-        const float default_mic_hp_cutoff_frequency_hz = 150.0f; // Fan uğultusu için daha yüksek
+        const float default_mic_hp_cutoff_frequency_hz = 150.0f;
         if (sample_rate > 0) {
             mic_hp_filter_alpha = 1.0f / (1.0f + 2.0f * M_PI * default_mic_hp_cutoff_frequency_hz / sample_rate);
         } else {
-            mic_hp_filter_alpha = 0.0f; // Güvenlik için
+            mic_hp_filter_alpha = 0.0f;
         }
         mic_hp_filter_prev_output.resize(channels, 0.0f);
         mic_hp_filter_prev_input.resize(channels, 0.0f);
 
-        mic_lp_filter_alpha = 0.0f; // Başlangıçta kapalı
+        mic_lp_filter_alpha = 0.0f;
         mic_lp_filter_prev_output.resize(channels, 0.0f);
 
-        mic_input_gain = 1.0f; // 0dB
+        mic_input_gain = 1.0f;
 
         // Reverb Reduction (LPF)
-        mic_reverb_lp_filter_alpha = 0.0f; // Başlangıçta kapalı
+        mic_reverb_lp_filter_alpha = 0.0f;
         mic_reverb_lp_filter_prev_output.resize(channels, 0.0f);
 
-        // De-esser (High-Shelf Filter)
-        mic_de_esser_gain = 1.0f; // Linear gain (0dB)
-        mic_de_esser_cutoff_hz = 6000.0f; // Varsayılan kesme frekansı
+        // De-esser
+        mic_de_esser_gain = 1.0f;
+        mic_de_esser_cutoff_hz = 6000.0f;
         de_esser_b0.resize(channels, 0.0f); de_esser_b1.resize(channels, 0.0f); de_esser_b2.resize(channels, 0.0f);
         de_esser_a1.resize(channels, 0.0f); de_esser_a2.resize(channels, 0.0f);
         de_esser_x_prev.resize(channels, 0.0f); de_esser_x_prev2.resize(channels, 0.0f);
         de_esser_y_prev.resize(channels, 0.0f); de_esser_y_prev2.resize(channels, 0.0f);
 
-        // De-hum (Notch Filter)
-        de_hum_frequency_hz = 50.0f; // Varsayılan hum frekansı (Avrupa için 50Hz)
-        mic_de_hum_q = 30.0f; // Varsayılan Q faktörü (dar çentik)
+        // De-hum
+        de_hum_frequency_hz = 50.0f;
+        mic_de_hum_q = 30.0f;
         de_hum_enabled = false;
         de_hum_b0.resize(channels, 0.0f); de_hum_b1.resize(channels, 0.0f); de_hum_b2.resize(channels, 0.0f);
         de_hum_a1.resize(channels, 0.0f); de_hum_a2.resize(channels, 0.0f);
@@ -221,37 +266,34 @@ struct AudioEngine {
         de_hum_y_prev.resize(channels, 0.0f); de_hum_y_prev2.resize(channels, 0.0f);
 
         // Compressor
-        mic_comp_threshold_db = 0.0f; // Default: 0dB (Off)
-        mic_comp_ratio = 1.0f;        // Default: 1:1 (Off)
-        mic_comp_attack_ms = 1.0f;    // Default: 1ms
-        mic_comp_release_ms = 100.0f; // Default: 100ms
-        mic_comp_makeup_gain_db = 0.0f; // Default: 0dB
+        mic_comp_threshold_db = 0.0f;
+        mic_comp_ratio = 1.0f;
+        mic_comp_attack_ms = 1.0f;
+        mic_comp_release_ms = 100.0f;
+        mic_comp_makeup_gain_db = 0.0f;
         mic_comp_envelope.resize(channels, 0.0f);
-        mic_comp_gain.resize(channels, 1.0f); // Start with no gain reduction
+        mic_comp_gain.resize(channels, 1.0f);
 
         // Parametric EQ
-        mic_eq_gain_db = 0.0f;      // Default: 0dB (flat)
-        mic_eq_frequency_hz = 1000.0f; // Default: 1kHz
-        mic_eq_q = 1.0f;            // Default: Q=1.0
+        mic_eq_gain_db = 0.0f;
+        mic_eq_frequency_hz = 1000.0f;
+        mic_eq_q = 1.0f;
         mic_eq_enabled = false;
         eq_b0.resize(channels, 0.0f); eq_b1.resize(channels, 0.0f); eq_b2.resize(channels, 0.0f);
         eq_a1.resize(channels, 0.0f); eq_a2.resize(channels, 0.0f);
         eq_x_prev.resize(channels, 0.0f); eq_x_prev2.resize(channels, 0.0f);
         eq_y_prev.resize(channels, 0.0f); eq_y_prev2.resize(channels, 0.0f);
-
-        // --- Mikrofon İşleme Parametreleri Sonu ---
     }
 
     // Destructor
     ~AudioEngine() {
         std::cout << "AudioEngine destroying..." << std::endl;
-        // PortAudio akışlarını durdur ve sonlandır
         if (record_stream) {
             Pa_StopStream(record_stream);
             Pa_CloseStream(record_stream);
             record_stream = nullptr;
         }
-        if (play_stream) { // Oynatma akışını da kapat
+        if (play_stream) {
             Pa_StopStream(play_stream);
             Pa_CloseStream(play_stream);
             play_stream = nullptr;
@@ -264,11 +306,10 @@ struct AudioEngine {
         audio_buffer.clear();
         envelope_data_storage.clear();
         recorded_audio_buffer.clear();
-        lp_filter_prev_output.clear(); // Playback filtre değişkenlerini de temizle
+        lp_filter_prev_output.clear();
         
         clear_history();
 
-        // --- Yeni Eklenen Mikrofon İşleme Değişkenlerini Temizle ---
         mic_noise_gate_gain.clear();
         mic_noise_gate_prev_sample.clear();
         mic_hp_filter_prev_output.clear();
@@ -289,7 +330,95 @@ struct AudioEngine {
         eq_a1.clear(); eq_a2.clear();
         eq_x_prev.clear(); eq_x_prev2.clear();
         eq_y_prev.clear(); eq_y_prev2.clear();
-        // --- Yeni Eklenen Mikrofon İşleme Değişkenleri Sonu ---
+    }
+
+    // Helper: Geçerli zaman damgasını alma
+    std::string get_current_timestamp() {
+        auto now = std::chrono::system_clock::now();
+        auto in_time_t = std::chrono::system_clock::to_time_t(now);
+        std::stringstream ss;
+        ss.fill('0');
+        struct tm timeinfo;
+#if defined(_WIN32)
+        localtime_s(&timeinfo, &in_time_t);
+#else
+        localtime_r(&in_time_t, &timeinfo);
+#endif
+        ss << std::put_time(&timeinfo, "%Y-%m-%d %H:%M:%S");
+        return ss.str();
+    }
+
+    // EDL günlüğüne komut kaydetme ve metin dosyasını otomatik güncelleme
+    void log_edl_command(ActionType type, const std::string& type_name, int start_ms, int end_ms, const std::string& desc, const std::string& src_path = "") {
+        AudioEditCommand cmd;
+        cmd.id = ++command_counter;
+        cmd.type = type;
+        cmd.type_name = type_name;
+        cmd.start_ms = start_ms;
+        cmd.end_ms = end_ms;
+        cmd.timestamp = get_current_timestamp();
+        cmd.description = desc;
+        cmd.source_file_path = src_path;
+
+        edl_log.push_back(cmd);
+        export_edl_to_file();
+    }
+
+    // EDL kaydını metin dosyası şeklinde export/saund/edl_log.txt olarak dışa aktarma
+    int export_edl_to_file() {
+        try {
+            fs::create_directories(project_directory);
+            std::string edl_file_path = project_directory + "/edl_log.txt";
+            std::ofstream outfile(edl_file_path);
+            if (!outfile.is_open()) return -1;
+
+            outfile << "====================================================\n";
+            outfile << "           KAVRAM EDIT DECISION LIST (EDL)          \n";
+            outfile << "====================================================\n";
+            outfile << "Project Directory : " << project_directory << "\n";
+            outfile << "Original WAV Copy : " << original_copy_path << "\n";
+            outfile << "Current Duration  : " << total_duration_ms << " ms\n";
+            outfile << "Sample Rate       : " << sample_rate << " Hz\n";
+            outfile << "Channels          : " << channels << "\n";
+            outfile << "----------------------------------------------------\n\n";
+
+            for (const auto& cmd : edl_log) {
+                outfile << "[" << cmd.id << "] " << cmd.timestamp << " | " << cmd.type_name << "\n";
+                if (cmd.start_ms >= 0 || cmd.end_ms >= 0) {
+                    outfile << "    Time Range: " << cmd.start_ms << " ms -> " << cmd.end_ms << " ms\n";
+                }
+                if (!cmd.source_file_path.empty()) {
+                    outfile << "    Source File: " << cmd.source_file_path << "\n";
+                }
+                outfile << "    Description: " << cmd.description << "\n";
+                outfile << "----------------------------------------------------\n";
+            }
+            outfile.close();
+            return 0;
+        } catch (...) {
+            return -1;
+        }
+    }
+
+    // Orijinal dosyanın kilitlenmemiş güvenli bir kopyasını alma (Non-Destructive copy)
+    int safe_copy_original_file(const std::string& source_path) {
+        try {
+            fs::create_directories(project_directory);
+            original_copy_path = project_directory + "/original.wav";
+            
+            // Eğer sistem destekliyorsa reflink (Linux cp --reflink=auto benzeri) veya standart kopya
+            std::error_code ec;
+            fs::copy_file(source_path, original_copy_path, fs::copy_options::overwrite_existing, ec);
+            if (ec) {
+                std::cerr << "Safe copy warning: " << ec.message() << std::endl;
+                return -1;
+            }
+            std::cout << "Original sound safely copied to: " << original_copy_path << std::endl;
+            return 0;
+        } catch (const std::exception& e) {
+            std::cerr << "Safe copy error: " << e.what() << std::endl;
+            return -1;
+        }
     }
 
     // --- GEÇMİŞ YÖNETİMİ (History Management for Undo/Redo) ---
@@ -299,7 +428,6 @@ struct AudioEngine {
     }
 
     void push_history() {
-        // İleri alınan (Redo) ancak henüz kullanılmayan geçmişi sil
         if (history_index < static_cast<int>(history_stack.size()) - 1) {
             history_stack.erase(history_stack.begin() + history_index + 1, history_stack.end());
         }
@@ -307,7 +435,6 @@ struct AudioEngine {
         try {
             history_stack.push_back(audio_buffer); // Güvenli Kopya
             if (history_stack.size() > MAX_HISTORY_STEPS) {
-                // Sınırı aşarsak en eski olanı sil
                 history_stack.erase(history_stack.begin());
             } else {
                 history_index++;
@@ -322,6 +449,7 @@ struct AudioEngine {
             history_index--;
             audio_buffer = history_stack[history_index];
             recalculate_envelope_data();
+            log_edl_command(ActionType::UNDO, "UNDO", -1, -1, "Reverted last action using command stack.");
             std::cout << "Undo successful. Returning to history index: " << history_index << std::endl;
             return 0;
         }
@@ -333,6 +461,7 @@ struct AudioEngine {
             history_index++;
             audio_buffer = history_stack[history_index];
             recalculate_envelope_data();
+            log_edl_command(ActionType::REDO, "REDO", -1, -1, "Re-applied action using command stack.");
             std::cout << "Redo successful. Returning to history index: " << history_index << std::endl;
             return 0;
         }
@@ -341,7 +470,6 @@ struct AudioEngine {
 
     int can_undo() { return history_index > 0 ? 1 : 0; }
     int can_redo() { return history_index < static_cast<int>(history_stack.size()) - 1 ? 1 : 0; }
-
 
     // Yardımcı fonksiyon: Zarf verisini yeniden hesapla
     void recalculate_envelope_data() {
@@ -352,17 +480,12 @@ struct AudioEngine {
         }
 
         const int ENVELOPE_MS_PER_POINT = 50; // Her 50 ms için bir nokta
-        // DÜZELTME: -Wsign-compare uyarısını düzeltmek için 'long' -> 'size_t'
         size_t frames_per_envelope_point = (sample_rate * ENVELOPE_MS_PER_POINT) / 1000;
         if (frames_per_envelope_point == 0) frames_per_envelope_point = 1;
 
-        // DÜZELTME: -Wsign-compare uyarısını düzeltmek için 'long i' -> 'size_t i'
         for (size_t i = 0; i < audio_buffer.size() / channels; i += frames_per_envelope_point) {
             float max_amplitude = 0.0f;
-            // DÜZELTME: -Wsign-compare uyarısını düzeltmek için 'long j' -> 'size_t j'
-            // 'j' zaten 'size_t' idi, karşılaştırıldığı 'frames_per_envelope_point' artık 'size_t'
             for (size_t j = 0; j < frames_per_envelope_point; ++j) {
-                // DÜZELTME: (i + j) artık 'size_t' (unsigned) olduğu için karşılaştırma güvenli.
                 if ((i + j) * channels < audio_buffer.size()) {
                     for (int k = 0; k < channels; ++k) {
                         max_amplitude = std::max(max_amplitude, std::abs(audio_buffer[(i + j) * channels + k]));
@@ -376,7 +499,6 @@ struct AudioEngine {
         total_duration_ms = static_cast<int>((static_cast<double>(audio_buffer.size() / channels) / sample_rate) * 1000);
         std::cout << "Envelope data recalculated. New duration: " << total_duration_ms << " ms, Length: " << envelope_data_storage.size() << std::endl;
     }
-
 
     // Ses dosyalarını yükleme ve zarf verisi oluşturma
     // Returns 0 on success, -1 on failure.
@@ -400,12 +522,17 @@ struct AudioEngine {
             std::string filePath = filePaths[i];
             std::cout << "  Loading: " << filePath << std::endl;
 
+            // Ilk dosyayı asıl dosyayı bozmamak için güvenli kopya konumuna kopyala
+            if (i == 0) {
+                safe_copy_original_file(filePath);
+            }
+
             SF_INFO sfinfo;
             SNDFILE* infile = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
 
             if (!infile) {
                 std::cerr << "Error opening sound file: " << filePath << " - " << sf_strerror(NULL) << std::endl;
-                audio_buffer.clear(); // Hata durumunda buffer'ı temizle
+                audio_buffer.clear();
                 return -1;
             }
 
@@ -414,21 +541,21 @@ struct AudioEngine {
                 sample_rate = sfinfo.samplerate;
                 channels = sfinfo.channels;
             } else {
-                // Sonraki dosyaların aynı formatta olduğundan emin olun
                 if (sfinfo.samplerate != sample_rate || sfinfo.channels != channels) {
                     std::cerr << "Warning: Mismatch in sample rate or channels for " << filePath << ". Skipping." << std::endl;
                     sf_close(infile);
-                    continue; // Bu dosyayı atla
+                    continue;
                 }
             }
 
-            // Dosyadan tüm ses verilerini oku
             std::vector<float> file_data(sfinfo.frames * sfinfo.channels);
             sf_readf_float(infile, file_data.data(), sfinfo.frames);
             sf_close(infile);
 
-            // Mevcut ses buffer'ına ekle
             audio_buffer.insert(audio_buffer.end(), file_data.begin(), file_data.end());
+
+            // EDL günlüğüne ekle
+            log_edl_command(ActionType::LOAD_FILE, "LOAD_FILE", 0, static_cast<int>((static_cast<double>(sfinfo.frames)/sfinfo.samplerate)*1000), "Loaded file into non-destructive engine.", filePath);
         }
 
         if (audio_buffer.empty() || sample_rate == 0 || channels == 0) {
@@ -436,20 +563,16 @@ struct AudioEngine {
             return -1;
         }
 
-        recalculate_envelope_data(); // Yeni zarf verisini hesapla
-        
-        // Temiz ilk durumu kaydet (Undo noktası)
+        recalculate_envelope_data();
         push_history(); 
 
-        std::cout << "Audio files loaded. Total duration: " << total_duration_ms << " ms." << std::endl;
-        std::cout << "Envelope data length: " << envelope_data_storage.size() << std::endl;
+        std::cout << "Audio files loaded safely. Total duration: " << total_duration_ms << " ms." << std::endl;
         current_play_position_ms = 0;
         is_playing_flag = false;
-        return 0; // Indicate success
+        return 0;
     }
 
     // Play audio
-    // Returns 0 on success, -1 on failure.
     int play() {
         if (audio_buffer.empty() || sample_rate == 0 || channels == 0) {
             std::cerr << "Error: No audio data to play." << std::endl;
@@ -458,36 +581,28 @@ struct AudioEngine {
 
         if (is_playing_flag) {
             std::cout << "Audio is already playing." << std::endl;
-            return 0; // Already playing
+            return 0;
         }
 
-        // Eğer oynatma akışı zaten varsa, durdurup kapat
         if (play_stream) {
             Pa_StopStream(play_stream);
             Pa_CloseStream(play_stream);
             play_stream = nullptr;
         }
 
-        // Oynatma akışı parametrelerini ayarla
         PaStreamParameters outputParameters;
 
-        // --- GÜNCELLEME: API Prioritizasyonu (PulseAudio > ALSA > Default) ---
-        // Kullanıcının Linux uyumluluğu için önerdiği mantık
         PaHostApiIndex targetApiIndex = Pa_GetDefaultHostApi();
         int host_api_count = Pa_GetHostApiCount();
         
-        // 1. API'leri tara ve PulseAudio'yu (veya ALSA'yı) ara
         for (PaHostApiIndex i = 0; i < host_api_count; ++i) {
             const PaHostApiInfo* info = Pa_GetHostApiInfo(i);
             if (info) {
                 std::string apiName = info->name;
-                // PulseAudio'yu (veya modern PipeWire/Pulse katmanını) tercih et
-                // ALSA, PipeWire'ın ALSA arayüzü olarak da kullanılabilir
                 if (apiName.find("PulseAudio") != std::string::npos ||
                     apiName.find("ALSA") != std::string::npos) 
                 {
                     targetApiIndex = i;
-                    // PulseAudio en yüksek önceliği alsın ve hemen kullanılsın
                     if (apiName.find("PulseAudio") != std::string::npos) {
                         std::cout << "AudioEngine: Found PulseAudio Host API for playback." << std::endl;
                         break;
@@ -496,7 +611,6 @@ struct AudioEngine {
             }
         }
 
-        // 2. Bulunan API'ye ait varsayılan cihazı kullan
         const PaHostApiInfo* targetApiInfo = Pa_GetHostApiInfo(targetApiIndex);
         if (!targetApiInfo) {
              std::cerr << "Error: Could not get info for target Host API." << std::endl;
@@ -505,7 +619,6 @@ struct AudioEngine {
         
         PaDeviceIndex device_index = targetApiInfo->defaultOutputDevice;
         if (device_index == paNoDevice) {
-             // Seçilen API'nin varsayılan çıkış cihazı yoksa, genel varsayılana geri dön
              std::cout << "AudioEngine: Target API has no default output. Falling back to overall default device." << std::endl;
              device_index = Pa_GetDefaultOutputDevice();
              if (device_index == paNoDevice) {
@@ -516,38 +629,30 @@ struct AudioEngine {
             std::cout << "AudioEngine: Using Host API '" << targetApiInfo->name << "' for playback." << std::endl;
         }
 
-        outputParameters.device = device_index; // Seçilen cihazı ata
-        // --- GÜNCELLEME SONU ---
+        outputParameters.device = device_index;
 
-
-        // Cihaz bilgilerini al
         const PaDeviceInfo* deviceInfo = Pa_GetDeviceInfo(outputParameters.device);
         if (!deviceInfo) {
             std::cerr << "Error: Could not get device info for selected output device." << std::endl;
             return -1;
         }
 
-        // Ses motorunun kendi örnekleme hızını kullan
-        // Bu, ses dosyasının orijinal örnekleme hızında oynatılmasını sağlar.
         double playback_sample_rate = static_cast<double>(sample_rate);
 
-        outputParameters.channelCount = channels; // Mevcut ses kanalı sayısını kullan
-        outputParameters.sampleFormat = paFloat32; // Float32 formatında oynatma
-        // Daha yüksek gecikme (latency) kullanarak tamponlama sorunlarını azaltmaya çalışıyoruz.
-        // Bu, sesin daha akıcı çalmasına yardımcı olabilir ancak küçük bir gecikme yaratır.
-        outputParameters.suggestedLatency = deviceInfo->defaultHighOutputLatency; // Düşük yerine yüksek gecikme
+        outputParameters.channelCount = channels;
+        outputParameters.sampleFormat = paFloat32;
+        outputParameters.suggestedLatency = deviceInfo->defaultHighOutputLatency;
         outputParameters.hostApiSpecificStreamInfo = NULL;
 
-        // Oynatma akışını aç
         PaError err = Pa_OpenStream(
             &play_stream,
-            NULL, // Giriş parametresi yok (sadece oynatma)
+            NULL,
             &outputParameters,
-            playback_sample_rate, // Ses motorunun örnekleme oranını kullan
-            1024, // Sabit bir tampon boyutu belirledik (önceki 512 yerine 1024)
-            paClipOff, // Aşırı yüklenmeyi engelle
-            pa_playback_callback, // Geri çağırma fonksiyonu
-            this // userData (AudioEngine pointer'ı)
+            playback_sample_rate,
+            1024,
+            paClipOff,
+            pa_playback_callback,
+            this
         );
 
         if (err != paNoError) {
@@ -556,7 +661,6 @@ struct AudioEngine {
             return -1;
         }
 
-        // Oynatma akışını başlat
         err = Pa_StartStream(play_stream);
         if (err != paNoError) {
             std::cerr << "PortAudio error during Pa_StartStream for playback: " << Pa_GetErrorText(err) << std::endl;
@@ -566,22 +670,20 @@ struct AudioEngine {
         }
 
         is_playing_flag = true;
-        // Oynatma pozisyonunu sıfırla veya kaldığı yerden devam ettir (current_play_position_ms'i kullan)
         playback_frame_index = static_cast<long>((static_cast<double>(current_play_position_ms) / 1000.0) * sample_rate);
 
         std::cout << "Audio playback started." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
     // Pause audio
-    // Returns 0 on success, -1 on failure.
     int pause() {
         if (!is_playing_flag) {
             std::cout << "Audio is not playing." << std::endl;
-            return 0; // Already paused
+            return 0;
         }
         if (play_stream) {
-            PaError err = Pa_StopStream(play_stream); // Akışı duraklatmak için StopStream kullanılır
+            PaError err = Pa_StopStream(play_stream);
             if (err != paNoError) {
                 std::cerr << "PortAudio error during Pa_StopStream for pause: " << Pa_GetErrorText(err) << std::endl;
                 return -1;
@@ -589,13 +691,12 @@ struct AudioEngine {
         }
         is_playing_flag = false;
         std::cout << "Audio playback paused." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
     // Stop audio
-    // Returns 0 on success, -1 on failure.
     int stop() {
-        if (!is_playing_flag && playback_frame_index == 0) { // Zaten durmuşsa
+        if (!is_playing_flag && playback_frame_index == 0) {
             std::cout << "Audio is already stopped." << std::endl;
             return 0;
         }
@@ -603,57 +704,39 @@ struct AudioEngine {
             PaError err = Pa_StopStream(play_stream);
             if (err != paNoError) {
                 std::cerr << "PortAudio error during Pa_StopStream for stop: " << Pa_GetErrorText(err) << std::endl;
-                // Hata olsa bile akışı kapatmaya çalış
                 Pa_CloseStream(play_stream);
                 play_stream = nullptr;
                 is_playing_flag = false;
-                current_play_position_ms = 0; // Pozisyonu sıfırla
+                current_play_position_ms = 0;
                 playback_frame_index = 0;
                 return -1;
             }
-            Pa_CloseStream(play_stream); // Akışı kapat
+            Pa_CloseStream(play_stream);
             play_stream = nullptr;
         }
         is_playing_flag = false;
-        current_play_position_ms = 0; // Pozisyonu sıfırla
+        current_play_position_ms = 0;
         playback_frame_index = 0;
         std::cout << "Audio playback stopped." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
-    // Get current playback position in milliseconds
-    int get_position_ms() {
-        return current_play_position_ms;
-    }
+    int get_position_ms() { return current_play_position_ms; }
+    int get_duration_ms() { return total_duration_ms; }
+    int get_envelope_length() { return envelope_data_storage.size(); }
 
-    // Get total duration in milliseconds
-    int get_duration_ms() {
-        return total_duration_ms;
-    }
-
-    // Get waveform envelope data length
-    int get_envelope_length() {
-        return envelope_data_storage.size();
-    }
-
-    // Get waveform envelope data pointer
     const float* get_envelope_data() {
-        if (envelope_data_storage.empty()) {
-            return nullptr;
-        }
+        if (envelope_data_storage.empty()) return nullptr;
         return envelope_data_storage.data();
     }
 
-    // Set playback speed
     int set_speed(float speed) {
         std::cout << "Setting playback speed to " << speed << "x." << std::endl;
         current_speed = speed;
         return 0;
     }
 
-    // Set playback position in milliseconds
     int set_play_position_ms(int ms) {
-        // Geçersiz değerleri sınırla
         if (ms < 0) ms = 0;
         if (ms > total_duration_ms) ms = total_duration_ms;
 
@@ -666,14 +749,11 @@ struct AudioEngine {
         return 0; 
     }
 
-    // Get playback state
-    int get_is_playing() {
-        return is_playing_flag ? 1 : 0;
-    }
+    int get_is_playing() { return is_playing_flag ? 1 : 0; }
 
     // Delete a segment of audio
     int delete_segment(int start_ms, int end_ms) {
-        std::cout << "Deleting audio segment from " << start_ms << " to " << end_ms << " ms (requires audio data manipulation)." << std::endl;
+        std::cout << "Deleting audio segment from " << start_ms << " to " << end_ms << " ms (non-destructive EDL recorded)." << std::endl;
         if (audio_buffer.empty() || sample_rate == 0 || channels == 0) {
             std::cerr << "Error: No audio data to delete from." << std::endl;
             return -1;
@@ -682,38 +762,33 @@ struct AudioEngine {
         long start_frame = static_cast<long>((static_cast<double>(start_ms) / 1000.0) * sample_rate);
         long end_frame = static_cast<long>((static_cast<double>(end_ms) / 1000.0) * sample_rate);
 
-        // Clamp to valid range
         start_frame = std::max(0L, start_frame);
         end_frame = std::min(static_cast<long>(audio_buffer.size() / channels), end_frame);
 
         if (start_frame >= end_frame) {
             std::cout << "No valid segment to delete." << std::endl;
-            return 0; // Nothing to delete, consider it success
+            return 0;
         }
 
-        // Calculate start and end indices in the interleaved buffer
         long start_idx = start_frame * channels;
         long end_idx = end_frame * channels;
 
-        // Remove the segment from the audio_buffer
         audio_buffer.erase(audio_buffer.begin() + start_idx, audio_buffer.begin() + end_idx);
 
-        recalculate_envelope_data(); // Yeniden hesapla
-        
-        // İşlem başarılıysa geçmişe kaydet
+        recalculate_envelope_data();
         push_history(); 
 
-        return 0; // Success
+        log_edl_command(ActionType::DELETE_SEGMENT, "DELETE_SEGMENT", start_ms, end_ms, "Cut audio range from buffer.");
+
+        return 0;
     }
 
     // --- BENZER SES TESPİTİ VE OTOMATİK SİLME ALGORİTMASI ---
-    // Seçili aralığın parmak izini çıkarıp tüm ses dosyasını tarayarak benzer yerleri siler.
     int detect_and_delete_similar_segments(int start_ms, int end_ms, float threshold) {
         if (audio_buffer.empty() || sample_rate == 0 || channels == 0 || start_ms >= end_ms) {
             return -1;
         }
 
-        // 1. Geri alma (Undo) güvenliği için silme öncesi durumu geçmişe kaydet
         push_history();
 
         long start_frame = static_cast<long>((static_cast<double>(start_ms) / 1000.0) * sample_rate);
@@ -728,14 +803,12 @@ struct AudioEngine {
             return 0; 
         }
 
-        // ÇÖZÜM: Yüksek doğruluk ve hassas kesim için zaman adımı 2ms'ye düşürüldü.
         long step_size = (sample_rate * 2) / 1000; 
         if (step_size < 1) step_size = 1;
 
         long num_bins = total_frames / step_size;
         if (num_bins == 0) return 0;
 
-        // Hem ses şiddeti (RMS Enerji) hem de frekans karakteri (Zero-Crossing Rate) için vektörler
         std::vector<float> global_energy(num_bins, 0.0f);
         std::vector<float> global_zcr(num_bins, 0.0f);
 
@@ -748,7 +821,7 @@ struct AudioEngine {
             float prev_val = (f_start > 0) ? audio_buffer[(f_start - 1) * channels] : 0.0f;
 
             for (long f = f_start; f < f_end; ++f) {
-                float current_val = audio_buffer[f * channels]; // Sıfır geçişi için ana kanal
+                float current_val = audio_buffer[f * channels];
                 if ((current_val >= 0.0f && prev_val < 0.0f) || (current_val < 0.0f && prev_val >= 0.0f)) {
                     zcr_count++;
                 }
@@ -770,13 +843,11 @@ struct AudioEngine {
 
         if (pattern_bins_count <= 0) return 0;
 
-        // Şablonun enerjisini ve frekans karakterini alıyoruz
         std::vector<float> pattern_energy(global_energy.begin() + pattern_start_bin, global_energy.begin() + pattern_end_bin);
         std::vector<float> pattern_zcr(global_zcr.begin() + pattern_start_bin, global_zcr.begin() + pattern_end_bin);
 
-        float effective_threshold = std::min(threshold, 0.85f); // Aşırı katı olmaması için üst limit
+        float effective_threshold = std::min(threshold, 0.85f);
 
-        // Şablonu normalize et ve ortalama frekans karakterini (ZCR) hesapla
         float pattern_norm = 0.0f;
         float pattern_mean_zcr = 0.0f;
         for (size_t i = 0; i < pattern_energy.size(); ++i) {
@@ -804,29 +875,19 @@ struct AudioEngine {
             if (candidate_norm == 0.0f) candidate_norm = 1.0f;
             candidate_mean_zcr /= pattern_bins_count;
 
-            // 1. Şekil Benzerliği (Normalized Cross-Correlation)
             float similarity = dot_product / (pattern_norm * candidate_norm);
-
-            // 2. Ses Şiddeti (Genlik) Yakınlığı. 
-            // Çok sessiz bir nefesin, gürültülü bir harfi silmemesi için sıkılaştırıldı. (0.3x ile 3.0x arası)
             float amplitude_ratio = (pattern_norm > 0.0f && candidate_norm > 0.0f) ? (candidate_norm / pattern_norm) : 1.0f;
-
-            // 3. Frekans Karakteri (Sıfır Geçiş Oranı - ZCR)
-            // Bu sayede "S" (hiss) sesi ile "T" (click) veya normal ses birbirine karışmaz, konuşma kaybı yaşanmaz.
             float zcr_diff = std::abs(pattern_mean_zcr - candidate_mean_zcr);
-            bool zcr_match = zcr_diff < 0.12f; // Maksimum %12 frekans karakteri sapması (çok güvenli)
+            bool zcr_match = zcr_diff < 0.12f;
 
             if (similarity >= effective_threshold && amplitude_ratio > 0.3f && amplitude_ratio < 3.0f && zcr_match) {
                 long del_start = b * step_size;
                 long del_end = (b + pattern_bins_count) * step_size;
                 segments_to_delete.push_back({del_start, del_end});
-                
-                // Üst üste binip aynı yeri tekrar bulmaması için şablon boyu kadar atla.
                 b += pattern_bins_count - 1; 
             }
         }
 
-        // KULLANICI İSTEĞİ: "o seçili alanla beraber hepsini siler"
         bool original_included = false;
         for (const auto& r : segments_to_delete) {
             if (std::abs(r.first - start_frame) < step_size * 2) {
@@ -855,7 +916,6 @@ struct AudioEngine {
             }
         }
 
-        // Sondan başa doğru sil (indeks kaymalarını önlemek için)
         for (auto it = merged_segments.rbegin(); it != merged_segments.rend(); ++it) {
             long s_idx = it->first * channels;
             long e_idx = it->second * channels;
@@ -865,6 +925,8 @@ struct AudioEngine {
         }
 
         recalculate_envelope_data();
+        log_edl_command(ActionType::DELETE_SIMILAR_SEGMENTS, "DELETE_SIMILAR", start_ms, end_ms, "Detected and deleted " + std::to_string(merged_segments.size()) + " similar audio pattern segments.");
+
         std::cout << "High-Accuracy Similar segments deleted. Count: " << merged_segments.size() << std::endl;
         return 0;
     }
@@ -875,7 +937,6 @@ struct AudioEngine {
             return -1;
         }
 
-        // 1. Geri alma (Undo) güvenliği
         push_history();
 
         long start_frame = static_cast<long>((static_cast<double>(start_ms) / 1000.0) * sample_rate);
@@ -887,7 +948,6 @@ struct AudioEngine {
 
         if (start_frame >= end_frame) return 0;
 
-        // Seçilen bölgenin "maksimum kalınlığını" (genliğini) ölç
         float max_thickness = 0.0f;
         for (long i = start_frame; i < end_frame; ++i) {
             for (int c = 0; c < channels; ++c) {
@@ -898,19 +958,13 @@ struct AudioEngine {
             }
         }
 
-        // Tolerans: Seçilen boşluğun kalınlığından %20 daha fazlasına kadar olanları da sessizlik say (dalgalanmalar için)
         float threshold = max_thickness * 1.2f;
-        if (threshold < 0.001f) threshold = 0.001f; // Minimum çok düşük dip gürültüsü sınırı
+        if (threshold < 0.001f) threshold = 0.001f;
 
-        // Analiz parametreleri:
-        // Çok ince hassasiyetle 10ms'lik pencerelerde tarama yapalım
         long window_frames = (sample_rate * 10) / 1000;
         if (window_frames < 1) window_frames = 1;
         
-        // Kelime içlerini (p, t gibi ani harf duraksamaları) yanlışlıkla kesmemek için minimum silme uzunluğu 150ms olmalı!
         long min_silence_frames = (sample_rate * 150) / 1000; 
-        
-        // Konuşulan kelimelerin başını (nefes) veya sonunu (yankı) kesmemek için bulduğumuz boşluklardan 25ms pay bırakalım
         long padding_frames = (sample_rate * 25) / 1000; 
 
         std::vector<std::pair<long, long>> segments_to_delete;
@@ -928,21 +982,17 @@ struct AudioEngine {
                     }
                 }
             } else {
-                w_max = threshold + 1.0f; // Dosya bittiğinde açık olan boşluk bloğunu kapatmak için zorla sınır dışına at
+                w_max = threshold + 1.0f;
             }
 
-            // Eğer bu pencerenin sesi eşiğimizden (kalınlığımızdan) düşükse
             if (w_max <= threshold && i < total_frames) {
                 if (current_silence_start == -1) {
-                    current_silence_start = i; // Boşluk başlıyor
+                    current_silence_start = i;
                 }
             } else {
-                // Sesi bulduk (konuşma başladı), önceden açık olan boşluk bloğu var mıydı?
                 if (current_silence_start != -1) {
                     long silence_length = i - current_silence_start;
-                    // Eğer bulduğumuz boşluk güvenli süreden (150ms) uzunsa listeye ekle
                     if (silence_length >= min_silence_frames) {
-                        // Ancak listeye eklerken başından ve sonundan 25ms pay(padding) bırak
                         long del_start = current_silence_start + padding_frames;
                         long del_end = i - padding_frames;
                         if (del_end > del_start) {
@@ -954,10 +1004,8 @@ struct AudioEngine {
             }
         }
 
-        // Kullanıcının özellikle seçtiği ve işaret ettiği şablon alanı da garanti olarak silineceklere ekleyelim.
         segments_to_delete.push_back({start_frame, end_frame});
 
-        // Silinecek aralıkları birbirine karıştırmamak için sırala ve birleştir
         std::sort(segments_to_delete.begin(), segments_to_delete.end(), [](const auto& a, const auto& b) {
             return a.first < b.first;
         });
@@ -974,7 +1022,6 @@ struct AudioEngine {
             }
         }
 
-        // Sondan başa doğru sil (Böylece indeksler kayıp yanlış yerleri silmez)
         for (auto it = merged_segments.rbegin(); it != merged_segments.rend(); ++it) {
             long s_idx = it->first * channels;
             long e_idx = it->second * channels;
@@ -984,17 +1031,18 @@ struct AudioEngine {
         }
 
         recalculate_envelope_data();
+        log_edl_command(ActionType::DELETE_BY_THICKNESS, "DELETE_THICKNESS", start_ms, end_ms, "Deleted quiet/silence gaps based on thickness sample.");
+
         std::cout << "Thickness based deletion completed. Segments deleted: " << merged_segments.size() << std::endl;
         return 0;
     }
-
 
     // Insert audio data from a file
     int insert_audio(const std::string& filePath, int position_ms) {
         std::cout << "Inserting audio file '" << filePath << "' at position " << position_ms << " ms." << std::endl;
         if (sample_rate == 0 || channels == 0) {
             std::cerr << "Error: Main audio engine not initialized with sample rate/channels. Load a file first." << std::endl;
-            return -1; // Cannot insert if main audio properties are unknown
+            return -1;
         }
 
         SF_INFO sfinfo;
@@ -1005,7 +1053,6 @@ struct AudioEngine {
             return -1;
         }
 
-        // Sample rate mismatch check
         if (sfinfo.samplerate != sample_rate) {
             std::cerr << "Error: Sample rate mismatch for inserted file. Expected: "
                       << sample_rate << "Hz. Got: " << sfinfo.samplerate << "Hz." << std::endl;
@@ -1017,15 +1064,14 @@ struct AudioEngine {
         sf_readf_float(infile, inserted_data.data(), sfinfo.frames);
         sf_close(infile);
 
-        // Kanal sayısı eşleştirme
         std::vector<float> processed_inserted_data;
         if (sfinfo.channels == channels) {
-            processed_inserted_data = inserted_data; // Kanal sayısı zaten eşleşiyor
+            processed_inserted_data = inserted_data;
         } else if (sfinfo.channels == 1 && channels == 2) {
             processed_inserted_data.reserve(inserted_data.size() * 2);
             for (float sample : inserted_data) {
-                processed_inserted_data.push_back(sample); // Left channel
-                processed_inserted_data.push_back(sample); // Right channel
+                processed_inserted_data.push_back(sample);
+                processed_inserted_data.push_back(sample);
             }
         } else if (sfinfo.channels == 2 && channels == 1) {
             processed_inserted_data.reserve(inserted_data.size() / 2);
@@ -1043,12 +1089,12 @@ struct AudioEngine {
 
         audio_buffer.insert(audio_buffer.begin() + insert_idx, processed_inserted_data.begin(), processed_inserted_data.end());
 
-        recalculate_envelope_data(); // Yeniden hesapla
-        
-        // İşlem başarılıysa geçmişe kaydet
+        recalculate_envelope_data();
         push_history();
 
-        return 0; // Success
+        log_edl_command(ActionType::INSERT_AUDIO, "INSERT_AUDIO", position_ms, position_ms, "Inserted audio segment from external file.", filePath);
+
+        return 0;
     }
 
     // Start microphone recording
@@ -1056,12 +1102,11 @@ struct AudioEngine {
         std::cout << "Starting microphone recording." << std::endl;
         if (is_recording_flag) {
             std::cout << "Already recording." << std::endl;
-            return 1; // Already recording
+            return 1;
         }
 
         PaStreamParameters inputParameters;
         
-        // --- GÜNCELLEME: API Prioritizasyonu ---
         PaHostApiIndex targetApiIndex = Pa_GetDefaultHostApi();
         int host_api_count = Pa_GetHostApiCount();
         
@@ -1125,18 +1170,13 @@ struct AudioEngine {
 
         recorded_audio_buffer.clear(); 
         
-        // GÜVENLİK VE OPTİMİZASYON: Kayıt esnasında ani donmaları engellemek için,
-        // buffer'a şimdiden 30 dakikalık (~600MB) kapasite rezerve ediliyor. 
-        // Böylece callback döngüsü sırasında sistem tıkanmaz.
         try {
             recorded_audio_buffer.reserve(sample_rate * channels * 1800);
-        } catch(...) {
-            // Sessizce yutulur. Eğer sistemin RAM'i yetmezse standart allocation devreye girer.
-        }
+        } catch(...) {}
 
         is_recording_flag = true;
         std::cout << "Microphone recording started." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
     // Stop microphone recording
@@ -1144,7 +1184,7 @@ struct AudioEngine {
         std::cout << "Stopping microphone recording." << std::endl;
         if (!is_recording_flag) {
             std::cout << "Not currently recording." << std::endl;
-            return 1; // Not recording
+            return 1;
         }
 
         PaError err = Pa_StopStream(record_stream);
@@ -1165,10 +1205,9 @@ struct AudioEngine {
         record_stream = nullptr;
         is_recording_flag = false;
         std::cout << "Microphone recording stopped. Recorded " << recorded_audio_buffer.size() << " samples." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
-    // Play recorded audio (placeholder)
     int play_recorded_audio() {
         return 0;
     }
@@ -1181,7 +1220,6 @@ struct AudioEngine {
             return -1;
         }
         
-        // --- Normalleştirme ---
         float max_amplitude = 0.0f;
         for (float sample : recorded_audio_buffer) {
             max_amplitude = std::max(max_amplitude, std::abs(sample));
@@ -1195,7 +1233,6 @@ struct AudioEngine {
                 sample *= scale_factor;
             }
         }
-        // --- Normalleştirme Sonu ---
 
         if (sample_rate == 0 || channels == 0) { 
             std::cerr << "Error: Main audio engine not initialized with sample rate/channels. Load a file first." << std::endl;
@@ -1206,8 +1243,8 @@ struct AudioEngine {
             std::vector<float> stereo_recorded_audio_buffer;
             stereo_recorded_audio_buffer.reserve(recorded_audio_buffer.size() * 2);
             for (float sample : recorded_audio_buffer) {
-                stereo_recorded_audio_buffer.push_back(sample); // Left
-                stereo_recorded_audio_buffer.push_back(sample); // Right
+                stereo_recorded_audio_buffer.push_back(sample);
+                stereo_recorded_audio_buffer.push_back(sample);
             }
             recorded_audio_buffer = stereo_recorded_audio_buffer;
         } else if (channels == 1 && recorded_audio_buffer.size() % 2 == 0 && recorded_audio_buffer.size() > 0) {
@@ -1226,14 +1263,14 @@ struct AudioEngine {
 
         audio_buffer.insert(audio_buffer.begin() + insert_idx, recorded_audio_buffer.begin(), recorded_audio_buffer.end());
 
-        recorded_audio_buffer.clear(); // Kaydedilen sesi ekledikten sonra temizle
-        recalculate_envelope_data(); // Yeniden hesapla
-        
-        // İşlem başarılıysa geçmişe kaydet
+        recorded_audio_buffer.clear();
+        recalculate_envelope_data();
         push_history();
 
+        log_edl_command(ActionType::INSERT_RECORDING, "INSERT_MIC_RECORDING", position_ms, position_ms, "Inserted live microphone recording at cursor.");
+
         std::cout << "Recorded audio inserted. New total duration: " << total_duration_ms << " ms." << std::endl;
-        return 0; // Success
+        return 0;
     }
 
     // Save combined/edited audio data to a file
@@ -1258,7 +1295,10 @@ struct AudioEngine {
         sf_writef_float(outfile, audio_buffer.data(), audio_buffer.size() / channels);
         sf_close(outfile);
 
-        return 0; // Success
+        // Export/Save işlemini de EDL kaydına not alıyoruz
+        log_edl_command(ActionType::LOAD_FILE, "EXPORT_FILE", 0, total_duration_ms, "Exported final audio session to file.", filePath);
+
+        return 0;
     }
 
     // --- Mikrofon İşleme Fonksiyonları ---
@@ -1274,7 +1314,7 @@ struct AudioEngine {
 
     int set_high_pass_filter_cutoff(float hz) {
         if (hz <= 0.0f || sample_rate == 0) {
-            mic_hp_filter_alpha = 0.0f; // Filtreyi devre dışı bırak
+            mic_hp_filter_alpha = 0.0f;
         } else {
             mic_hp_filter_alpha = 1.0f / (1.0f + 2.0f * M_PI * hz / sample_rate);
         }
@@ -1284,7 +1324,7 @@ struct AudioEngine {
     }
 
     int set_microphone_gain(float gain) {
-        mic_input_gain = std::max(0.0f, gain); // Kazanç negatif olamaz
+        mic_input_gain = std::max(0.0f, gain);
         return 0;
     }
 
@@ -1502,7 +1542,7 @@ struct AudioEngine {
         sf_writef_float(outfile, recorded_audio_buffer.data(), recorded_audio_buffer.size() / channels);
         sf_close(outfile);
 
-        return 0; // Success
+        return 0;
     }
 };
 
@@ -1646,6 +1686,7 @@ static int pa_playback_callback(const void *inputBuffer, void *outputBuffer,
 {
     (void)inputBuffer;
     (void)timeInfo;
+    (void)statusFlags;
 
     AudioEngine *engine = (AudioEngine*)userData;
     float *out = (float*)outputBuffer;
@@ -1736,7 +1777,6 @@ static int pa_playback_callback(const void *inputBuffer, void *outputBuffer,
     }
 }
 
-
 // C interface functions (extern "C" ensures C-style linking)
 extern "C" {
     void* create_audio_engine() {
@@ -1788,7 +1828,7 @@ extern "C" {
         return static_cast<AudioEngine*>(ptr)->detect_and_delete_similar_segments(start_ms, end_ms, threshold);
     }
     
-    // --- YENİ EKLENEN: Kalınlığa (Amplitude) Göre Sesleri Silme C Fonksiyonu ---
+    // --- Kalınlığa (Amplitude) Göre Sesleri Silme C Fonksiyonu ---
     int delete_segments_by_thickness(void* ptr, int start_ms, int end_ms) {
         if (!ptr) return -1;
         return static_cast<AudioEngine*>(ptr)->delete_segments_by_thickness(start_ms, end_ms);
@@ -1809,7 +1849,13 @@ extern "C" {
     int can_undo_audio(void* ptr) { if (!ptr) return 0; return static_cast<AudioEngine*>(ptr)->can_undo(); }
     int can_redo_audio(void* ptr) { if (!ptr) return 0; return static_cast<AudioEngine*>(ptr)->can_redo(); }
 
-    // --- Yeni Eklenen Mikrofon İşleme C Fonksiyonları ---
+    // --- EDL (Edit Decision List) Export C Function ---
+    int export_edl_log(void* ptr) {
+        if (!ptr) return -1;
+        return static_cast<AudioEngine*>(ptr)->export_edl_to_file();
+    }
+
+    // --- Mikrofon İşleme C Fonksiyonları ---
     int set_mic_noise_gate_threshold(void* ptr, float threshold) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_noise_gate_threshold(threshold); }
     int set_mic_noise_gate_release(void* ptr, float ms) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_noise_gate_release(ms); }
     int set_mic_high_pass_filter_cutoff(void* ptr, float hz) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_high_pass_filter_cutoff(hz); }
@@ -1819,19 +1865,18 @@ extern "C" {
     int set_mic_de_esser_level(void* ptr, int level) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_de_esser_level(level); }
     int set_mic_de_hum_level(void* ptr, int level) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_de_hum_level(level); }
     
-    // Yeni Eklenen Compressor Fonksiyonları
+    // Compressor Fonksiyonları
     int set_mic_compressor_threshold(void* ptr, float db_threshold) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_compressor_threshold(db_threshold); }
     int set_mic_compressor_ratio(void* ptr, float ratio) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_compressor_ratio(ratio); }
     int set_mic_compressor_attack(void* ptr, float ms) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_compressor_attack(ms); }
     int set_mic_compressor_release(void* ptr, float ms) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_compressor_release(ms); }
     int set_mic_compressor_makeup_gain(void* ptr, float db_gain) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_compressor_makeup_gain(db_gain); }
 
-    // Yeni Eklenen Parametric EQ Fonksiyonları
+    // Parametric EQ Fonksiyonları
     int set_mic_eq_gain(void* ptr, float db_gain) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_eq_gain(db_gain); }
     int set_mic_eq_frequency(void* ptr, float hz) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_eq_frequency(hz); }
     int set_mic_eq_q(void* ptr, float q_val) { if (!ptr) return -1; return static_cast<AudioEngine*>(ptr)->set_mic_eq_q(q_val); }
 
-    // EQ katsayılarını hesaplamak için yardımcı fonksiyon
     int calculate_eq_coefficients(void* ptr) { if (!ptr) return -1; static_cast<AudioEngine*>(ptr)->calculate_eq_coefficients(); return 0; }
 
     int save_recorded_audio_to_file(void* ptr, const char* filePath) {

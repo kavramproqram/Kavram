@@ -51,7 +51,6 @@ from PyQt5.QtCore import Qt, QTimer, QPointF, QRectF, QDir, QByteArray, QPoint
 from PyQt5.QtGui import QPainter, QPen, QColor, QCursor, QBrush, QPainterPath, QIcon, QPixmap, QFont, QTextCursor, QTextBlockFormat, QKeySequence
 from PyQt5.QtSvg import QSvgRenderer
 
-# --- resource_path (PyInstaller için dinamik yol) ---
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
@@ -83,7 +82,6 @@ SETTINGS_DIR = os.path.join(QDir.homePath(), '.config', 'concept_sound_editor')
 TEMP_RAW_RECORDING_FILE = os.path.join(SETTINGS_DIR, "temp_raw_recording.wav")
 SETTINGS_FILE = os.path.join(SETTINGS_DIR, "settings.json")
 
-# --- C++ Kütüphanesini Yükle (Dinamik Yol) ---
 lib = None
 try:
     if sys.platform.startswith('win'):
@@ -202,7 +200,6 @@ except OSError as e:
     else:
         print("Error message box cannot be shown because GUI is not initialized.")
 
-# --- Dalga Formu Çizim Bileşeni ---
 class WaveformWidget(QWidget):
     def __init__(self, parent=None, sound_editor_window=None):
         super().__init__(parent)
@@ -371,7 +368,6 @@ class WaveformWidget(QWidget):
         painter.end()
 
 
-# --- Özel Panel Yeniden Boyutlandırma Çubuğu ---
 class ResizeHandle(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -401,7 +397,6 @@ class ResizeHandle(QFrame):
         self.is_dragging = False
 
 
-# --- Gelişmiş Geçici Metin Paneli ---
 class TemporaryTextPanel(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -430,7 +425,6 @@ class TemporaryTextPanel(QFrame):
         layout.addWidget(self.text_edit)
 
 
-# --- Ana Pencere Sınıfı ---
 class SoundEditorWindow(QWidget):
     DEFAULT_BASE_DIR = os.path.join(os.path.expanduser('~'), 'Kavram', 'Export')
 
@@ -627,16 +621,25 @@ class SoundEditorWindow(QWidget):
         self.toolbar_layout.addWidget(self.cut_button)
         self.btn_cut = self.cut_button
 
-        # --- Similar Delete butonu (yazı boyutuna göre otomatik genişlik) ---
+# --- Similar Delete butonu (yazı boyutuna göre otomatik genişlik) ---
         self.similar_delete_button = QPushButton("::")
-        self.similar_delete_button.setToolTip("Sol Tık: Seçili kesite frekans olarak benzerleri siler\nSağ Tık: Seçili alanın kalınlığındaki (volume/sessizlik) tüm boşlukları güvenlice siler")
+        # Tooltip güncellendi (Tek işlev: Kalınlığa/sessizliğe göre silme)
+        self.similar_delete_button.setToolTip("Seçili alanın kalınlığındaki (volume/sessizlik) tüm boşlukları siler")
         self.similar_delete_button.setStyleSheet(self.buttonStyle())
         self.similar_delete_button.setFixedHeight(30)
         self.similar_delete_button.adjustSize()
         self.similar_delete_button.setFixedWidth(self.similar_delete_button.sizeHint().width() + 20)
-        self.similar_delete_button.clicked.connect(self.delete_similar_segments_action)
-        self.similar_delete_button.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.similar_delete_button.customContextMenuRequested.connect(self.delete_thickness_segments_action)
+        
+        # Sol tık (clicked) artık önceden sağ tıkta olan kalınlık silme fonksiyonunu çalıştıracak:
+        self.similar_delete_button.clicked.connect(self.delete_thickness_segments_action)
+        
+        # Kapatılan eski sol tık fonksiyonu:
+        # self.similar_delete_button.clicked.connect(self.delete_similar_segments_action)
+        
+        # Kapatılan sağ tık olayı:
+        # self.similar_delete_button.setContextMenuPolicy(Qt.CustomContextMenu)
+        # self.similar_delete_button.customContextMenuRequested.connect(self.delete_thickness_segments_action)
+        
         self.toolbar_layout.addWidget(self.similar_delete_button)
         self.btn_similar_delete = self.similar_delete_button
 
@@ -752,9 +755,9 @@ class SoundEditorWindow(QWidget):
         self.toolbar_layout.addWidget(self.lbl_time)
 
         # --- Dosya etiketi ---
-        #self.lbl_file = QLabel('File: None')
-        #self.lbl_file.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        #self.toolbar_layout.addWidget(self.lbl_file)
+        self.lbl_file = QLabel('File: None')
+        self.lbl_file.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        self.toolbar_layout.addWidget(self.lbl_file)
 
         # --- Stretch (boşluk) ---
         self.toolbar_layout.addStretch()
@@ -801,7 +804,6 @@ class SoundEditorWindow(QWidget):
         redo_shortcut_std.setContext(Qt.WindowShortcut)
         redo_shortcut_std.activated.connect(self.redo_action)
 
-    # --- Dalga Formu Genişlik Menüsü ---
     def show_wave_scale_menu(self):
         if self.is_recording_mode:
             return
@@ -827,7 +829,6 @@ class SoundEditorWindow(QWidget):
         self._save_settings()
         self.log_sound(f"Dalga formu ölçeklemesi ayarlandı: {scale}x")
 
-    # Undo / Redo
     def update_undo_redo_buttons(self):
         if not self.lib or not self.audio_engine:
             self.btn_undo.setEnabled(False)
@@ -877,7 +878,6 @@ class SoundEditorWindow(QWidget):
             self.waveform_widget.clear_selection()
             print("Redo carried out.")
 
-    # Stil metodları
     def buttonStyle(self):
         return """
             QPushButton, QComboBox {
@@ -927,7 +927,6 @@ class SoundEditorWindow(QWidget):
             QMenu::item:selected { background-color: #555; }
         """
 
-    # --- Geçici Metin Paneli Kontrolleri ---
     def toggle_text_panel(self):
         if self.temporary_text_panel.isVisible():
             self.temporary_text_panel.hide()
@@ -1094,7 +1093,6 @@ class SoundEditorWindow(QWidget):
                 self.waveform_widget.split_points_ms = []
                 self.update_undo_redo_buttons()
 
-    # --- CONCEPT SOUND (.sound) PAKET SİSTEMİ ---
     def load_sound_package(self, file_path):
         if not self.lib or not self.audio_engine:
             return

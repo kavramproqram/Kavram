@@ -1158,7 +1158,7 @@ class SphereWindow(QWidget):
             
             self.update_connection_dropdown()  
             confirm_dialog.accept()
-            self.show_info_message("Sıfırlama işlemi başarıyla tamamlandı.\nTüm belirtilen klasörler temizlendi ve özel editörler kaldırıldı.")
+            self.show_info_message("Sıfırlama işlemi başarıyla tamamlandı.\nTüm belirtilen klasörler temizlendi \nve özel editörler kaldırıldı.")
         
         yes_btn.clicked.connect(do_reset)
         no_btn.clicked.connect(confirm_dialog.reject)

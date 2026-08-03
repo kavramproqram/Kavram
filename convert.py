@@ -1142,10 +1142,6 @@ class UniversalConverter(QWidget):
             "Ses önizlemesi için Play butonuna basabilirsiniz.")
         self._show_audio_info(is_video=True)
 
-    def _restore_video_preview_ui(self):
-        if self._video_widget: self._video_widget.setVisible(False)
-        self._show_audio_info(is_video=True)
-
     def _init_ui(self):
         self.setWindowTitle('Convert')
         self.resize(920, 600)
@@ -1180,7 +1176,7 @@ class UniversalConverter(QWidget):
 
         bs = self._btn_css()
         for b in [self.btn_file, self.btn_convert, self.btn_reset, self.btn_export]:
-            b.setFixedSize(80, 30); b.setStyleSheet(bs)
+            b.setFixedSize(90, 30); b.setStyleSheet(bs)
             b.setCursor(Qt.PointingHandCursor)
 
         self.btn_play_preview.setFixedSize(90, 30)

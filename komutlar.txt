@@ -18,6 +18,8 @@ pip install pynput
 
 pip install pynput
 
+pip install cryptography
+
 pip install sounddevice
 
 pip install pyinstaller
@@ -206,6 +208,7 @@ g++ -std=c++17 -O2 -Wall -Wextra -Wpedantic -pthread camera_recorder.cpp -o came
 
 g++ -O2 -shared -fPIC -o libconverter_engine.so converter_engine.cpp -lm $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale)
 
+g++ -O2 -shared -fPIC -Wl,-rpath,'$ORIGIN:$ORIGIN/lib' -o libconverter_engine.so converter_engine.cpp -lm $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale)
 
 sudo apt install libavformat-dev libavcodec-dev libavutil-dev \
                  libswresample-dev libswscale-dev

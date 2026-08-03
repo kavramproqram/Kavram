@@ -35,7 +35,8 @@ import os
 import signal
 import importlib
 import json          
-import subprocess    
+import subprocess 
+import traceback   
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QStackedWidget, QVBoxLayout, QDialog,
     QListWidget, QListWidgetItem, QLabel, QMessageBox, QMenu
@@ -219,8 +220,11 @@ class EditorSwitcherDialog(QDialog):
 
 
 class CoreWindow(QWidget):
+    _instance = None
+
     def __init__(self):
         super().__init__()
+        CoreWindow._instance = self
         self.setWindowTitle("Kavram")
         self.setWindowIcon(QIcon(resource_path('ikon/Kavram.png')))
 
@@ -295,6 +299,59 @@ class CoreWindow(QWidget):
         self.showMaximized()
         self.force_close = False
         self.spawned_external_processes = []
+
+    def handle_uncaught_editor_exception(self, exctype, value, tb):
+        """
+        Tüm editörlerden (Qt sinyal, timer veya callback kaynaklı) gelen 
+        ve yakalanmamış olan her türlü Python istisnasını yakalar. 
+        Uygulamanın Abort/Core Dump olmasını engeller ve güvenle Sphere'e döner.
+        """
+        error_msg = f"{exctype.__name__}: {value}"
+        traceback.print_exception(exctype, value, tb)
+        
+        current_widget = self.stack.currentWidget()
+        current_editor_name = "Bilinmeyen Editör"
+        for name, widget_instance in list(self.instantiated_editors.items()):
+            if widget_instance == current_widget:
+                current_editor_name = name
+                break
+
+        print(f"[GÜVENLİK PROTOKOLÜ] '{current_editor_name}' editöründe çökme engellendi: {error_msg}")
+        
+        # Kullanıcıyı bilgilendiren diyalog
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Critical)
+        msg.setWindowTitle("Editör Hatası (Çökme Koruması)")
+        msg.setText(f"'{current_editor_name}' editöründe beklenmeyen bir hata oluştu ve işlem durduruldu.\n\n"
+                    f"Sistem güvenliği sağlandı. Ana editöre (Sphere) güvenle dönülüyor.")
+        msg.setDetailedText("".join(traceback.format_exception(exctype, value, tb)))
+        msg.setStyleSheet("""
+            QMessageBox { background-color: #1e1e1e; color: white; }
+            QLabel { color: white; font-size: 13px; }
+            QPushButton { background-color: #3a3a3a; color: white; padding: 6px 14px; border-radius: 4px; }
+            QPushButton:hover { background-color: #555; }
+        """)
+        msg.exec_()
+
+        # Çöken editör Sphere değilse onu temizle ve Sphere'e geç
+        if current_editor_name != "Sphere":
+            try:
+                if current_editor_name in self.instantiated_editors:
+                    crashed_widget = self.instantiated_editors[current_editor_name]
+                    self.stack.removeWidget(crashed_widget)
+                    del self.instantiated_editors[current_editor_name]
+                    crashed_widget.deleteLater()
+                
+                self.switchToEditor("Sphere", close_current=False)
+            except Exception as e:
+                print(f"[GÜVENLİK PROTOKOLÜ KRİTİK] Sphere'e dönüş hatası: {e}")
+
+    def safe_call(self, func, *args, **kwargs):
+        """Fonksiyon çağrılarını güvenlik çemberi altında çalıştırır."""
+        try:
+            func(*args, **kwargs)
+        except Exception as e:
+            self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
 
     def get_custom_editors_dir(self):
         """Kök veri dizini altındaki custom_editors klasörünü döndürür."""
@@ -436,7 +493,20 @@ class CoreWindow(QWidget):
     def show_error_message(self, text):
         QMessageBox.critical(self, "Hata", text)
 
+    def safe_switch_to_editor(self, editor_name, close_current=False):
+        """
+        Tüm editör başlatma ve dosya yükleme işlemlerini korumaya alan 
+        Güvenlik Protokolü.
+        """
+        return self.switchToEditor(editor_name, close_current=close_current)
+
     def switchToEditor(self, editor_name, close_current=False):
+        try:
+            self._internal_switch_to_editor(editor_name, close_current=close_current)
+        except Exception as e:
+            self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
+
+    def _internal_switch_to_editor(self, editor_name, close_current=False):
         if editor_name in self.editor_map and self.editor_map[editor_name] == 'CUSTOM':
             executable = self.get_custom_editor_executable(editor_name)
             if executable and os.path.exists(executable):
@@ -616,7 +686,17 @@ class CoreWindow(QWidget):
         except ImportError as e:
             QMessageBox.critical(self, "Hata", f"IDE_switcher.py bulunamadı: {e}")
 
+    def safe_load_editor_file(self, editor_name, file_path):
+        """Dosya yükleme işlemlerini korumaya alan Güvenlik Protokolü."""
+        return self.loadEditorFile(editor_name, file_path)
+
     def loadEditorFile(self, editor_name, file_path):
+        try:
+            self._internal_load_editor_file(editor_name, file_path)
+        except Exception as e:
+            self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
+
+    def _internal_load_editor_file(self, editor_name, file_path):
         print(f"DEBUG: CoreWindow.loadEditorFile called. editor_name: {editor_name}, file_path: {file_path}")
         
         if editor_name == "Drawing":
@@ -634,7 +714,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = drawing_editor
             self.stack.setCurrentWidget(drawing_editor)
             drawing_editor.showMaximized()
-            QTimer.singleShot(0, lambda: drawing_editor.load_image_from_path(file_path))
+            QTimer.singleShot(0, lambda: self.safe_call(drawing_editor.load_image_from_path, file_path))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Drawing editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Text":
@@ -653,7 +733,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = text_editor
             self.stack.setCurrentWidget(text_editor)
             text_editor.showMaximized()
-            QTimer.singleShot(0, lambda: text_editor.load_file_content(file_path))
+            QTimer.singleShot(0, lambda: self.safe_call(text_editor.load_file_content, file_path))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Text editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Ai":
@@ -672,7 +752,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = ai_editor
             self.stack.setCurrentWidget(ai_editor)
             ai_editor.showMaximized()
-            QTimer.singleShot(0, lambda: ai_editor.openFiles_from_path([file_path]))
+            QTimer.singleShot(0, lambda: self.safe_call(ai_editor.openFiles_from_path, [file_path]))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Ai editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Sound":
@@ -691,7 +771,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = sound_editor
             self.stack.setCurrentWidget(sound_editor)
             sound_editor.showMaximized()
-            QTimer.singleShot(0, lambda: sound_editor.load_files_from_path([file_path]))
+            QTimer.singleShot(0, lambda: self.safe_call(sound_editor.load_files_from_path, [file_path]))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Sound editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Media":
@@ -710,7 +790,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = media_editor
             self.stack.setCurrentWidget(media_editor)
             media_editor.showMaximized()
-            QTimer.singleShot(0, lambda: media_editor.load_file(file_path))
+            QTimer.singleShot(0, lambda: self.safe_call(media_editor.load_file, file_path))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Media editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Rec":
@@ -729,7 +809,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = rec_editor
             self.stack.setCurrentWidget(rec_editor)
             rec_editor.showMaximized()
-            QTimer.singleShot(0, lambda: rec_editor.load_file(file_path))
+            QTimer.singleShot(0, lambda: self.safe_call(rec_editor.load_file, file_path))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Rec editörü yüklendi ve dosya {file_path} için hazırlandı.")
         elif editor_name == "Copy":
@@ -748,7 +828,7 @@ class CoreWindow(QWidget):
             self.instantiated_editors[editor_name] = copy_editor
             self.stack.setCurrentWidget(copy_editor)
             copy_editor.showMaximized()
-            QTimer.singleShot(0, lambda: copy_editor.load_copya(file_path))
+            QTimer.singleShot(0, lambda: self.safe_call(copy_editor.load_copya, file_path))
             self.setWindowTitle("Kavram")
             print(f"DEBUG: Copy editörü yüklendi ve dosya {file_path} için hazırlandı.")
         else:
@@ -938,7 +1018,23 @@ class CoreWindow(QWidget):
         self.clean_up_external_processes()
         super().closeEvent(event)
 
+def global_exception_handler(exctype, value, tb):
+    """
+    Tüm Python ve PyQt5 döngülerindeki yakalanmamış hataları yakalar.
+    CoreDump ve Abort olmasını engelleyip çöken pencereyi kapatır.
+    """
+    if issubclass(exctype, KeyboardInterrupt):
+        sys.__excepthook__(exctype, value, tb)
+        return
+    if CoreWindow._instance is not None:
+        CoreWindow._instance.handle_uncaught_editor_exception(exctype, value, tb)
+    else:
+        sys.__excepthook__(exctype, value, tb)
+
 if __name__ == "__main__":
+    # Küresel İstisna Dinleyicisi (Global Exception Handler) Entegrasyonu
+    sys.excepthook = global_exception_handler
+
     app = QApplication(sys.argv)
     app.setApplicationName("Kavram")
     # BU SATIR: Tüm alt pencereler ve diyaloglar için ikonu küresel (global) olarak uygular.
