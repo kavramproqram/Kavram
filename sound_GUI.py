@@ -755,9 +755,9 @@ class SoundEditorWindow(QWidget):
         self.toolbar_layout.addWidget(self.lbl_time)
 
         # --- Dosya etiketi ---
-        self.lbl_file = QLabel('File: None')
-        self.lbl_file.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-        self.toolbar_layout.addWidget(self.lbl_file)
+        #self.lbl_file = QLabel('File: None')
+        #self.lbl_file.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        #self.toolbar_layout.addWidget(self.lbl_file)
 
         # --- Stretch (boşluk) ---
         self.toolbar_layout.addStretch()

@@ -3,8 +3,8 @@
     "default_position": null,
     "record_limit": "5 dk",
     "segment_duration": "30 sn",
-    "windows_active": false,
-    "sound_active": false,
+    "windows_active": true,
+    "sound_active": true,
     "noise_filter_enabled": false,
     "keystroke_display_enabled": false,
     "overlay_visible": false

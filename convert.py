@@ -30,7 +30,6 @@
 # Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
 # /Kavram/License/GPLv3.txt
 
-
 import sys, os, ctypes, time, subprocess, json, shutil, uuid
 
 # Linux Mint / GStreamer VA-API uyuşmazlıklarını önlemek için ortam değişkenleri (Kritik Düzeltme)
@@ -1055,7 +1054,7 @@ class UniversalConverter(QWidget):
     def _stop_playback(self):
         if self._media_player:
             self._media_player.stop()
-            self._media_player.setMedia(QMediaContent())
+            # Boş QMediaContent ataması GStreamer tarafında 'Invalid URI' hatası verdiğinden kaldırıldı.
 
         if self._ffplay_proc:
             try:
@@ -1105,13 +1104,34 @@ class UniversalConverter(QWidget):
             self._restore_video_preview_ui()
 
     def _on_media_error(self, error):
-        error_str = self._media_player.errorString() if self._media_player and hasattr(self._media_player, 'errorString') else "Bilinmeyen hata"
+        if not self._media_player:
+            return
+        error_str = self._media_player.errorString() if hasattr(self._media_player, 'errorString') else ""
+        # Boş URI veya durdurma esnasında oluşan önemsiz GStreamer hatalarını yoksay
+        if "Invalid URI" in error_str or not error_str:
+            return
         QMessageBox.warning(self, "Video Hatası", f"Video oynatılamadı: {error_str}")
         self._restore_video_preview_ui()
 
+    def _restore_video_preview_ui(self):
+        """Video oynatma bittiğinde veya durdurulduğunda arayüz elemanlarını varsayılan duruma getirir."""
+        if hasattr(self, '_video_widget') and self._video_widget:
+            self._video_widget.setVisible(False)
+        if hasattr(self, 'preview_scroll'):
+            self.preview_scroll.setVisible(True)
+        if hasattr(self, 'preview_zoom'):
+            self.preview_zoom.setVisible(False)
+        if hasattr(self, 'preview_label'):
+            self.preview_label.setVisible(True)
+            self.preview_label.setText("Video Önizleme")
+        if hasattr(self, 'btn_play_preview'):
+            self.btn_play_preview.setText("Play")
+            self.btn_play_preview.setEnabled(True)
+        self._is_playing = False
+
     # DÜZELTME: Video önizleme artık her zaman PyQt içinde gömülü
     def _start_video_preview_playback(self, video_path):
-        if not os.path.exists(video_path): return
+        if not video_path or not os.path.exists(video_path): return
         self._stop_playback()
 
         # Her zaman gömülü oynatıcıyı dene
@@ -1122,9 +1142,9 @@ class UniversalConverter(QWidget):
             self.preview_label.setText("Video Önizleme (5 sn)")
             self._video_widget.setVisible(True)
 
-            url = QMediaContent(QUrl.fromLocalFile(video_path))
-            if self._media_player.media().canonicalUrl() != url:
-                self._media_player.setMedia(url)
+            url = QUrl.fromLocalFile(video_path)
+            if self._media_player.media().request().url() != url:
+                self._media_player.setMedia(QMediaContent(url))
             self._media_player.play()
             self._is_playing = True
             self.btn_play_preview.setText("Pauze")
@@ -1515,7 +1535,7 @@ class UniversalConverter(QWidget):
         if HAS_MEDIA and self._video_widget and self._media_player:
             self._video_widget.setVisible(True)
             url = QUrl.fromLocalFile(self.file_path)
-            if self._media_player.media().canonicalUrl() != url:
+            if self._media_player.media().request().url() != url:
                 self._media_player.setMedia(QMediaContent(url))
             self._media_player.pause()
         else:
@@ -1725,7 +1745,7 @@ class UniversalConverter(QWidget):
                 self.preview_label.setText("Video (Dönüştürülmüş)")
                 if HAS_MEDIA and self._video_widget and self._media_player:
                     url = QUrl.fromLocalFile(path)
-                    if self._media_player.media().canonicalUrl() != url:
+                    if self._media_player.media().request().url() != url:
                         self._media_player.setMedia(QMediaContent(url))
                     self._media_player.pause()
                 if auto_play: self._start_video_preview_playback(path)

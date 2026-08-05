@@ -300,6 +300,70 @@ class CoreWindow(QWidget):
         self.force_close = False
         self.spawned_external_processes = []
 
+    def raise_process_window(self, pid, executable_path=None):
+        """
+        Harici çalışan bir sürecin (ör. Blender) penceresini ekranda öne getirir ve odağa alır.
+        xdotool ve wmctrl araçları kullanılarak yüksek performansla pencere aktifleştirilir.
+        """
+        if not pid:
+            return False
+
+        # Süreç ağacını (çocuk PID'leri) topla
+        pids_to_check = [pid]
+        try:
+            res = subprocess.run(['pgrep', '-P', str(pid)], capture_output=True, text=True, timeout=1)
+            if res.returncode == 0:
+                for line in res.stdout.strip().splitlines():
+                    if line.strip().isdigit():
+                        pids_to_check.append(int(line.strip()))
+        except Exception:
+            pass
+
+        # 1. Yöntem: xdotool ile PID sorgusu (En hızlı)
+        for p in pids_to_check:
+            try:
+                res = subprocess.run(
+                    ['xdotool', 'search', '--onlyvisible', '--pid', str(p)],
+                    capture_output=True, text=True, timeout=1
+                )
+                if res.returncode == 0 and res.stdout.strip():
+                    for wid in res.stdout.strip().splitlines():
+                        if wid.strip():
+                            subprocess.run(['xdotool', 'windowactivate', wid.strip()], timeout=1)
+                            return True
+            except Exception:
+                pass
+
+        # 2. Yöntem: wmctrl ile PID sorgusu
+        try:
+            res = subprocess.run(['wmctrl', '-lp'], capture_output=True, text=True, timeout=1)
+            if res.returncode == 0 and res.stdout.strip():
+                for line in res.stdout.strip().splitlines():
+                    parts = line.split()
+                    if len(parts) >= 3 and parts[2].isdigit() and int(parts[2]) in pids_to_check:
+                        subprocess.run(['wmctrl', '-i', '-a', parts[0]], timeout=1)
+                        return True
+        except Exception:
+            pass
+
+        # 3. Yöntem: Executable ismi üzerinden xdotool / wmctrl
+        if executable_path:
+            exe_name = os.path.basename(executable_path)
+            try:
+                res = subprocess.run(['xdotool', 'search', '--onlyvisible', '--class', exe_name, 'windowactivate'], timeout=1)
+                if res.returncode == 0:
+                    return True
+            except Exception:
+                pass
+            try:
+                res = subprocess.run(['wmctrl', '-a', exe_name], timeout=1)
+                if res.returncode == 0:
+                    return True
+            except Exception:
+                pass
+
+        return False
+
     def handle_uncaught_editor_exception(self, exctype, value, tb):
         """
         Tüm editörlerden (Qt sinyal, timer veya callback kaynaklı) gelen 
@@ -507,9 +571,23 @@ class CoreWindow(QWidget):
             self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
 
     def _internal_switch_to_editor(self, editor_name, close_current=False):
+        # 1. Özel Editör Kontrolü (Harici Executable)
         if editor_name in self.editor_map and self.editor_map[editor_name] == 'CUSTOM':
             executable = self.get_custom_editor_executable(editor_name)
             if executable and os.path.exists(executable):
+                # Temizlik: Kapanmış süreçleri listeden çıkar
+                self.spawned_external_processes = [
+                    p for p in self.spawned_external_processes 
+                    if isinstance(p, dict) and p.get('process') and p['process'].poll() is None
+                ]
+                # Zaten açık mı kontrol et
+                for proc_info in self.spawned_external_processes:
+                    if proc_info.get('name') == editor_name or proc_info.get('path') == executable:
+                        process = proc_info.get('process')
+                        if process and process.poll() is None:
+                            # Süreç açık -> Pencereyi öne getir ve odağa al
+                            self.raise_process_window(process.pid, executable)
+                            return
                 try:
                     cwd = os.path.dirname(executable)
                     env = os.environ.copy()
@@ -517,7 +595,12 @@ class CoreWindow(QWidget):
                     if os.path.exists(lib_dir):
                         env['LD_LIBRARY_PATH'] = lib_dir + os.pathsep + env.get('LD_LIBRARY_PATH', '')
                     process = subprocess.Popen([executable], start_new_session=True, cwd=cwd, env=env)
-                    self.spawned_external_processes.append(process)
+                    
+                    self.spawned_external_processes.append({
+                        'path': executable,
+                        'name': editor_name,
+                        'process': process
+                    })
                 except Exception as e:
                     QMessageBox.warning(self, "Hata", f"Program başlatılamadı: {e}")
             else:
@@ -539,20 +622,29 @@ class CoreWindow(QWidget):
             current_widget.deleteLater()
             print(f"'{current_editor_name}' editörü kapatıldı.")
 
+        # 2. Filter Penceresi Kontrolü (Açıksa doğrudan öne getirir)
         if editor_name == "Filter":
             if not self.filter_window_instance:
                 module = importlib.import_module("filtre")
                 AudioCleanerUI = getattr(module, "AudioCleanerUI")
                 self.filter_window_instance = AudioCleanerUI()
+            
             self.filter_window_instance.showNormal()
+            self.filter_window_instance.raise_()
             self.filter_window_instance.activateWindow()
+
+        # 3. Convert Penceresi Kontrolü (Açıksa doğrudan öne getirir)
         elif editor_name == "Convert":
             if not self.convert_window_instance:
                 module = importlib.import_module("convert")
                 UniversalConverter = getattr(module, "UniversalConverter")
                 self.convert_window_instance = UniversalConverter()
+            
             self.convert_window_instance.showNormal()
+            self.convert_window_instance.raise_()
             self.convert_window_instance.activateWindow()
+
+        # 4. Dahili Stack Editörleri
         elif editor_name in self.instantiated_editors:
             self.stack.setCurrentWidget(self.instantiated_editors[editor_name])
             self.instantiated_editors[editor_name].showMaximized()
@@ -892,9 +984,10 @@ class CoreWindow(QWidget):
 
     def clean_up_external_processes(self):
         if hasattr(self, 'spawned_external_processes'):
-            for p in self.spawned_external_processes:
+            for item in self.spawned_external_processes:
                 try:
-                    if p.poll() is None:
+                    p = item.get('process') if isinstance(item, dict) else item
+                    if p and p.poll() is None:
                         try:
                             os.killpg(os.getpgid(p.pid), signal.SIGTERM)
                         except ProcessLookupError:
@@ -1032,16 +1125,13 @@ def global_exception_handler(exctype, value, tb):
         sys.__excepthook__(exctype, value, tb)
 
 if __name__ == "__main__":
-    # Küresel İstisna Dinleyicisi (Global Exception Handler) Entegrasyonu
+    # Küresel İstisna Dinleyicisi Entegrasyonu
     sys.excepthook = global_exception_handler
 
     app = QApplication(sys.argv)
     app.setApplicationName("Kavram")
-    # BU SATIR: Tüm alt pencereler ve diyaloglar için ikonu küresel (global) olarak uygular.
-    app.setWindowIcon(QIcon(resource_path('ikon/Kavram.png'))) 
-    
-    load_cpp_library()
-    initialize_lua_engine()
+
     window = CoreWindow()
     window.show()
+
     sys.exit(app.exec_())

@@ -728,6 +728,10 @@ class MediaEditor(QWidget):
         self.setWindowTitle("Media Timeline Player")
         self.setStyleSheet("background-color: #282c34; color: white;")
 
+        # *** DEĞİŞİKLİK: noise_filter_enabled'ı en başta tanımla ***
+        self.noise_filter_enabled = self._load_noise_filter_setting()
+        # *** DEĞİŞİKLİK SONU ***
+
         self.media_queue = []
         self.current_media_index = -1
         self.is_playing = False
@@ -755,8 +759,6 @@ class MediaEditor(QWidget):
             'eq_gain_db': 0.0, 'eq_freq_hz': 1000.0, 'eq_q': 1.0,
         }
         self.load_filter_settings() # Ayarları dosyadan yükle
-        # self.noise_filter_enabled artık ortak ayar dosyasından (overlay_settings) yüklenecek
-        self.noise_filter_enabled = self._load_noise_filter_setting()
 
         self.lua = LuaRuntime(unpack_returned_tuples=True)
         self.load_lua_scripts()

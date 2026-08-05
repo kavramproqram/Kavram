@@ -672,15 +672,37 @@ class DraggableBox(QFrame):
     def switch_to_selected_editor(self):
         if self.selected_editor_name and self.core_window_ref:
             print(f"DEBUG: switch_to_selected_editor called. selected_editor_name: {self.selected_editor_name}, selected_file_path: {self.selected_file_path}")
+            
+            # İç Editörler ve Dosya Yükleme İşlemleri
             if self.selected_editor_name in ["Drawing", "Text", "Ai", "Sound", "Media", "Rec", "Copy"] and self.selected_file_path:
                 if hasattr(self.core_window_ref, 'loadEditorFile'):
                     self.core_window_ref.loadEditorFile(self.selected_editor_name, self.selected_file_path)
                 else:
                     QMessageBox.warning(self, "Hata", "CoreWindow'da dosya yükleme işlevi bulunamadı.")
-            elif self.selected_editor_name == "Program" and self.selected_file_path:
+            
+            # Program veya Özel Editör (Çalıştırılabilir Dosyalar)
+            elif (self.selected_editor_name == "Program" or (hasattr(self.core_window_ref, 'custom_editors') and any(e['name'] == self.selected_editor_name for e in self.core_window_ref.custom_editors))) and self.selected_file_path:
                 if not os.access(self.selected_file_path, os.X_OK):
                     QMessageBox.warning(self, "Hata", "Seçilen dosya çalıştırılabilir (executable) iznine sahip değil.")
                     return
+                
+                # --- TEK AÇILMA VE ÖNE GETİRME (SINGLE INSTANCE & FOCUS) ---
+                if hasattr(self.core_window_ref, 'spawned_external_processes'):
+                    # Temizlik: Kapanmış süreçleri temizle
+                    self.core_window_ref.spawned_external_processes = [
+                        p for p in self.core_window_ref.spawned_external_processes
+                        if isinstance(p, dict) and p.get('process') and p['process'].poll() is None
+                    ]
+                    
+                    for proc_info in self.core_window_ref.spawned_external_processes:
+                        if proc_info.get('path') == self.selected_file_path:
+                            process = proc_info.get('process')
+                            if process and process.poll() is None: # Süreç hala çalışıyor
+                                # Program zaten açık -> Mevcut pencereyi öne getir ve odağa al
+                                if hasattr(self.core_window_ref, 'raise_process_window'):
+                                    self.core_window_ref.raise_process_window(process.pid, self.selected_file_path)
+                                return
+
                 try:
                     exe = self.selected_file_path
                     cwd = os.path.dirname(exe)
@@ -690,25 +712,13 @@ class DraggableBox(QFrame):
                         env['LD_LIBRARY_PATH'] = lib_dir + os.pathsep + env.get('LD_LIBRARY_PATH', '')
                     args = [exe]
                     process = subprocess.Popen(args, start_new_session=True, cwd=cwd, env=env)
-                    if self.core_window_ref and hasattr(self.core_window_ref, 'spawned_external_processes'):
-                        self.core_window_ref.spawned_external_processes.append(process)
-                except Exception as e:
-                    QMessageBox.warning(self, "Hata", f"Program başlatılamadı: {e}")
-            elif hasattr(self.core_window_ref, 'custom_editors') and any(e['name'] == self.selected_editor_name for e in self.core_window_ref.custom_editors) and self.selected_file_path:
-                if not os.access(self.selected_file_path, os.X_OK):
-                    QMessageBox.warning(self, "Hata", "Seçilen özel editör çalıştırılabilir iznine sahip değil.")
-                    return
-                try:
-                    exe = self.selected_file_path
-                    cwd = os.path.dirname(exe)
-                    env = os.environ.copy()
-                    lib_dir = os.path.join(cwd, 'lib')
-                    if os.path.exists(lib_dir):
-                        env['LD_LIBRARY_PATH'] = lib_dir + os.pathsep + env.get('LD_LIBRARY_PATH', '')
-                    args = [exe]
-                    process = subprocess.Popen(args, start_new_session=True, cwd=cwd, env=env)
-                    if self.core_window_ref and hasattr(self.core_window_ref, 'spawned_external_processes'):
-                        self.core_window_ref.spawned_external_processes.append(process)
+                    
+                    if hasattr(self.core_window_ref, 'spawned_external_processes'):
+                        self.core_window_ref.spawned_external_processes.append({
+                            'path': self.selected_file_path,
+                            'name': self.selected_editor_name,
+                            'process': process
+                        })
                 except Exception as e:
                     QMessageBox.warning(self, "Hata", f"Program başlatılamadı: {e}")
             else:

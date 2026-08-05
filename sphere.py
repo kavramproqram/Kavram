@@ -1185,7 +1185,7 @@ class SphereWindow(QWidget):
                     self.show_error_message("Editör adı sadece harf, rakam ve alt çizgi içerebilir.")
                     return
                 if not self.view.selected_boxes_list:
-                    self.show_error_message("Önce bir kutu seçin ve o kutuda 'Program' editörü ile bir executable dosyası seçili olmalı.")
+                    self.show_error_message("Önce bir kutu seçin ve o kutuda 'Program' \neditörü ile bir executable dosyası seçili olmalı.")
                     return
                 selected_box = self.view.selected_boxes_list[0]
                 if selected_box.selected_editor_name != "Program":
@@ -1199,7 +1199,7 @@ class SphereWindow(QWidget):
                 if self.core_window_ref and hasattr(self.core_window_ref, 'add_custom_editor'):
                     success = self.core_window_ref.add_custom_editor(editor_name, source_exec)
                     if success:
-                        self.show_info_message(f"'{editor_name}' editörü başarıyla sisteme eklendi (orijinal yolu kullanılıyor).")
+                        self.show_info_message(f"'{editor_name}' editörü başarıyla \nsisteme eklendi (orijinal yolu kullanılıyor).")
                     else:
                         self.show_error_message("Editör eklenemedi.")
                 else:
