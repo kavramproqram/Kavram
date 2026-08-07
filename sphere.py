@@ -1444,7 +1444,7 @@ class SphereWindow(QWidget):
         options = QFileDialog.Options()
         file_filter = (
             "Kitap Files (*.kitap);;"
-            "All Supported Files (*.kitap *.kavram *.txt *.png *.pnf *.jpg *.jpeg *.bmp *.gif *.ai *.sound *.wav *.aiff *.flac *.ogg *.mp3 *.media *.mp4 *.avi *.mov *.mkv *.webm *.flv *.rec *.aac *.m4a *.copya);;"
+            "All Supported Files (*.kitap *.kavram *.txr *.png *.pnf *.jpg *.jpeg *.bmp *.gif *.ai *.sound *.wav *.aiff *.flac *.ogg *.mp3 *.media *.mp4 *.avi *.mov *.mkv *.webm *.flv *.rec *.aac *.m4a *.copya);;"
             "Kavram Files (*.kavram);;"
             "Program (*);;"
             "All Files (*)"
@@ -1482,7 +1482,7 @@ class SphereWindow(QWidget):
 
             file_extension = os.path.splitext(final_path)[1].lower()
             editor_map = {
-                ".copya": "Copy", ".rec": "Rec", ".txt": "Text",
+                ".copya": "Copy", ".rec": "Rec", ".txr": "Text",
                 ".png": "Drawing", ".pnf": "Drawing", ".jpg": "Drawing", ".jpeg": "Drawing", ".bmp": "Drawing", ".gif": "Drawing",
                 ".ai": "Ai",
                 ".sound": "Sound", ".wav": "Sound", ".aiff": "Sound", ".flac": "Sound", ".ogg": "Sound", ".mp3": "Sound", ".aac": "Sound", ".m4a": "Sound",
@@ -1501,7 +1501,7 @@ class SphereWindow(QWidget):
             self.view.addDraggableBox(editor_name=editor_name, file_path=final_path)
 
         if unsupported_files:
-            self.show_warning_message(f"Aşağıdaki dosyalar için desteklenen bir editör bulunamadı ve atlandı:\n\n" + "\n".join(unsupported_files))
+            self.show_warning_message(f"Aşağıdaki dosyalar için desteklenen \nbir editör bulunamadı ve atlandı:\n\n" + "\n".join(unsupported_files))
 
 
     def _clear_all_boxes_and_connections(self):

@@ -150,9 +150,9 @@ try:
     lib.redo_audio.argtypes = [ctypes.c_void_p]
     lib.redo_audio.restype = ctypes.c_int
     lib.can_undo_audio.argtypes = [ctypes.c_void_p]
-    lib.can_undo_audio.restype = ctypes.c_int
+    lib.can_undo_audio.restype = ctypes.c_int  # <-- EKLENDİ
     lib.can_redo_audio.argtypes = [ctypes.c_void_p]
-    lib.can_redo_audio.restype = ctypes.c_int
+    lib.can_redo_audio.restype = ctypes.c_int  # <-- EKLENDİ
 
     # Mikrofon efektleri
     lib.set_mic_noise_gate_threshold.argtypes = [ctypes.c_void_p, ctypes.c_float]
@@ -755,7 +755,7 @@ class SoundEditorWindow(QWidget):
         self.toolbar_layout.addWidget(self.lbl_time)
 
         # --- Dosya etiketi ---
-        #self.lbl_file = QLabel('File: None')
+        self.lbl_file = QLabel('File: None')
         #self.lbl_file.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
         #self.toolbar_layout.addWidget(self.lbl_file)
 
@@ -1045,6 +1045,10 @@ class SoundEditorWindow(QWidget):
                 self.load_wav_files_into_engine(file_paths)
 
     def load_files_from_path(self, file_paths):
+        # Güvenlik kontrolü: motor ve kütüphane mevcut değilse çık
+        if not self.lib or not self.audio_engine:
+            return
+
         if not file_paths:
             return
         valid_paths = [path for path in file_paths if path.lower().endswith('.wav') or path.lower().endswith('.sound')]
@@ -1094,8 +1098,10 @@ class SoundEditorWindow(QWidget):
                 self.update_undo_redo_buttons()
 
     def load_sound_package(self, file_path):
+        # Güvenlik kontrolü
         if not self.lib or not self.audio_engine:
             return
+
         try:
             temp_dir = tempfile.mkdtemp()
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
@@ -1136,6 +1142,10 @@ class SoundEditorWindow(QWidget):
             QMessageBox.critical(self, "Hata", f".sound dosyası yüklenirken hata oluştu:\n{str(e)}")
 
     def export_sound_package(self):
+        # Güvenlik kontrolü
+        if not self.lib or not self.audio_engine:
+            return
+
         if not self.lib or not self.audio_engine or self.lib.get_duration_ms(self.audio_engine) <= 0:
             QMessageBox.warning(self, 'Warning', 'Dışa aktarılacak ses verisi yok.')
             return
@@ -1380,6 +1390,11 @@ class SoundEditorWindow(QWidget):
                 QMessageBox.critical(self, 'Hata', f'Ses kaydedilirken bir hata oluştu:\n{save_path}')
 
     def saveContent(self):
+        # Güvenlik kontrolü
+        if not self.lib or not self.audio_engine:
+            QMessageBox.warning(self, 'Uyarı', 'Ses motoru çalışmıyor.')
+            return
+
         if not self.current_file:
             self.export_sound_package()
         else:

@@ -5,7 +5,7 @@
     "segment_duration": "30 sn",
     "windows_active": true,
     "sound_active": true,
-    "noise_filter_enabled": false,
+    "noise_filter_enabled": true,
     "keystroke_display_enabled": false,
     "overlay_visible": false
 }

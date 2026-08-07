@@ -197,9 +197,11 @@ ldd libmediaengine.so | grep portaudio
 
 chmod +x build_engine.sh && ./build_engine.sh
 
-g++ -Wall -Wextra -std=c++17 -fPIC sound_Engine.cpp -o libsound_engine.so -shared     $(pkg-config --cflags --libs portaudio-2.0 sndfile)
+# g++ -Wall -Wextra -std=c++17 -fPIC sound_Engine.cpp -o libsound_engine.so -shared     $(pkg-config --cflags --libs portaudio-2.0 sndfile)
 
-g++ -O3 -march=native -mtune=native -flto -ffast-math -fPIC -shared -std=c++17 sound_Engine.cpp -o libsound_engine.so -lsndfile -lportaudio -pthread
+# g++ -O3 -march=native -mtune=native -flto -ffast-math -fPIC -shared -std=c++17 sound_Engine.cpp -o libsound_engine.so -lsndfile -lportaudio -pthread
+
+g++ -O3 -fPIC -shared -std=c++17 sound_Engine.cpp -o libsound_engine.so $(pkg-config --cflags --libs portaudio-2.0 sndfile)
 
 mkdir -p lib
 cp libsound_engine.so lib/
