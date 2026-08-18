@@ -45,16 +45,6 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QThread, QObject, pyqtSignal, QSettings, QTimer, QUrl
 from PyQt5.QtGui import QIcon, QPixmap, QImage, QPainter, QColor
 
-# Video oynatma için MediaPlayer
-try:
-    from PyQt5.QtMultimediaWidgets import QVideoWidget
-    from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
-    HAS_MEDIA = True
-except ImportError:
-    HAS_MEDIA = False
-    QVideoWidget = None
-    QMediaPlayer = None
-
 # PyMuPDF — PDF dönüşümü için
 try:
     import fitz
@@ -63,7 +53,7 @@ except ImportError:
     HAS_FITZ = False
     print("UYARI: PyMuPDF (fitz) kurulu değil. pip install PyMuPDF")
 
-# Pillow — PDF içinde resim işlemek ve video nota ikonu çizmek için
+# Pillow — PDF içinde resim işlemek için
 try:
     from PIL import Image, ImageDraw
     HAS_PIL = True
@@ -413,27 +403,21 @@ def _create_music_note_image(w, h):
         d = ImageDraw.Draw(img)
         cx, cy = w // 2, h // 2
         
-        # Boyut yarı yarıya küçültüldü (eski değer 6 yerine 12 yapıldı)
         s = min(w, h) // 12  
         
-        # Premium koyu arka plan deseni
         d.rectangle([0, 0, w, h], fill=(18, 18, 24, 255))
         
-        # Tekli Müzik Notası Çizimi (Sekizlik Nota - ♪)
-        # 1. Kafa (Eliptik nota başı)
         d.ellipse([cx - 1.5*s, cy + 0.8*s, cx + 0.5*s, cy + 2.4*s], fill=(240, 240, 240, 255)) 
         
-        # 2. Sap (Yukarı doğru zarif çizgi)
         stem_x = cx + 0.3*s
         d.line([stem_x, cy + 1.5*s, stem_x, cy - 3*s], fill=(240, 240, 240, 255), width=max(3, s//4)) 
         
-        # 3. Kuyruk (Bayrak - sağa aşağı doğru kıvrım)
         flag_points = [
-            (stem_x, cy - 3*s),         # Sapın en üstü
-            (cx + 2.0*s, cy - 1.2*s),   # Dış sağ kavis
-            (cx + 2.2*s, cy - 0.2*s),   # Alt sivri uç
-            (cx + 1.0*s, cy - 1.2*s),   # İç kavis dönüşü
-            (stem_x, cy - 1.8*s)        # Sapa geri birleşme noktası
+            (stem_x, cy - 3*s),         
+            (cx + 2.0*s, cy - 1.2*s),   
+            (cx + 2.2*s, cy - 0.2*s),   
+            (cx + 1.0*s, cy - 1.2*s),   
+            (stem_x, cy - 1.8*s)        
         ]
         d.polygon(flag_points, fill=(240, 240, 240, 255))
         
@@ -446,7 +430,6 @@ def _create_music_note_image(w, h):
 def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_preview, progress_cb):
     """Videoya harici sesi ekler. Çok daha kararlı, çökmeyen ve asenkron uyumlu tpad/apad filtre yapısı."""
     try:
-        # 1. Video çözünürlüğü ve süresini al (Kapsamlı FFprobe Fallback)
         probe_cmd = [FFPROBE_PATH, '-v', 'error', '-select_streams', 'v:0', '-show_entries', 
                      'stream=width,height,duration', '-of', 'json', vid_path]
         out = subprocess.check_output(probe_cmd, stderr=subprocess.DEVNULL)
@@ -466,7 +449,6 @@ def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_previe
             except:
                 v_dur = 10.0
 
-        # Ses dosyasının süresini al
         probe_aud = [FFPROBE_PATH, '-v', 'error', '-select_streams', 'a:0', '-show_entries', 
                      'stream=duration', '-of', 'json', aud_path]
         out_a = subprocess.check_output(probe_aud, stderr=subprocess.DEVNULL)
@@ -481,7 +463,6 @@ def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_previe
             except:
                 a_dur = 10.0
 
-        # Temel video efekt filtreleri
         filters = []
         if do_inv: filters.append("negate")
         if do_gray: filters.append("hue=s=0")
@@ -490,7 +471,6 @@ def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_previe
         cmd = [FFMPEG_PATH, '-y', '-i', vid_path, '-i', aud_path]
         
         if a_dur > v_dur:
-            # Ses videodan uzunsa: Videoyu duraklat (siyah ekran yap) ve üzerine nota ikonu overlay et
             note_img_path = _create_music_note_image(w, h)
             if note_img_path:
                 cmd.extend(['-loop', '1', '-i', note_img_path])
@@ -502,12 +482,10 @@ def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_previe
                 )
                 cmd.extend(['-filter_complex', filter_complex, '-map', '[vout]', '-map', '1:a'])
             else:
-                # Nota resmi çizilemezse yedek olarak siyah ekran uzatması
                 pad_dur = a_dur - v_dur
                 filter_complex = f"[0:v]{fx_str}scale={w}:{h},tpad=stop_mode=0:stop_duration={pad_dur}[vout]"
                 cmd.extend(['-filter_complex', filter_complex, '-map', '[vout]', '-map', '1:a'])
         else:
-            # Video sesten uzunsa: Videoyu normal oynat, biten sesi asenkron sessizlikle besle (apad)
             note_img_path = None
             filter_complex = f"[0:v]{fx_str}scale={w}:{h}[vout];[1:a]apad[aout]"
             cmd.extend(['-filter_complex', filter_complex, '-map', '[vout]', '-map', '[aout]'])
@@ -524,7 +502,6 @@ def mix_video_and_audio(vid_path, aud_path, out_path, do_inv, do_gray, is_previe
         
         cmd.append(out_path)
         
-        # FFmpeg hata akışını tamamen kaydetmek için tampon bellek dizi loglama yapısı
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         err_lines = []
         last_pct = 10
@@ -596,7 +573,6 @@ class ConversionWorker(QObject):
                 self.progress.emit(val)
         c_prog = ProgressCB(prog_cb)
 
-        # C++ API Yeni Signature ile çağrılır
         ret = _cpp.kavram_convert(
             self.in_path.encode(), self.out_path.encode(),
             self.cover_path.encode() if self.cover_path else None,
@@ -715,191 +691,6 @@ class ConversionWorker(QObject):
         self._stop = True
         if _cpp: _cpp.kavram_cancel()
 
-# ── Önizleme Yardımcıları ────────────────────────────────────────────────────
-
-class ZoomablePreviewLabel(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self._scale = 1.0
-        self._min_scale = 0.5
-        self._max_scale = 5.0
-        self._default_scale = 1.0
-        self._offset_x = 0
-        self._offset_y = 0
-        self._dragging = False
-        self._drag_start_x = 0
-        self._drag_start_y = 0
-        self._last_offset_x = 0
-        self._last_offset_y = 0
-
-        self._pixmap = None
-        self._scaled_pixmap = None
-        self._text_message = ""
-
-        self.setMinimumSize(300, 200)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.setStyleSheet("background-color:#1F1F1F;border-radius:6px;")
-        self.setCursor(Qt.SizeAllCursor)
-
-    def setPixmap(self, pixmap):
-        self._pixmap = pixmap
-        self._text_message = ""
-        self.reset_view()
-
-    def setText(self, text):
-        self._pixmap = None
-        self._scaled_pixmap = None
-        self._text_message = text
-        self.update()
-
-    def reset_view(self):
-        self._scale = self._default_scale
-        self._offset_x = 0
-        self._offset_y = 0
-        self._update_scaled_pixmap()
-        self.update()
-
-    # DÜZELTME: resizeEvent eklendi - Tam ekran sorunu çözüldü
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self._update_scaled_pixmap()
-        self.update()
-
-    def _update_scaled_pixmap(self):
-        if self._pixmap is None:
-            self._scaled_pixmap = None
-            return
-        if self._scale == 1.0:
-            self._scaled_pixmap = self._pixmap
-        else:
-            w = int(self._pixmap.width() * self._scale)
-            h = int(self._pixmap.height() * self._scale)
-            if w > 0 and h > 0:
-                self._scaled_pixmap = self._pixmap.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-            else:
-                self._scaled_pixmap = self._pixmap
-
-    def wheelEvent(self, event):
-        if self._pixmap is None: return
-
-        mouse_x = event.x()
-        mouse_y = event.y()
-
-        if self._scaled_pixmap:
-            pix_w = self._scaled_pixmap.width()
-            pix_h = self._scaled_pixmap.height()
-            label_w = self.width()
-            label_h = self.height()
-            offset_x = (label_w - pix_w) // 2
-            offset_y = (label_h - pix_h) // 2
-        else:
-            offset_x = offset_y = 0
-
-        pixcoord_x = mouse_x - offset_x - self._offset_x
-        pixcoord_y = mouse_y - offset_y - self._offset_y
-
-        if pixcoord_x < 0 or pixcoord_y < 0: return
-
-        scale_factor = 1.1 if event.angleDelta().y() > 0 else 0.9
-        new_scale = max(self._min_scale, min(self._max_scale, self._scale * scale_factor))
-
-        if new_scale != self._scale:
-            old_scale = self._scale
-            self._scale = new_scale
-            self._update_scaled_pixmap()
-
-            if old_scale != 0 and new_scale != 0:
-                self._offset_x = int(pixcoord_x * (1 - new_scale / old_scale))
-                self._offset_y = int(pixcoord_y * (1 - new_scale / old_scale))
-            self.update()
-
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self._dragging = True
-            self._drag_start_x = event.x()
-            self._drag_start_y = event.y()
-            self._last_offset_x = self._offset_x
-            self._last_offset_y = self._offset_y
-            self.setCursor(Qt.ClosedHandCursor)
-        elif event.button() == Qt.RightButton:
-            self.reset_view()
-
-    def mouseMoveEvent(self, event):
-        if self._dragging:
-            self._offset_x = self._last_offset_x + (event.x() - self._drag_start_x)
-            self._offset_y = self._last_offset_y + (event.y() - self._drag_start_y)
-            self.update()
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            self._dragging = False
-            self.setCursor(Qt.SizeAllCursor)
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.fillRect(event.rect(), QColor("#1F1F1F"))
-
-        if self._pixmap is None and self._text_message:
-            painter.setPen(QColor("#666666"))
-            painter.drawText(self.rect(), Qt.AlignCenter, self._text_message)
-            return
-
-        if self._scaled_pixmap is None:
-            painter.setPen(QColor("#666666"))
-            painter.drawText(self.rect(), Qt.AlignCenter, "Dosya yükleyin")
-            return
-
-        # DÜZELTME: Her paintEvent'te dinamik merkezleme
-        x = (self.width() - self._scaled_pixmap.width()) // 2 + self._offset_x
-        y = (self.height() - self._scaled_pixmap.height()) // 2 + self._offset_y
-
-        if self._scaled_pixmap.hasAlpha():
-            painter.setCompositionMode(QPainter.CompositionMode_Source)
-        painter.drawPixmap(int(x), int(y), self._scaled_pixmap)
-
-def generate_image_preview(img_path, max_size=600):
-    try:
-        pixmap = QPixmap(img_path)
-        if pixmap.isNull(): return None
-        if pixmap.width() > max_size or pixmap.height() > max_size:
-            return pixmap.scaled(max_size, max_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        return pixmap
-    except Exception as e:
-        print(f"[Kavram] Resim önizleme hatası: {e}")
-        return None
-
-def generate_pdf_preview(pdf_path, max_size=600):
-    if not HAS_FITZ: return None
-    try:
-        doc = fitz.open(pdf_path)
-        if doc.page_count == 0:
-            doc.close(); return None
-        page = doc[0]
-        mat = fitz.Matrix(1.5, 1.5)
-        pix = page.get_pixmap(matrix=mat, colorspace=fitz.csRGB)
-        doc.close()
-        img = QImage.fromData(pix.tobytes("png"))
-        if img.isNull(): return None
-        pixmap = QPixmap.fromImage(img)
-        if pixmap.width() > max_size or pixmap.height() > max_size:
-            return pixmap.scaled(max_size, max_size, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        return pixmap
-    except Exception as e:
-        print(f"[Kavram] PDF önizleme hatası: {e}")
-        return None
-
-def generate_txt_preview(txt_path, max_lines=15):
-    try:
-        with open(txt_path, 'r', encoding='utf-8', errors='replace') as f:
-            lines = []
-            for i, line in enumerate(f):
-                if i >= max_lines: break
-                lines.append(line.rstrip())
-            return '\n'.join(lines)
-    except Exception as e:
-        print(f"[Kavram] TXT önizleme hatası: {e}")
-        return None
-
 # ── GUI (UniversalConverter) ────────────────────────────────────────────────────
 class UniversalConverter(QWidget):
     def __init__(self):
@@ -914,20 +705,6 @@ class UniversalConverter(QWidget):
         self.qsettings        = QSettings("Kavram", "UniversalConverter")
         self._session_num     = self._next_export_counter()
 
-        self._ffplay_proc = None
-        self._preview_timer = None
-        self._is_playing = False
-        self._video_preview_process = None
-
-        self.preview_thread = None
-        self.preview_worker = None
-
-        self._media_player = None
-        self._video_widget = None
-
-        self._cached_preview_path = None
-        self._cached_preview_settings = None
-
         self._init_ui()
         self._reset()
         self._update_btns()
@@ -936,231 +713,6 @@ class UniversalConverter(QWidget):
         n = self.qsettings.value("export_counter", 0, int) + 1
         self.qsettings.setValue("export_counter", n)
         return n
-
-    def _get_settings_hash(self):
-        s = self._get_settings()
-        mode_int = self._get_current_mode_int()
-        fmt = self.c_fmt.currentText()
-        cover = self.cover_image_path
-        vid_aud = self.vid_audio_path
-        return (mode_int, fmt, cover, vid_aud, s['speed'], s['pitch'], s['effect'], 
-                s['change_freq'], s['new_freq'], s['vid_invert'], s['vid_rm_aud'], s['vid_gray'])
-
-    # DÜZELTME: Thread güvenli başlatma
-    def _start_preview_pipeline(self):
-        if not self.file_path: return
-        ext = os.path.splitext(self.file_path)[1].lower()
-
-        # Saf video (efekt yoksa) doğrudan oynat
-        if ext in VIDEO_EXT and not self.vid_audio_path and self.c_vid_gray.currentIndex() == 0 and self.c_vid_inv.currentIndex() == 0 and self.c_vid_rm_aud.currentIndex() == 0:
-            self._start_video_preview_playback(self.file_path)
-            return
-
-        # DÜZELTME: Çalışan thread varsa temizle
-        if self.preview_thread and self.preview_thread.isRunning():
-            if self.preview_worker:
-                try: self.preview_worker.stop()
-                except: pass
-            self.preview_thread.quit()
-            if not self.preview_thread.wait(3000):
-                self.preview_thread.terminate()
-                self.preview_thread.wait(2000)
-
-        mode = self._get_current_mode_int()
-        if mode == -1:
-            QMessageBox.warning(self, "Uyarı", "Oluşturmak için kapak resmi seçin.")
-            return
-
-        current_hash = self._get_settings_hash()
-        if self._cached_preview_path and os.path.exists(self._cached_preview_path) and self._cached_preview_settings == current_hash:
-            self.btn_play_preview.setEnabled(True)
-            self.btn_play_preview.setText("Play")
-            return
-
-        s = self._get_settings()
-        fmt = self.c_fmt.currentText()
-
-        if mode in (MODE_AUD2VID, MODE_VID_MIX):
-            preview_ext = '.mp4'
-        else:
-            preview_ext = '.wav' if self.current_mode == 'audio' else fmt
-
-        self._preview_path = os.path.join(CONVERT_DIR, f"preview_{uuid.uuid4().hex}{preview_ext}")
-
-        self.btn_play_preview.setText("Hazırlanıyor...")
-        self.btn_play_preview.setEnabled(False)
-
-        use_fallback = False
-        broken, reason = _preflight_check(self.file_path)
-        if broken and mode not in (MODE_AUD2VID, MODE_VID_MIX):
-            use_fallback = True
-
-        self.preview_thread = QThread()
-        if use_fallback:
-            self.preview_worker = FfmpegFallbackWorker(
-                self.file_path, self._preview_path, preview_ext, speed=s.get('speed', 1.0), is_preview=True)
-        else:
-            cov = self.cover_image_path if mode == MODE_AUD2VID else None
-            self.preview_worker = ConversionWorker(
-                self.file_path, self._preview_path, cov, mode, s, is_preview=True)
-
-        self.preview_worker.moveToThread(self.preview_thread)
-        self.preview_thread.started.connect(self.preview_worker.run)
-        self.preview_worker.finished.connect(self._on_preview_done)
-        self.preview_worker.error.connect(self._on_preview_error)
-        self.preview_worker.finished.connect(self.preview_thread.quit)
-        self.preview_worker.error.connect(self.preview_thread.quit)
-
-        self.preview_thread.start(QThread.LowPriority)
-
-    def _play_preview_file(self, file_path):
-        ext = os.path.splitext(file_path)[1].lower()
-        if ext in VIDEO_EXT: self._start_video_preview_playback(file_path)
-        else: self._start_ffplay(file_path)
-
-    def _on_preview_done(self, out_path, elapsed):
-        self.btn_play_preview.setEnabled(True)
-        self.btn_play_preview.setText("Play")
-        self._cached_preview_path = out_path
-        self._cached_preview_settings = self._get_settings_hash()
-        self.lbl_status.setText("Önizleme hazır. Play butonuna basın.")
-
-    def _on_preview_error(self, msg):
-        self.btn_play_preview.setEnabled(True)
-        self.btn_play_preview.setText("Play")
-        QMessageBox.warning(self, "Önizleme Hatası", f"Önizleme oluşturulamadı:\n{msg}")
-
-    def _start_ffplay(self, path):
-        try:
-            self._ffplay_proc = subprocess.Popen(
-                [FFPLAY_PATH, '-nodisp', '-autoexit', path],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-            )
-            self._is_playing = True
-            self.btn_play_preview.setText("Pauze")
-
-            if self._preview_timer: self._preview_timer.stop()
-            self._preview_timer = QTimer()
-            self._preview_timer.timeout.connect(self._check_ffplay_status)
-            self._preview_timer.start(500)
-        except Exception as e:
-            print(f"[Kavram] Oynatma hatası: {e}")
-            self._stop_playback()
-
-    def _check_ffplay_status(self):
-        if self._ffplay_proc and self._ffplay_proc.poll() is not None:
-            self._stop_playback()
-
-    def _stop_playback(self):
-        if self._media_player:
-            self._media_player.stop()
-            # Boş QMediaContent ataması GStreamer tarafında 'Invalid URI' hatası verdiğinden kaldırıldı.
-
-        if self._ffplay_proc:
-            try:
-                self._ffplay_proc.terminate()
-                self._ffplay_proc.wait(timeout=1)
-            except:
-                try: self._ffplay_proc.kill()
-                except: pass
-            self._ffplay_proc = None
-
-        if self._video_preview_process:
-            try:
-                self._video_preview_process.terminate()
-                self._video_preview_process.wait(timeout=1)
-            except:
-                try: self._video_preview_process.kill()
-                except: pass
-            self._video_preview_process = None
-
-        self._is_playing = False
-        if hasattr(self, 'btn_play_preview'):
-            self.btn_play_preview.setText("Play")
-
-        if self._preview_timer:
-            self._preview_timer.stop()
-            self._preview_timer = None
-
-    def _toggle_playback(self):
-        if self._is_playing:
-            self._stop_playback()
-        else:
-            if self._cached_preview_path and os.path.exists(self._cached_preview_path) and self._cached_preview_settings == self._get_settings_hash():
-                self._play_preview_file(self._cached_preview_path)
-            else:
-                self._start_preview_pipeline()
-
-    def _on_media_position_changed(self, position):
-        if self._media_player:
-            duration = self._media_player.duration()
-            if duration > 0 and position >= 5000:
-                self._stop_playback()
-                self._restore_video_preview_ui()
-
-    def _on_media_state_changed(self, state):
-        if not HAS_MEDIA: return
-        if hasattr(QMediaPlayer, 'StoppedState') and state == QMediaPlayer.StoppedState and self._is_playing:
-            self._restore_video_preview_ui()
-
-    def _on_media_error(self, error):
-        if not self._media_player:
-            return
-        error_str = self._media_player.errorString() if hasattr(self._media_player, 'errorString') else ""
-        # Boş URI veya durdurma esnasında oluşan önemsiz GStreamer hatalarını yoksay
-        if "Invalid URI" in error_str or not error_str:
-            return
-        QMessageBox.warning(self, "Video Hatası", f"Video oynatılamadı: {error_str}")
-        self._restore_video_preview_ui()
-
-    def _restore_video_preview_ui(self):
-        """Video oynatma bittiğinde veya durdurulduğunda arayüz elemanlarını varsayılan duruma getirir."""
-        if hasattr(self, '_video_widget') and self._video_widget:
-            self._video_widget.setVisible(False)
-        if hasattr(self, 'preview_scroll'):
-            self.preview_scroll.setVisible(True)
-        if hasattr(self, 'preview_zoom'):
-            self.preview_zoom.setVisible(False)
-        if hasattr(self, 'preview_label'):
-            self.preview_label.setVisible(True)
-            self.preview_label.setText("Video Önizleme")
-        if hasattr(self, 'btn_play_preview'):
-            self.btn_play_preview.setText("Play")
-            self.btn_play_preview.setEnabled(True)
-        self._is_playing = False
-
-    # DÜZELTME: Video önizleme artık her zaman PyQt içinde gömülü
-    def _start_video_preview_playback(self, video_path):
-        if not video_path or not os.path.exists(video_path): return
-        self._stop_playback()
-
-        # Her zaman gömülü oynatıcıyı dene
-        if HAS_MEDIA and self._media_player and self._video_widget:
-            self.preview_scroll.setVisible(False)
-            self.preview_zoom.setVisible(False)
-            self.preview_label.setVisible(True)
-            self.preview_label.setText("Video Önizleme (5 sn)")
-            self._video_widget.setVisible(True)
-
-            url = QUrl.fromLocalFile(video_path)
-            if self._media_player.media().request().url() != url:
-                self._media_player.setMedia(QMediaContent(url))
-            self._media_player.play()
-            self._is_playing = True
-            self.btn_play_preview.setText("Pauze")
-            
-            if self._preview_timer: self._preview_timer.stop()
-            self._preview_timer = QTimer()
-            self._preview_timer.setSingleShot(True)
-            self._preview_timer.timeout.connect(self._stop_playback)
-            self._preview_timer.start(5000)
-            return
-
-        # Eğer HAS_MEDIA yoksa, kullanıcıya bilgi ver
-        QMessageBox.information(self, "Bilgi", 
-            "Video oynatma için QtMultimedia kütüphanesi gerekli.\n"
-            "Ses önizlemesi için Play butonuna basabilirsiniz.")
-        self._show_audio_info(is_video=True)
 
     def _init_ui(self):
         self.setWindowTitle('Convert')
@@ -1184,29 +736,21 @@ class UniversalConverter(QWidget):
         self.btn_file    = QPushButton('File')
         self.btn_convert = QPushButton('Convert')
         self.btn_reset   = QPushButton('Reset')
-        self.btn_play_preview = QPushButton('Play')
-        self.btn_play_preview.setEnabled(False)
         self.btn_export  = QPushButton('Export')
 
         self.btn_file.clicked.connect(self._select_file)
         self.btn_convert.clicked.connect(self._start)
         self.btn_export.clicked.connect(self._export)
         self.btn_reset.clicked.connect(self._reset)
-        self.btn_play_preview.clicked.connect(self._toggle_playback)
 
         bs = self._btn_css()
         for b in [self.btn_file, self.btn_convert, self.btn_reset, self.btn_export]:
             b.setFixedSize(90, 30); b.setStyleSheet(bs)
             b.setCursor(Qt.PointingHandCursor)
 
-        self.btn_play_preview.setFixedSize(90, 30)
-        play_style = bs.replace('background-color:transparent', 'background-color:#3A3A3A')
-        self.btn_play_preview.setStyleSheet(play_style)
-
         bl.addWidget(self.btn_file)
         bl.addWidget(self.btn_convert)
         bl.addWidget(self.btn_reset)
-        bl.addWidget(self.btn_play_preview)
         bl.addStretch()
         bl.addWidget(self.btn_export)
         return bar
@@ -1244,68 +788,11 @@ class UniversalConverter(QWidget):
         info_layout.addWidget(self.lbl_info)
         info_layout.addWidget(self.progress)
 
+        # Ana içerik: sadece ayar paneli (önizleme kaldırıldı)
         main_frame = QFrame()
-        main_hlayout = QHBoxLayout(main_frame)
-        main_hlayout.setContentsMargins(0, 5, 0, 0)
-        main_hlayout.setSpacing(15)
-
-        left_panel = self._make_settings()
-
-        # DÜZELTME: Sağ panel layout düzeltildi
-        right_panel = QFrame()
-        right_panel.setStyleSheet("background-color:#282828;border-radius:10px;")
-        right_layout = QVBoxLayout(right_panel)
-        right_layout.setContentsMargins(10, 10, 10, 10)
-        right_layout.setSpacing(8)
-
-        self.preview_label = QLabel("Önizleme")
-        self.preview_label.setAlignment(Qt.AlignCenter)
-        self.preview_label.setStyleSheet("color:#888;font-weight:bold;font-size:12px;")
-
-        self.preview_zoom = ZoomablePreviewLabel()
-        self.preview_zoom.setVisible(False)
-
-        self.preview_scroll = QScrollArea()
-        self.preview_scroll.setWidgetResizable(True)
-        self.preview_scroll.setStyleSheet("""
-            QScrollArea { border: none; background-color: transparent; }
-            QScrollArea > QWidget > QLabel { background-color: transparent; }
-        """)
-
-        self.preview_image = QLabel()
-        self.preview_image.setAlignment(Qt.AlignCenter)
-        self.preview_image.setText("Dosya Yüklendi")
-        self.preview_image.setStyleSheet("color:#555;font-size:12px;background-color:#1F1F1F;border-radius:6px;padding:20px;")
-
-        self.preview_scroll.setWidget(self.preview_image)
-        self.preview_scroll.setVisible(False)
-
-        if HAS_MEDIA:
-            self._video_widget = QVideoWidget()
-            self._video_widget.setMinimumSize(320, 180)
-            self._video_widget.setMaximumSize(640, 360)
-            self._video_widget.setAspectRatioMode(Qt.KeepAspectRatio)
-            self._video_widget.setStyleSheet("background-color:#000000;border-radius:6px;")
-            self._video_widget.setVisible(False)
-
-            self._media_player = QMediaPlayer()
-            self._media_player.setVideoOutput(self._video_widget)
-            self._media_player.setVolume(100)
-            self._media_player.stateChanged.connect(self._on_media_state_changed)
-            self._media_player.error.connect(self._on_media_error)
-            self._media_player.positionChanged.connect(self._on_media_position_changed)
-        else:
-            self._video_widget = None
-            self._media_player = None
-
-        right_layout.addWidget(self.preview_label)
-        right_layout.addWidget(self.preview_zoom, 1)
-        right_layout.addWidget(self.preview_scroll, 1)
-        if HAS_MEDIA and self._video_widget:
-            right_layout.addWidget(self._video_widget, 1)
-
-        main_hlayout.addWidget(left_panel, 1) 
-        main_hlayout.addWidget(right_panel, 1)
+        main_layout = QVBoxLayout(main_frame)
+        main_layout.setContentsMargins(0, 5, 0, 0)
+        main_layout.addWidget(self._make_settings())
 
         cl.addWidget(info_frame)
         cl.addWidget(main_frame, 1)
@@ -1320,29 +807,34 @@ class UniversalConverter(QWidget):
                 background-color:#1F1F1F;color:#E0E0E0;}
             QComboBox::drop-down{border:0px;}""")
 
-        self.fl = QFormLayout(fr)
-        self.fl.setContentsMargins(15, 15, 15, 15); self.fl.setSpacing(12)
+        # İki sütunlu düzen
+        main_layout = QHBoxLayout(fr)
+        main_layout.setContentsMargins(15, 15, 15, 15)
+        main_layout.setSpacing(20)
 
-        def row(label, widget, tip=None):
-            if tip: widget.setToolTip(tip)
-            self.fl.addRow(label, widget)
-            return widget
+        # Sol sütun (Temel ses ayarları)
+        left_frame = QFrame()
+        left_layout = QFormLayout(left_frame)
+        left_layout.setSpacing(12)
 
+        # Sağ sütun (Gelişmiş ayarlar)
+        right_frame = QFrame()
+        right_layout = QFormLayout(right_frame)
+        right_layout.setSpacing(12)
+
+        # --- Sol sütun elemanları ---
         self.c_fmt = QComboBox()
         self.c_fmt.currentIndexChanged.connect(self._on_fmt_changed)
-        self.c_fmt.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Format (Export Format):", self.c_fmt)
+        left_layout.addRow("Format (Export Format):", self.c_fmt)
 
         self.c_freq_on = QComboBox()
         self.c_freq_on.addItems(['Kapalı (Off)', 'Açık (On)'])
         self.c_freq_on.currentIndexChanged.connect(self._toggle_freq)
-        self.c_freq_on.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Frekans Değiştir (Frequency):", self.c_freq_on)
+        left_layout.addRow("Frekans Değiştir (Frequency):", self.c_freq_on)
         self.e_freq = QLineEdit()
         self.e_freq.setPlaceholderText("Örnek: 44100")
         self.e_freq.setVisible(False)
-        self.e_freq.textChanged.connect(self._invalidate_preview_cache)
-        row("Yeni Frekans Hz:", self.e_freq)
+        left_layout.addRow("Yeni Frekans Hz:", self.e_freq)
 
         self.c_speed = QComboBox()
         speeds = [f"{v:.2f}x" for v in [
@@ -1351,8 +843,7 @@ class UniversalConverter(QWidget):
             1.50,1.60,1.70,1.80,1.90,2.0,2.20,2.50,2.70,3.0,3.50,4.0]]
         self.c_speed.addItems(speeds)
         self.c_speed.setCurrentText('1.00x')
-        self.c_speed.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Ses Hızı (Speed):", self.c_speed)
+        left_layout.addRow("Ses Hızı (Speed):", self.c_speed)
 
         self.c_pitch = QComboBox()
         pitch_items = {f"Yüksek Perde ({-i} Ton)": -i for i in range(6, 0, -1)}
@@ -1360,17 +851,17 @@ class UniversalConverter(QWidget):
         pitch_items.update({f"Düşük Perde (+{i} Ton)": i for i in range(1, 7)})
         self._pitch_vals = list(pitch_items.values())
         self.c_pitch.addItems(pitch_items.keys())
-        self.c_pitch.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Ses Perdesi (Pitch):", self.c_pitch)
+        self.c_pitch.setCurrentIndex(6)  # Normal
+        left_layout.addRow("Ses Perdesi (Pitch):", self.c_pitch)
 
         self.c_effect = QComboBox()
         self.c_effect.addItems([
             "Efekt Yok", "Normalleştir", "Sıkıştır", "Alçak Geçiren Filtre",
             "Yüksek Geçiren Filtre", "Giriş/Çıkış Fade", "Faz Ters Çevir",
             "Sola Kaydır", "Sağa Kaydır"])
-        self.c_effect.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Ses Efekti:", self.c_effect)
+        left_layout.addRow("Ses Efekti:", self.c_effect)
 
+        # --- Sağ sütun elemanları ---
         self.btn_cover = QPushButton("Kapak Resmi Seç")
         self.btn_cover.setStyleSheet(self._btn_css())
         self.btn_cover.setCursor(Qt.PointingHandCursor)
@@ -1379,24 +870,20 @@ class UniversalConverter(QWidget):
         self.lbl_cover = QLabel("Resim seçilmedi")
         self.lbl_cover.setStyleSheet("color:#888;font-size:10px;")
         self.lbl_cover.setVisible(False)
-        row("Video Kapak Resmi:", self.btn_cover)
-        row("", self.lbl_cover)
+        right_layout.addRow("Video Kapak Resmi:", self.btn_cover)
+        right_layout.addRow("", self.lbl_cover)
 
-        # YENİ VİDEO ÖZELLİKLERİ
         self.c_vid_inv = QComboBox()
         self.c_vid_inv.addItems(['Hayır (No)', 'Evet (Yes)'])
-        self.c_vid_inv.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Video Renkleri Ters Çevir:", self.c_vid_inv)
+        right_layout.addRow("Video Renkleri Ters Çevir:", self.c_vid_inv)
         
         self.c_vid_gray = QComboBox()
         self.c_vid_gray.addItems(['Hayır (No)', 'Evet (Yes)'])
-        self.c_vid_gray.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Video Gri Ton (Grayscale):", self.c_vid_gray)
+        right_layout.addRow("Video Gri Ton (Grayscale):", self.c_vid_gray)
         
         self.c_vid_rm_aud = QComboBox()
         self.c_vid_rm_aud.addItems(['Hayır (No)', 'Evet (Yes)'])
-        self.c_vid_rm_aud.currentIndexChanged.connect(self._invalidate_preview_cache)
-        row("Video Sesini Tamamen Sil:", self.c_vid_rm_aud)
+        right_layout.addRow("Video Sesini Tamamen Sil:", self.c_vid_rm_aud)
 
         self.btn_vid_aud = QPushButton("Harici Ses Ekle (Sync)")
         self.btn_vid_aud.setStyleSheet(self._btn_css())
@@ -1404,26 +891,30 @@ class UniversalConverter(QWidget):
         self.btn_vid_aud.clicked.connect(self._select_vid_audio)
         self.lbl_vid_aud = QLabel("Ses seçilmedi")
         self.lbl_vid_aud.setStyleSheet("color:#888;font-size:10px;")
-        row("Videoya Ses Ekle:", self.btn_vid_aud)
-        row("", self.lbl_vid_aud)
+        right_layout.addRow("Videoya Ses Ekle:", self.btn_vid_aud)
+        right_layout.addRow("", self.lbl_vid_aud)
 
-        # PDF & IMG
         self.c_pdf_inv  = QComboBox(); self.c_pdf_inv.addItems(['Hayır', 'Evet'])
-        row("PDF Ters Çevir:", self.c_pdf_inv)
+        right_layout.addRow("PDF Ters Çevir:", self.c_pdf_inv)
         self.c_pdf_gray = QComboBox(); self.c_pdf_gray.addItems(['Hayır', 'Evet'])
-        row("PDF Gri Ton:", self.c_pdf_gray)
+        right_layout.addRow("PDF Gri Ton:", self.c_pdf_gray)
 
         self.c_img_inv  = QComboBox(); self.c_img_inv.addItems(['Hayır', 'Evet'])
-        row("Resim Ters Çevir:", self.c_img_inv)
+        right_layout.addRow("Resim Ters Çevir:", self.c_img_inv)
         self.c_img_gray = QComboBox(); self.c_img_gray.addItems(['Hayır', 'Evet'])
-        row("Resim Gri Ton:", self.c_img_gray)
+        right_layout.addRow("Resim Gri Ton:", self.c_img_gray)
         self.c_img_scale = QComboBox()
         self.c_img_scale.addItems([
             '-5 (x0.25)', '-4 (x0.35)', '-3 (x0.50)', '-2 (x0.65)', '-1 (x0.80)',
             '0 (Orijinal)', '+1 (x1.25)', '+2 (x1.50)', '+3 (x1.75)', '+4 (x2.00)', '+5 (x2.50)'])
         self.c_img_scale.setCurrentIndex(5)
-        row("Resim Çözünürlüğü:", self.c_img_scale)
+        right_layout.addRow("Resim Çözünürlüğü:", self.c_img_scale)
 
+        # Sol ve sağ sütunları ana düzene ekle
+        main_layout.addWidget(left_frame, 1)
+        main_layout.addWidget(right_frame, 1)
+
+        # Görünürlük kontrolü için listeler
         self._audio_ws = [self.c_freq_on, self.e_freq, self.c_speed, self.c_pitch, self.c_effect]
         self._video_ws = [self.c_vid_inv, self.c_vid_gray, self.c_vid_rm_aud, self.btn_vid_aud, self.lbl_vid_aud]
         self._pdf_ws   = [self.c_pdf_inv, self.c_pdf_gray]
@@ -1432,14 +923,12 @@ class UniversalConverter(QWidget):
         self._toggle_ui('audio')
         return fr
 
-    def _invalidate_preview_cache(self):
-        self._cached_preview_path = None
-        self._cached_preview_settings = None
-
     def _row_vis(self, w, v):
         w.setVisible(v)
-        lbl = self.fl.labelForField(w)
-        if lbl: lbl.setVisible(v)
+        # FormLayout'te label'ı bulmak için biraz uğraşmak gerekebilir.
+        # Ancak burada sadece widget'ın görünürlüğünü değiştiriyoruz,
+        # label'lar otomatik olarak gizlenmez, onları da gizlemek gerekirse
+        # ayrıca yapılabilir. Şimdilik widget'ları gizliyoruz.
 
     def _toggle_ui(self, mode):
         self.current_mode = mode
@@ -1473,107 +962,15 @@ class UniversalConverter(QWidget):
             if idx >= 0: self.c_fmt.setCurrentIndex(idx)
 
         self._on_fmt_changed()
-        self._invalidate_preview_cache()
 
     def _on_fmt_changed(self):
         fmt  = self.c_fmt.currentText()
         show_cov = self.current_mode == 'audio' and fmt in ['.mp4', '.mkv']
         self._row_vis(self.btn_cover, show_cov)
         self.lbl_cover.setVisible(show_cov and bool(self.cover_image_path))
-        self._update_preview_original()
-        self._invalidate_preview_cache()
 
     def _toggle_freq(self, idx):
         self._row_vis(self.e_freq, idx == 1)
-        self._invalidate_preview_cache()
-
-    def _update_preview_original(self):
-        if not hasattr(self, 'preview_scroll'): return
-        if not self.file_path:
-            self.preview_scroll.setVisible(False)
-            self.preview_zoom.setVisible(False)
-            self.preview_label.setVisible(False)
-            if self._video_widget: self._video_widget.setVisible(False)
-            return
-
-        ext = os.path.splitext(self.file_path)[1].lower()
-        try:
-            if ext in IMAGE_EXT:
-                self._show_original_image()
-                if self._video_widget: self._video_widget.setVisible(False)
-            elif ext in PDF_EXT:
-                self._show_original_pdf()
-                if self._video_widget: self._video_widget.setVisible(False)
-            elif ext in VIDEO_EXT:
-                self._show_video_thumbnail()
-            elif ext in AUDIO_EXT:
-                fmt = self.c_fmt.currentText()
-                if self.cover_image_path and fmt in ['.mp4', '.mkv']:
-                    self.preview_zoom.setVisible(False)
-                    self.preview_scroll.setVisible(True)
-                    self.preview_label.setVisible(True)
-                    self.preview_label.setText("Video Önizleme (Ses+Resim)")
-                    self.preview_image.setText("\nSes + Kapak resmi. Play ile izleyin.")
-                    if self._video_widget: self._video_widget.setVisible(False)
-                else:
-                    self._show_audio_info(is_video=False)
-                    if self._video_widget: self._video_widget.setVisible(False)
-            else:
-                self.preview_scroll.setVisible(False)
-                self.preview_zoom.setVisible(False)
-                self.preview_label.setVisible(False)
-                if self._video_widget: self._video_widget.setVisible(False)
-        except Exception as e:
-            print(f"[Kavram] Önizleme hatası: {e}")
-
-    def _show_video_thumbnail(self):
-        if not hasattr(self, 'preview_scroll'): return
-        self.preview_scroll.setVisible(False)
-        self.preview_zoom.setVisible(False)
-        self.preview_label.setVisible(True)
-        self.preview_label.setText("Video Önizleme (Duraklatıldı)")
-        if HAS_MEDIA and self._video_widget and self._media_player:
-            self._video_widget.setVisible(True)
-            url = QUrl.fromLocalFile(self.file_path)
-            if self._media_player.media().request().url() != url:
-                self._media_player.setMedia(QMediaContent(url))
-            self._media_player.pause()
-        else:
-            self.preview_label.setText("Video Önizleme")
-            self.preview_image.setText("\nVideo dosyası yüklendi\nPlay ile önizleyin.")
-            self.preview_scroll.setVisible(True)
-
-    def _show_original_image(self):
-        if not hasattr(self, 'preview_zoom'): return
-        self.preview_scroll.setVisible(False)
-        self.preview_zoom.setVisible(True)
-        self.preview_label.setVisible(True)
-        self.preview_label.setText("Resim Önizleme")
-        pixmap = generate_image_preview(self.file_path, max_size=400)
-        self.preview_zoom.setPixmap(pixmap) if pixmap else self.preview_zoom.setText("Yüklenemedi")
-
-    def _show_original_pdf(self):
-        if not hasattr(self, 'preview_zoom'): return
-        self.preview_scroll.setVisible(False)
-        self.preview_zoom.setVisible(True)
-        self.preview_label.setVisible(True)
-        self.preview_label.setText("PDF Önizleme - Sayfa 1")
-        pixmap = generate_pdf_preview(self.file_path, max_size=400)
-        self.preview_zoom.setPixmap(pixmap) if pixmap else self.preview_zoom.setText("Yüklenemedi")
-
-    def _show_audio_info(self, is_video=False):
-        if not hasattr(self, 'preview_scroll'): return
-        self.preview_zoom.setVisible(False)
-        self.preview_scroll.setVisible(True)
-        self.preview_label.setVisible(True)
-        if is_video:
-            self.preview_label.setText("Video Önizleme")
-            self.preview_image.setText("\nVideo yüklendi. Play ile izleyin.")
-        else:
-            self.preview_label.setText("Ses Önizleme")
-            self.preview_image.setText("\nSes yüklendi. Play ile dinleyin.")
-        self.preview_image.setAlignment(Qt.AlignCenter)
-        self.preview_image.setScaledContents(False)
 
     def _select_file(self):
         init = EXPORT_DIR if os.path.exists(EXPORT_DIR) else os.path.expanduser('~')
@@ -1591,7 +988,6 @@ class UniversalConverter(QWidget):
         self.lbl_cover.setText("Resim seçilmedi")
         self.lbl_vid_aud.setText("Ses seçilmedi")
         self._out_path = None
-        self._invalidate_preview_cache()
 
         ext  = os.path.splitext(p)[1].lower()
         name = os.path.basename(p)
@@ -1602,9 +998,6 @@ class UniversalConverter(QWidget):
         self.lbl_status.setText(f"Yüklendi:\n{name}")
         self._toggle_ui(self.current_mode)
         self._update_btns()
-        self._update_preview_original()
-        self.btn_play_preview.setEnabled(ext in AUDIO_EXT or ext in VIDEO_EXT)
-        if not self.btn_play_preview.isEnabled(): self._stop_playback()
 
     def _select_cover(self):
         init = os.path.dirname(self.file_path) if self.file_path else os.path.expanduser('~')
@@ -1613,8 +1006,6 @@ class UniversalConverter(QWidget):
             self.cover_image_path = p
             self.lbl_cover.setText(os.path.basename(p))
             self.lbl_cover.setVisible(True)
-            self._update_preview_original()
-            self._invalidate_preview_cache()
 
     def _select_vid_audio(self):
         init = os.path.dirname(self.file_path) if self.file_path else os.path.expanduser('~')
@@ -1624,7 +1015,6 @@ class UniversalConverter(QWidget):
             self.lbl_vid_aud.setText(os.path.basename(p))
             self.lbl_vid_aud.setVisible(True)
             self.c_vid_rm_aud.setCurrentIndex(0)
-            self._invalidate_preview_cache()
 
     def _make_out_path(self):
         os.makedirs(CONVERT_DIR, exist_ok=True)
@@ -1651,10 +1041,8 @@ class UniversalConverter(QWidget):
             return MODE_AUD2VID
         return MODE_AUDIO
 
-    # DÜZELTME: Thread güvenli başlatma
     def _start(self):
         if not self.file_path: return
-        self._stop_playback()
         
         # Çalışan thread varsa temizle
         if self.conv_thread and self.conv_thread.isRunning():
@@ -1707,57 +1095,7 @@ class UniversalConverter(QWidget):
         self.lbl_status.setText(f"✓ {elapsed:.2f} saniyede tamamlandı")
         self._cleanup()
         self._update_btns()
-        self._show_converted_preview(out_path, auto_play=False)
-
-    def _show_converted_preview(self, path, auto_play=False):
-        if not path or not os.path.exists(path): return
-        ext = os.path.splitext(path)[1].lower()
-        try:
-            if ext in IMAGE_EXT:
-                self.preview_scroll.setVisible(False)
-                self.preview_zoom.setVisible(True)
-                self.preview_label.setVisible(True)
-                if self._video_widget: self._video_widget.setVisible(False)
-                self.preview_label.setText("Resim (Dönüştürülmüş)")
-                pixmap = generate_image_preview(path, max_size=400)
-                if pixmap: self.preview_zoom.setPixmap(pixmap)
-            elif ext in PDF_EXT:
-                self.preview_scroll.setVisible(False)
-                self.preview_zoom.setVisible(True)
-                self.preview_label.setVisible(True)
-                if self._video_widget: self._video_widget.setVisible(False)
-                self.preview_label.setText("PDF (Dönüştürülmüş)")
-                pixmap = generate_pdf_preview(path, max_size=400)
-                if pixmap: self.preview_zoom.setPixmap(pixmap)
-            elif ext == '.txt':
-                self.preview_zoom.setVisible(False)
-                self.preview_scroll.setVisible(True)
-                self.preview_label.setVisible(True)
-                if self._video_widget: self._video_widget.setVisible(False)
-                self.preview_label.setText("TXT Önizleme")
-                txt_content = generate_txt_preview(path, max_lines=15)
-                self.preview_image.setText(txt_content if txt_content else "Hata")
-            elif ext in VIDEO_EXT:
-                self.preview_zoom.setVisible(False)
-                self.preview_scroll.setVisible(False)
-                self.preview_label.setVisible(True)
-                if self._video_widget: self._video_widget.setVisible(True)
-                self.preview_label.setText("Video (Dönüştürülmüş)")
-                if HAS_MEDIA and self._video_widget and self._media_player:
-                    url = QUrl.fromLocalFile(path)
-                    if self._media_player.media().request().url() != url:
-                        self._media_player.setMedia(QMediaContent(url))
-                    self._media_player.pause()
-                if auto_play: self._start_video_preview_playback(path)
-            elif ext in AUDIO_EXT:
-                self.preview_zoom.setVisible(False)
-                self.preview_scroll.setVisible(True)
-                self.preview_label.setVisible(True)
-                if self._video_widget: self._video_widget.setVisible(False)
-                self.preview_label.setText("Ses (Dönüştürülmüş)")
-                self.preview_image.setText("\nSes dönüştürüldü\nPlay butonuna basın.")
-                if auto_play: self._start_ffplay(path)
-        except Exception as e: print(f"[Kavram] Gösterim hatası: {e}")
+        # Önizleme gösterimi kaldırıldı, sadece durum mesajı
 
     def _on_error(self, msg):
         self._out_path = None
@@ -1821,8 +1159,6 @@ class UniversalConverter(QWidget):
                 try:
                     if os.path.isfile(fpath): os.unlink(fpath)
                 except: pass
-        self._cached_preview_path = None
-        self._cached_preview_settings = None
 
     def _get_settings(self):
         try: nf = int(self.e_freq.text())
@@ -1849,8 +1185,6 @@ class UniversalConverter(QWidget):
         self.btn_convert.setEnabled(bool(self.file_path) and not converting)
         self.btn_reset.setEnabled(not converting)
         self.btn_export.setEnabled(bool(self._out_path) and os.path.exists(self._out_path or '') and not converting)
-        ext = os.path.splitext(self.file_path)[1].lower() if self.file_path else ''
-        self.btn_play_preview.setEnabled((ext in AUDIO_EXT or ext in VIDEO_EXT) and not converting and bool(self.file_path))
 
     def _reset(self):
         self.c_fmt.setCurrentIndex(0)
@@ -1874,8 +1208,6 @@ class UniversalConverter(QWidget):
         self.lbl_vid_aud.setVisible(False)
         
         self._on_fmt_changed()
-        self._stop_playback()
-        self._invalidate_preview_cache()
 
     def _btn_css(self):
         return """
@@ -1887,27 +1219,12 @@ class UniversalConverter(QWidget):
             QPushButton:disabled{background-color:#202020;color:#555;border:1px solid #333;}"""
 
     def closeEvent(self, event):
-        self._stop_playback()
         if self.conv_worker: self.conv_worker.stop()
         if self.conv_thread and self.conv_thread.isRunning():
             self.conv_thread.quit()
             if not self.conv_thread.wait(5000):
                 self.conv_thread.terminate()
                 self.conv_thread.wait(2000)
-
-        if self.preview_worker: self.preview_worker.stop()
-        if self.preview_thread and self.preview_thread.isRunning():
-            self.preview_thread.quit()
-            self.preview_thread.wait(2000)
-
-        if self._video_preview_process:
-            try:
-                self._video_preview_process.terminate()
-                self._video_preview_process.wait(timeout=1)
-            except:
-                try: self._video_preview_process.kill()
-                except: pass
-
         self._clean_convert_dir()
         event.accept()
 

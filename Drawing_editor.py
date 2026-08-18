@@ -1164,6 +1164,7 @@ class DrawingArea(QWidget):
         self.setAttribute(Qt.WA_StaticContents)
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.StrongFocus)
+        self.setAcceptDrops(True)
         self.modified = False
         self.drawing = False
         self.lastPoint = QPoint()
@@ -1940,7 +1941,7 @@ class DrawingArea(QWidget):
                                     "current_width": final_rect_2.width(), "current_height": final_rect_2.height(),
                                     "layer": self.current_layer_name
                                 })
-                        else:
+                        else:  # yatay aynalama
                             mirror_line = self.mirror_line_y
                             rect_1 = QRect(final_pos, self.current_image_display_size)
                             clip_rect_1 = QRect(rect_1.x(), rect_1.y(), rect_1.width(), int(mirror_line - rect_1.y()) + 1)
@@ -3195,6 +3196,34 @@ class DrawingArea(QWidget):
         self.commitImageToPixmap()
         self.update()
 
+    # ----- Sürükle-Bırak Desteği -----
+    def dragEnterEvent(self, event):
+        """Dosya sürüklendiğinde kabul et."""
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        """Sürükleme hareketinde kabul et."""
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        """Dosya bırakıldığında yükleme işlemini başlat."""
+        urls = event.mimeData().urls()
+        if urls:
+            file_path = urls[0].toLocalFile()
+            if file_path:
+                parent = self.parent()
+                if parent and hasattr(parent, 'load_image_from_path'):
+                    parent.load_image_from_path(file_path)
+                event.acceptProposedAction()
+        else:
+            event.ignore()
+
 
 class DrawingEditorWindow(QWidget):
     DEFAULT_BASE_DIR = os.path.join(os.path.expanduser('~'), 'Kavram', 'Export')
@@ -3330,12 +3359,25 @@ class DrawingEditorWindow(QWidget):
         # Program ilk açıldığında tuval boyutunu ekrana tam sığdırır (Auto Fit)
         QTimer.singleShot(100, self.fitCanvasToView)
 
+    # --- openResolutionDialog METODU EKLENDİ ---
+    def openResolutionDialog(self):
+        """O butonuna sağ tıklandığında çalışır. Çözünürlük değişikliği için dialog açar."""
+        if len(self.pages_data) > 1 or self.is_project_modified:
+            QMessageBox.warning(self, "Uyarı", "Çözünürlük ve tuval boyutu yalnızca tamamen boş ve yeni bir projede değiştirilebilir.\n\nLütfen çözünürlüğü değiştirmek için programı yeniden başlatın veya yeni, boş bir dosya kullanın.")
+            return
+
+        dialog = AspectRatioDialog(self)
+        if dialog.exec_():
+            settings = dialog.getSettings()
+            new_w = settings["width"]
+            new_h = settings["height"]
+            self.applyNewResolution(new_w, new_h)
+
     def fitCanvasToView(self):
         """Tuvali ekranın ortasına tam sığacak şekilde otomatik ölçekler (Zoom)."""
         margin = 40
         w = self.drawing_area.width() - margin
-        h = self.drawing_area.height() - margin
-        
+        h = self.drawing_area.height() - margin        
         if w > 0 and h > 0:
             zoom_x = w / float(self.canvas_width)
             zoom_y = h / float(self.canvas_height)
@@ -3617,20 +3659,6 @@ class DrawingEditorWindow(QWidget):
         QShortcut(QKeySequence("Ctrl+Left"), self, self.goPrevPage)
         QShortcut(QKeySequence("Ctrl+Shift+Right"), self, self.duplicateToNextPage)
         QShortcut(QKeySequence("Ctrl+Shift+Left"), self, self.duplicateToPrevPage)
-
-    def openResolutionDialog(self):
-        """O butonuna sağ tıklandığında (alan.py entegrasyonu) çalışacak olan fonksiyon.
-           Projede çizik bile varsa veya birden fazla sayfa varsa uyararak engeller."""
-        if len(self.pages_data) > 1 or self.is_project_modified:
-            QMessageBox.warning(self, "Uyarı", "Çözünürlük ve tuval boyutu yalnızca tamamen boş ve yeni bir projede değiştirilebilir.\n\nLütfen çözünürlüğü değiştirmek için programı yeniden başlatın veya yeni, boş bir dosya kullanın.")
-            return
-
-        dialog = AspectRatioDialog(self)
-        if dialog.exec_():
-            settings = dialog.getSettings()
-            new_w = settings["width"]
-            new_h = settings["height"]
-            self.applyNewResolution(new_w, new_h)
 
     def applyNewResolution(self, w, h):
         """Çözünürlük ve Boyutları, mevcut dosyadaki TÜM sayfalara entegre eder."""
@@ -4163,15 +4191,21 @@ class DrawingEditorWindow(QWidget):
             """
 
     def importFile(self):
-        options = QFileDialog.Options()
-        file_filter = "Supported Files (*.pnf *.drawing *.png *.jpg *.jpeg *.bmp *.gif);;Project Files (*.pnf *.drawing);;Image Files (*.png *.jpg *.jpeg *.bmp *.gif);;All Files (*)"
-        file_path, _ = QFileDialog.getOpenFileName(
-            self, "Import Drawing or Image", DrawingEditorWindow.DEFAULT_BASE_DIR,
-            file_filter,
-            options=options
-        )
-        if file_path:
-            self.load_image_from_path(file_path)
+        """Dosya açma işlemini CoreWindow üzerinden FileManager'a yönlendirir."""
+        if self.core_window_ref:
+            # CoreWindow üzerinden FileManager'ı aç
+            self.core_window_ref.open_file_manager_for_editor("Drawing")
+        else:
+            # Fallback: Eğer CoreWindow yoksa eski yöntemi kullan
+            options = QFileDialog.Options()
+            file_filter = "Supported Files (*.pnf *.drawing *.png *.jpg *.jpeg *.bmp *.gif);;Project Files (*.pnf *.drawing);;Image Files (*.png *.jpg *.jpeg *.bmp *.gif);;All Files (*)"
+            file_path, _ = QFileDialog.getOpenFileName(
+                self, "Import Drawing or Image", DrawingEditorWindow.DEFAULT_BASE_DIR,
+                file_filter,
+                options=options
+            )
+            if file_path:
+                self.load_image_from_path(file_path)
 
     def saveProject(self):
         if self.current_file_path:
@@ -4258,90 +4292,101 @@ class DrawingEditorWindow(QWidget):
             QApplication.restoreOverrideCursor()
 
     def exportFile(self):
-        self.saveCurrentPageData()
-
-        QDir().mkpath(DrawingEditorWindow.DEFAULT_BASE_DIR)
-        options = QFileDialog.Options()
-
-        file_filter = "Project Native Format (*.pnf);;PDF Files (*.pdf);;PNG Files (*.png);;Drawing Files (*.drawing);;JPEG Files (*.jpg *.jpeg);;All Files (*)"
-        default_filter = "Project Native Format (*.pnf)"
-
-        file_path, selected_filter = QFileDialog.getSaveFileName(
-            self, "Export Project", self.current_file_path or DrawingEditorWindow.DEFAULT_BASE_DIR,
-            file_filter,
-            default_filter,
-            options=options
-        )
-
-        if not file_path: return
-
-        if selected_filter.startswith("Project Native Format") or file_path.lower().endswith(".pnf"):
-            if not file_path.lower().endswith(".pnf"): file_path += ".pnf"
-            try:
-                self._save_to_path(file_path)
-                QMessageBox.information(self, "Kaydet", f"Proje başarıyla kaydedildi:\n{file_path}")
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"Dosya kaydedilemedi: {e}")
-
-        elif selected_filter == "Drawing Files (*.drawing)":
-            if not file_path.lower().endswith(".drawing"): file_path += ".drawing"
-            try:
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    json.dump([], f, indent=4)
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"Dosya kaydedilemedi: {e}")
-
-        elif selected_filter == "PDF Files (*.pdf)" or file_path.lower().endswith(".pdf"):
-            if not file_path.lower().endswith(".pdf"): file_path += ".pdf"
-            try:
-                printer = QPrinter(QPrinter.HighResolution)
-                printer.setOutputFormat(QPrinter.PdfFormat)
-                printer.setOutputFileName(file_path)
-                painter = QPainter(printer)
-                original_index = self.current_page_index
-                
-                self.saveCurrentPageData()
-                for i, page_data in enumerate(self.pages_data):
-                    if i > 0: printer.newPage()
-                    
-                    page_file_base = os.path.join(self.drawing_cache_dir, f"s{i + 1}")
-                    if os.path.exists(f"{page_file_base}.png"):
-                        image = QImage(f"{page_file_base}.png")
-                    else:
-                        image = QImage(self.canvas_width, self.canvas_height, QImage.Format_RGB32)
-                        image.fill(page_data.get("background", QColor("#333")))
-                        
-                    rect = painter.viewport()
-                    size = image.size()
-                    size.scale(rect.size(), Qt.KeepAspectRatio)
-                    painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
-                    painter.setWindow(image.rect())
-                    painter.drawImage(0, 0, image)
-                
-                painter.end()
-                self.loadPageData(original_index, save_current=False)
-                QMessageBox.information(self, "Success", "PDF Exported successfully.")
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"Could not export PDF: {e}")
+        """Dosya dışa aktarma işlemini CoreWindow üzerinden FileManager'a yönlendirir."""
+        if self.core_window_ref:
+            # CoreWindow üzerinden FileManager'ı export modunda aç
+            self.core_window_ref.open_file_manager_for_export(
+                exporter=self._save_to_path,
+                compression="xz",
+                default_export_name=self.current_file_path,
+                filter_extensions={".pnf"}
+            )
         else:
-            if selected_filter == "PNG Files (*.png)":
-                if not file_path.lower().endswith(".png"): file_path += ".png"
-                file_format = "PNG"
-            elif selected_filter == "JPEG Files (*.jpg *.jpeg)":
-                if not file_path.lower().endswith((".jpg", ".jpeg")): file_path += ".jpg"
-                file_format = "JPEG"
-            elif selected_filter == "BMP Files (*.bmp)":
-                if not file_path.lower().endswith(".bmp"): file_path += ".bmp"
-                file_format = "BMP"
-            elif selected_filter == "GIF Files (*.gif)":
-                if not file_path.lower().endswith(".gif"): file_path += ".gif"
-                file_format = "GIF"
-            else:
-                if not file_path.lower().endswith(".png"): file_path += ".png"
-                file_format = "PNG"
+            # Fallback: Eğer CoreWindow yoksa eski yöntemi kullan
+            self.saveCurrentPageData()
 
-            if not self.drawing_area.image.save(file_path, file_format):
-                QMessageBox.critical(self, "Error", "Could not export drawing.")
+            QDir().mkpath(DrawingEditorWindow.DEFAULT_BASE_DIR)
+            options = QFileDialog.Options()
+
+            file_filter = "Project Native Format (*.pnf);;PDF Files (*.pdf);;PNG Files (*.png);;Drawing Files (*.drawing);;JPEG Files (*.jpg *.jpeg);;All Files (*)"
+            default_filter = "Project Native Format (*.pnf)"
+
+            file_path, selected_filter = QFileDialog.getSaveFileName(
+                self, "Export Project", self.current_file_path or DrawingEditorWindow.DEFAULT_BASE_DIR,
+                file_filter,
+                default_filter,
+                options=options
+            )
+
+            if not file_path: return
+
+            if selected_filter.startswith("Project Native Format") or file_path.lower().endswith(".pnf"):
+                if not file_path.lower().endswith(".pnf"): file_path += ".pnf"
+                try:
+                    self._save_to_path(file_path)
+                    QMessageBox.information(self, "Kaydet", f"Proje başarıyla kaydedildi:\n{file_path}")
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"Dosya kaydedilemedi: {e}")
+
+            elif selected_filter == "Drawing Files (*.drawing)":
+                if not file_path.lower().endswith(".drawing"): file_path += ".drawing"
+                try:
+                    with open(file_path, 'w', encoding='utf-8') as f:
+                        json.dump([], f, indent=4)
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"Dosya kaydedilemedi: {e}")
+
+            elif selected_filter == "PDF Files (*.pdf)" or file_path.lower().endswith(".pdf"):
+                if not file_path.lower().endswith(".pdf"): file_path += ".pdf"
+                try:
+                    printer = QPrinter(QPrinter.HighResolution)
+                    printer.setOutputFormat(QPrinter.PdfFormat)
+                    printer.setOutputFileName(file_path)
+                    painter = QPainter(printer)
+                    original_index = self.current_page_index
+                    
+                    self.saveCurrentPageData()
+                    for i, page_data in enumerate(self.pages_data):
+                        if i > 0: printer.newPage()
+                        
+                        page_file_base = os.path.join(self.drawing_cache_dir, f"s{i + 1}")
+                        if os.path.exists(f"{page_file_base}.png"):
+                            image = QImage(f"{page_file_base}.png")
+                        else:
+                            image = QImage(self.canvas_width, self.canvas_height, QImage.Format_RGB32)
+                            image.fill(page_data.get("background", QColor("#333")))
+                            
+                        rect = painter.viewport()
+                        size = image.size()
+                        size.scale(rect.size(), Qt.KeepAspectRatio)
+                        painter.setViewport(rect.x(), rect.y(), size.width(), size.height())
+                        painter.setWindow(image.rect())
+                        painter.drawImage(0, 0, image)
+                    
+                    painter.end()
+                    self.loadPageData(original_index, save_current=False)
+                    QMessageBox.information(self, "Success", "PDF Exported successfully.")
+                except Exception as e:
+                    QMessageBox.critical(self, "Error", f"Could not export PDF: {e}")
+            else:
+                if selected_filter == "PNG Files (*.png)":
+                    if not file_path.lower().endswith(".png"): file_path += ".png"
+                    file_format = "PNG"
+                elif selected_filter == "JPEG Files (*.jpg *.jpeg)":
+                    if not file_path.lower().endswith((".jpg", ".jpeg")): file_path += ".jpg"
+                    file_format = "JPEG"
+                elif selected_filter == "BMP Files (*.bmp)":
+                    if not file_path.lower().endswith(".bmp"): file_path += ".bmp"
+                    file_format = "BMP"
+                elif selected_filter == "GIF Files (*.gif)":
+                    if not file_path.lower().endswith(".gif"): file_path += ".gif"
+                    file_format = "GIF"
+                else:
+                    if not file_path.lower().endswith(".png"): file_path += ".png"
+                    file_format = "PNG"
+
+                if not self.drawing_area.image.save(file_path, file_format):
+                    QMessageBox.critical(self, "Error", "Could not export drawing.")
 
     def load_image_from_path(self, file_path):
         if file_path.lower().endswith(".pnf"):
