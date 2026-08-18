@@ -1,3 +1,4 @@
+# text_editor.py - TAM DOSYA
 # Kavram 2.2.2
 # Copyright (C) 2026-07-22 Kavram or Contributors
 #
@@ -845,6 +846,10 @@ class RightClickButton(QPushButton):
 
 # --- Ana Editör Bileşeni ---
 class CustomTextEdit(QTextEdit):
+    # Yalnızca Kavram File Manager'ın özel olarak işaretlediği sürüklemeleri
+    # dosya içeriği ekleme işlemi olarak kabul eder.
+    FILE_MANAGER_DRAG_MIME = "application/x-kavram-file-manager-drag"
+
     def __init__(self, editor_window, parent=None):
         super().__init__(parent)
         self.editor_window = editor_window
@@ -852,6 +857,111 @@ class CustomTextEdit(QTextEdit):
         self.setMouseTracking(True) 
         self.last_enter_time = 0 
         self.last_shift_press_time = 0 
+
+        # Drop davranışı burada yalnızca özel File Manager payload'ı için
+        # devreye girer. Diğer sürüklemeler Qt'nin mevcut davranışına bırakılır.
+        self.setAcceptDrops(True)
+
+    def dragEnterEvent(self, event):
+        mime = event.mimeData()
+        if mime.hasFormat(self.FILE_MANAGER_DRAG_MIME) and mime.hasUrls():
+            local_files = [
+                url.toLocalFile()
+                for url in mime.urls()
+                if url.isLocalFile() and os.path.isfile(url.toLocalFile())
+            ]
+            if local_files:
+                event.acceptProposedAction()
+                return
+        super().dragEnterEvent(event)
+
+    def dragMoveEvent(self, event):
+        mime = event.mimeData()
+        if mime.hasFormat(self.FILE_MANAGER_DRAG_MIME) and mime.hasUrls():
+            local_files = [
+                url.toLocalFile()
+                for url in mime.urls()
+                if url.isLocalFile() and os.path.isfile(url.toLocalFile())
+            ]
+            if local_files:
+                event.acceptProposedAction()
+                return
+        super().dragMoveEvent(event)
+
+    @staticmethod
+    def _read_dropped_text_file(file_path):
+        """Dosya içeriğini metin olarak güvenli biçimde oku."""
+        encodings = ("utf-8", "utf-8-sig", "cp1254", "latin-1")
+        last_error = None
+        for encoding in encodings:
+            try:
+                with open(file_path, "r", encoding=encoding, newline="") as f:
+                    return f.read()
+            except UnicodeDecodeError as exc:
+                last_error = exc
+                continue
+            except (OSError, IOError):
+                return None
+        return None
+
+    def dropEvent(self, event):
+        mime = event.mimeData()
+        if not mime.hasFormat(self.FILE_MANAGER_DRAG_MIME) or not mime.hasUrls():
+            super().dropEvent(event)
+            return
+
+        # File Manager'daki sürüklenen dosyalardan ilk gerçek dosyayı kullan.
+        # Mevcut imleç konumu korunur; bırakılan ekran noktası imleci taşımaz.
+        file_path = None
+        for url in mime.urls():
+            if url.isLocalFile():
+                candidate = url.toLocalFile()
+                if os.path.isfile(candidate):
+                    file_path = candidate
+                    break
+
+        if not file_path:
+            event.ignore()
+            return
+
+        content = self._read_dropped_text_file(file_path)
+        if content is None:
+            QMessageBox.information(
+                self,
+                "Dosya",
+                "Bırakılan dosya metin olarak okunamadı."
+            )
+            event.ignore()
+            return
+
+        old_plain = self.toPlainText()
+        old_html = self.toHtml()
+        cursor = self.textCursor()
+        cursor.beginEditBlock()
+        cursor.insertText(os.path.basename(file_path))
+        cursor.insertText("\n")
+        cursor.insertText(content)
+        final_position = cursor.position()
+        cursor.endEditBlock()
+        self.setTextCursor(cursor)
+        self.ensureCursorVisible()
+
+        new_plain = self.toPlainText()
+        new_html = self.toHtml()
+        if new_plain != old_plain:
+            command = TextChangeCommand(
+                self.editor_window,
+                old_html,
+                new_html,
+                old_plain,
+                new_plain,
+                final_position
+            )
+            self.editor_window.undo_stack.push(command)
+            self.editor_window.update_undo_redo_buttons()
+            self.editor_window.clearHighlights()
+
+        event.acceptProposedAction()
 
     def keyPressEvent(self, event):
         # --- Özel Kısayol Kontrolleri (Tuş Vuruşu Seviyesinde Geri Al / Yinele Çözümü) ---
@@ -1641,13 +1751,11 @@ class TextEditorWindow(QWidget):
         redo_shortcut_std.activated.connect(self.redo_action)
 
     def quickSave(self):
+        """Hızlı kaydet: dosya açık ise doğrudan kaydet, değilse File Manager'da export."""
         if self.current_file:
-            try:
-                self.save_package(self.current_file)
-            except Exception as e:
-                QMessageBox.critical(self, "Hata", f"Dosya kaydedilirken hata oluştu:\n{str(e)}")
+            self.save_package(self.current_file)
         else:
-            self.saveContent()
+            self.exportContent("Hızlı Kaydet")
 
     def updateDotMode(self, active):
         self.dot_mode_enabled = active
@@ -1837,27 +1945,23 @@ class TextEditorWindow(QWidget):
             main_window.showSwitcher()
 
     def openFiles(self):
-        options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(
-            self, "Dosya Aç", TextEditorWindow.DEFAULT_BASE_DIR,
-            "Kavram Dosyası (*.txr);;Text Files (*.txt *.md *.log);;All Files (*)",
-            options=options
-        )
-        if file_name:
-            self.load_file_content(file_name)
+        """File Manager üzerinden dosya aç. Varsayılan filtre .txr, yanında .txt de göster."""
+        if not self.core_window_ref:
+            QMessageBox.warning(self, "Hata", "CoreWindow referansı yok.")
+            return
+        # Editör bağlamı Text (.txr) olarak ayarlanır, ancak filtre açılır listede .txt de bulunur.
+        manager = self.core_window_ref.open_file_manager_for_editor("Text", all_files=False)
+        if manager:
+            # Daha önce bağlanmış sinyalleri temizle
+            try:
+                manager.fileSelected.disconnect(self.load_file_content)
+            except (TypeError, RuntimeError):
+                pass
+            manager.fileSelected.connect(self.load_file_content)
 
     def saveContent(self):
-        options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getSaveFileName(
-            self, "Kaydet", TextEditorWindow.DEFAULT_BASE_DIR,
-            "Kavram Dosyası (*.txr);;All Files (*)",
-            options=options
-        )
-        if file_name:
-            if not file_name.lower().endswith('.txr'):
-                file_name += '.txr'
-            self.current_file = file_name
-            self.save_package(file_name)
+        """Eski QFileDialog ile kaydet - artık kullanılmıyor, exportContent ile değiştirildi."""
+        self.exportContent("Kaydet")
 
     def save_package(self, package_path):
         try:
@@ -1867,28 +1971,37 @@ class TextEditorWindow(QWidget):
                 f.write(content)
             self.current_file = package_path
             self.setWindowTitle(f"Kavram - {os.path.basename(package_path)}")
+            # Tek bildirim: save_package içinde
             QMessageBox.information(self, "Kaydedildi", f"Dosya başarıyla kaydedildi.\n{package_path}")
         except Exception as e:
             QMessageBox.critical(self, "Kaydetme Hatası", str(e))
 
     def exportContent(self, title=None):
-        if not isinstance(title, str):
-            title = "Dışa Aktar"
-
-        QDir().mkpath(TextEditorWindow.DEFAULT_BASE_DIR)
-        options = QFileDialog.Options()
-        save_path, _ = QFileDialog.getSaveFileName(
-            self, title, os.path.join(TextEditorWindow.DEFAULT_BASE_DIR, "belge.txr"),
-            "Kavram Dosyası (*.txr);;All Files (*)",
-            options=options
-        )
-        if not save_path:
+        """File Manager üzerinden dışa aktar (sadece .txr)."""
+        if not self.core_window_ref:
+            QMessageBox.warning(self, "Hata", "CoreWindow referansı yok.")
             return
 
-        if not save_path.lower().endswith('.txr'):
-            save_path += '.txr'
+        def export_to_path(path, compression=None):
+            try:
+                self.save_package(path)
+                return True
+            except Exception as e:
+                QMessageBox.critical(self, "Hata", f"Kaydedilemedi: {e}")
+                return False
 
-        self.save_package(save_path)
+        manager = self.core_window_ref.open_file_manager_for_export(
+            exporter=export_to_path,
+            compression=None,  # metin için sıkıştırma yok
+            default_export_name="belge",
+            filter_extensions={".txr"}
+        )
+        # exportCompleted bağlantısı KALDIRILDI, çünkü save_package zaten bildirim gösteriyor
+        # Sadece iptal durumu için
+        if manager:
+            manager.exportCancelled.connect(
+                lambda: QMessageBox.information(self, "İptal", "Kaydetme iptal edildi.")
+            )
 
     def closeEvent(self, event):
         self.save_settings()
@@ -1940,3 +2053,4 @@ if __name__ == "__main__":
     editor = TextEditorWindow(core_window_ref=None)
     editor.show()
     sys.exit(app.exec_())
+

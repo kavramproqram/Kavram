@@ -1,11 +1,14 @@
 {
     "thickness": 40,
-    "default_position": null,
-    "record_limit": "5 dk",
+    "default_position": [
+        10,
+        993
+    ],
+    "record_limit": "13 dk",
     "segment_duration": "30 sn",
     "windows_active": true,
-    "sound_active": true,
+    "sound_active": false,
     "noise_filter_enabled": false,
-    "keystroke_display_enabled": false,
-    "overlay_visible": false
+    "keystroke_display_enabled": true,
+    "overlay_visible": true
 }

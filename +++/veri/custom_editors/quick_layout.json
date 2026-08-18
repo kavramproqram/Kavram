@@ -1,0 +1,33 @@
+{
+    "boxes": [
+        {
+            "box_id": 6649,
+            "editor_name": null,
+            "file_path": null,
+            "name_input": "",
+            "timestamp_text": "",
+            "independent": false,
+            "pos_x": -300.0,
+            "pos_y": -200.0
+        },
+        {
+            "box_id": 6891,
+            "editor_name": null,
+            "file_path": null,
+            "name_input": "",
+            "timestamp_text": "",
+            "independent": false,
+            "pos_x": 100.0,
+            "pos_y": -100.0
+        }
+    ],
+    "connections": [
+        {
+            "start_box_id": 6891,
+            "start_port": "left",
+            "end_box_id": 6649,
+            "end_port": "right",
+            "color_type": "special"
+        }
+    ]
+}

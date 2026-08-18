@@ -14,5 +14,5 @@
     "eq_gain_db": 0.0,
     "eq_freq_hz": 1000.0,
     "eq_q": 1.0,
-    "noise_filter_enabled": false
+    "noise_filter_enabled": true
 }

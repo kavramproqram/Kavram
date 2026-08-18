@@ -1,45 +1,14 @@
-# Kavram 2.2.2
-# Copyright (C) 2026-07-22 Kavram or Contributors
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see /Kavram/License/GPLv3.txt
-#
-# ---------------------------------------------
-#
-# Kavram 2.2.2
-# Copyright (C) 2026-07-22 Kavram veya Contributors
-#
-# Bu program özgür bir yazılımdır: Özgür Yazılım Vakfı tarafından yayınlanan
-# GNU Genel Kamu Lisansı'nın 3. sürümü veya (tercihinize bağlı olarak)
-# daha sonraki herhangi bir sürümü kapsamında yeniden dağıtabilir ve/veya
-# değiştirebilirsiniz.
-#
-# Bu program, faydalı olacağı umuduyla dağıtılmaktadır, ancak HERHANGİ BİR
-# GARANTİ OLMADAN; hatta SATILABİLİRLİK veya BELİRLİ BİR AMACA UYGUNLUK
-# zımni garantisi olmaksızın.
-#
-# Bu programla birlikte GNU Genel Kamu Lisansı'nın bir kopyasını almış olmanız gerekir:
-# /Kavram/License/GPLv3.txt
-
 import sys
 import os
 import signal
 import importlib
-import json          
-import subprocess 
-import traceback   
+import json
+import subprocess
+import traceback
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QStackedWidget, QVBoxLayout, QDialog,
-    QListWidget, QListWidgetItem, QLabel, QMessageBox, QMenu
+    QListWidget, QListWidgetItem, QLabel, QMessageBox, QMenu,
+    QPushButton, QHBoxLayout, QFrame
 )
 from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtCore import Qt, QTimer
@@ -189,7 +158,7 @@ class EditorSwitcherDialog(QDialog):
         parent = self.parent()
         if parent and hasattr(parent, 'custom_editors'):
             if any(e['name'] == editor_name for e in parent.custom_editors):
-                menu = QMenu(self) 
+                menu = QMenu(self)
                 delete_action = menu.addAction("Sil")
                 action = menu.exec_(self.list_widget.mapToGlobal(position))
                 if action == delete_action:
@@ -251,11 +220,17 @@ class CoreWindow(QWidget):
             QPushButton:pressed, QToolButton:pressed {
                 background-color: #777777;
             }
+            QFrame#bottomBar {
+                background-color: #1a1a1a;
+                border-top: 1px solid #333;
+                min-height: 40px;
+                max-height: 40px;
+            }
         """)
 
         # ---- SIRALAMA MANTIĞI ----
         self.mru_editor_names = ["Sphere", "Text", "Drawing", "Sound", "Ai", "Media", "Rec", "Copy"]
-        self.fixed_base_names = ["Filter", "Convert"]
+        self.fixed_base_names = ["Filter", "Convert", "File"]
         self.editors_order = self.mru_editor_names.copy() + self.fixed_base_names.copy()
 
         self.editor_map = {
@@ -268,13 +243,15 @@ class CoreWindow(QWidget):
             "Rec": "camera_editor.CameraRecorderWindow",
             "Copy": "copya.MainWindow",
             "Filter": "filtre.AudioCleanerUI",
-            "Convert": "convert.UniversalConverter"
+            "Convert": "convert.UniversalConverter",
+            "File": "file_manager.FileManager"
         }
 
         self.stack = QStackedWidget()
         self.instantiated_editors = {}
         self.filter_window_instance = None
         self.convert_window_instance = None
+        self.file_manager_instance = None
 
         self.media_filter_connection_active = False
         self.is_filtering_in_progress = False
@@ -290,25 +267,86 @@ class CoreWindow(QWidget):
         self.instantiated_editors["Sphere"] = sphere_editor_instance
         self.stack.setCurrentWidget(sphere_editor_instance)
 
-        layout = QVBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.stack)
-        self.setLayout(layout)
+        # Ana layout
+        main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        main_layout.addWidget(self.stack)
+
+        # Alt bar TAMAMEN KALDIRILDI (File butonu ve bar yok)
+        # main_layout artık sadece self.stack içeriyor
+
+        self.setLayout(main_layout)
 
         self.showMaximized()
         self.force_close = False
         self.spawned_external_processes = []
 
+    def open_file_manager(self, editor_name=None, filter_extensions=None, mode="open",
+                          export_callback=None, export_compression="xz",
+                          default_export_name=None):
+        """File Manager'ı tek örnek (singleton) olarak açar."""
+        try:
+            # Eski örneği kapatıp yenisi açılacak
+            from file_manager import FileManager
+            return FileManager.open_singleton(
+                parent=None,
+                target_editor=editor_name,
+                custom_editors=self.custom_editors,
+                filter_extensions=filter_extensions,
+                mode=mode,
+                export_callback=export_callback,
+                export_compression=export_compression,
+                default_export_name=default_export_name
+            )
+        except Exception as e:
+            self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
+            return None
+
+    def open_file_manager_for_editor(self, editor_name, all_files=False):
+        """Editörlerden gelen dosya açma isteğini merkezi File Manager'a yönlendirir."""
+        try:
+            from file_manager import get_editor_default_extensions
+            extensions = get_editor_default_extensions(editor_name, self.custom_editors)
+        except Exception:
+            extensions = None
+
+        manager = self.open_file_manager(
+            editor_name=editor_name,
+            filter_extensions=extensions,
+            mode="open"
+        )
+        if manager is not None and all_files and manager.cmb_filter.count() > 1:
+            # Editör bağlamı korunur; yalnızca ikinci seçenek olan "Tüm Dosyalar" seçilir.
+            manager.cmb_filter.setCurrentIndex(1)
+        return manager
+
+    def open_file_manager_for_export(self, exporter, compression="xz", default_export_name=None, filter_extensions=None):
+        """Editör export isteğini File Manager'ın export arayüzüne yönlendirir.
+        filter_extensions ile hangi uzantının kullanılacağı belirtilir.
+        """
+        if filter_extensions is None:
+            filter_extensions = {".kitap"}
+        return self.open_file_manager(
+            editor_name=None,
+            filter_extensions=filter_extensions,
+            mode="export",
+            export_callback=exporter,
+            export_compression=compression,
+            default_export_name=default_export_name
+        )
+
+    def _on_file_manager_closed(self):
+        """File Manager kapatıldığında referansı temizler; yalnızca hâlâ aynı pencere ise."""
+        sender = self.sender()
+        if sender is self.file_manager_instance:
+            self.file_manager_instance = None
+            print("File Manager kapandı, referans temizlendi.")
+
     def raise_process_window(self, pid, executable_path=None):
-        """
-        Harici çalışan bir sürecin (ör. Blender) penceresini ekranda öne getirir ve odağa alır.
-        xdotool ve wmctrl araçları kullanılarak yüksek performansla pencere aktifleştirilir.
-        """
         if not pid:
             return False
 
-        # Süreç ağacını (çocuk PID'leri) topla
         pids_to_check = [pid]
         try:
             res = subprocess.run(['pgrep', '-P', str(pid)], capture_output=True, text=True, timeout=1)
@@ -319,7 +357,6 @@ class CoreWindow(QWidget):
         except Exception:
             pass
 
-        # 1. Yöntem: xdotool ile PID sorgusu (En hızlı)
         for p in pids_to_check:
             try:
                 res = subprocess.run(
@@ -334,7 +371,6 @@ class CoreWindow(QWidget):
             except Exception:
                 pass
 
-        # 2. Yöntem: wmctrl ile PID sorgusu
         try:
             res = subprocess.run(['wmctrl', '-lp'], capture_output=True, text=True, timeout=1)
             if res.returncode == 0 and res.stdout.strip():
@@ -346,7 +382,6 @@ class CoreWindow(QWidget):
         except Exception:
             pass
 
-        # 3. Yöntem: Executable ismi üzerinden xdotool / wmctrl
         if executable_path:
             exe_name = os.path.basename(executable_path)
             try:
@@ -365,14 +400,9 @@ class CoreWindow(QWidget):
         return False
 
     def handle_uncaught_editor_exception(self, exctype, value, tb):
-        """
-        Tüm editörlerden (Qt sinyal, timer veya callback kaynaklı) gelen 
-        ve yakalanmamış olan her türlü Python istisnasını yakalar. 
-        Uygulamanın Abort/Core Dump olmasını engeller ve güvenle Sphere'e döner.
-        """
         error_msg = f"{exctype.__name__}: {value}"
         traceback.print_exception(exctype, value, tb)
-        
+
         current_widget = self.stack.currentWidget()
         current_editor_name = "Bilinmeyen Editör"
         for name, widget_instance in list(self.instantiated_editors.items()):
@@ -381,8 +411,7 @@ class CoreWindow(QWidget):
                 break
 
         print(f"[GÜVENLİK PROTOKOLÜ] '{current_editor_name}' editöründe çökme engellendi: {error_msg}")
-        
-        # Kullanıcıyı bilgilendiren diyalog
+
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Critical)
         msg.setWindowTitle("Editör Hatası (Çökme Koruması)")
@@ -397,7 +426,6 @@ class CoreWindow(QWidget):
         """)
         msg.exec_()
 
-        # Çöken editör Sphere değilse onu temizle ve Sphere'e geç
         if current_editor_name != "Sphere":
             try:
                 if current_editor_name in self.instantiated_editors:
@@ -405,71 +433,72 @@ class CoreWindow(QWidget):
                     self.stack.removeWidget(crashed_widget)
                     del self.instantiated_editors[current_editor_name]
                     crashed_widget.deleteLater()
-                
+
                 self.switchToEditor("Sphere", close_current=False)
             except Exception as e:
                 print(f"[GÜVENLİK PROTOKOLÜ KRİTİK] Sphere'e dönüş hatası: {e}")
 
     def safe_call(self, func, *args, **kwargs):
-        """Fonksiyon çağrılarını güvenlik çemberi altında çalıştırır."""
         try:
             func(*args, **kwargs)
         except Exception as e:
             self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
 
     def get_custom_editors_dir(self):
-        """Kök veri dizini altındaki custom_editors klasörünü döndürür."""
         base = resource_path('veri')
         custom_dir = os.path.join(base, 'custom_editors')
         os.makedirs(custom_dir, exist_ok=True)
         return custom_dir
 
     def get_custom_editors_json_path(self):
-        """custom_editors.json dosyasının tam yolunu döndürür."""
         return os.path.join(self.get_custom_editors_dir(), 'custom_editors.json')
 
     def get_editor_path_file(self, editor_name):
-        """Bir editörün path.txt dosyasının tam yolunu döndürür."""
         editor_folder = os.path.join(self.get_custom_editors_dir(), editor_name)
         return os.path.join(editor_folder, 'path.txt')
 
     def load_custom_editors(self):
-        """Başlangıçta veri/custom_editors/ altındaki tüm editörleri tarar ve yükler."""
         self.custom_editors = []
         custom_dir = self.get_custom_editors_dir()
         if not os.path.exists(custom_dir):
+            self.editors_order = self.mru_editor_names.copy() + self.fixed_base_names.copy()
             return
+
+        custom_with_ext = []
+        custom_without_ext = []
 
         for item in os.listdir(custom_dir):
             folder_path = os.path.join(custom_dir, item)
             if os.path.isdir(folder_path):
                 path_file = os.path.join(folder_path, 'path.txt')
+                ext_file = os.path.join(folder_path, 'extension.txt')
                 if os.path.exists(path_file):
                     try:
                         with open(path_file, 'r', encoding='utf-8') as f:
                             executable_path = f.read().strip()
+                        extension = ""
+                        if os.path.exists(ext_file):
+                            with open(ext_file, 'r', encoding='utf-8') as f:
+                                extension = f.read().strip()
                         if os.path.exists(executable_path):
-                            self.custom_editors.append({
+                            editor_data = {
                                 'name': item,
-                                'executable': executable_path
-                            })
+                                'executable': executable_path,
+                                'extension': extension
+                            }
+                            self.custom_editors.append(editor_data)
                             self.editor_map[item] = 'CUSTOM'
+                            if extension:
+                                custom_with_ext.append(item)
+                            else:
+                                custom_without_ext.append(item)
                     except Exception as e:
                         print(f"Özel editör yüklenemedi ({item}): {e}")
 
-        # Sıralamayı güncelle
-        custom_names = [e['name'] for e in self.custom_editors]
-        try:
-            filter_idx = self.editors_order.index("Filter")
-        except ValueError:
-            filter_idx = len(self.editors_order)
-        self.editors_order = self.mru_editor_names.copy()
-        self.editors_order[filter_idx:filter_idx] = custom_names
-        self.editors_order.extend(self.fixed_base_names)
+        self.editors_order = custom_with_ext + self.mru_editor_names.copy() + custom_without_ext + self.fixed_base_names.copy()
         self.save_custom_editors_json()
 
     def save_custom_editors_json(self):
-        """Eski JSON formatında da kaydet (uyumluluk için)."""
         json_path = self.get_custom_editors_json_path()
         try:
             with open(json_path, 'w', encoding='utf-8') as f:
@@ -477,10 +506,9 @@ class CoreWindow(QWidget):
         except Exception as e:
             print(f"JSON kaydedilemedi: {e}")
 
-    def add_custom_editor(self, name, executable_path):
-        """Yeni bir özel editör ekler (kopyalama yapmaz, sadece yolu kaydeder)."""
-        if len(self.custom_editors) >= 9:
-            self.show_error_message("En fazla 9 özel editör eklenebilir.")
+    def add_custom_editor(self, name, executable_path, extension=""):
+        if len(self.custom_editors) >= 15:
+            self.show_error_message("En fazla 15 özel editör eklenebilir.")
             return False
         if any(e['name'] == name for e in self.custom_editors):
             self.show_error_message(f"'{name}' zaten var.")
@@ -496,22 +524,30 @@ class CoreWindow(QWidget):
             path_file = os.path.join(editor_folder, 'path.txt')
             with open(path_file, 'w', encoding='utf-8') as f:
                 f.write(executable_path)
+            ext_file = os.path.join(editor_folder, 'extension.txt')
+            with open(ext_file, 'w', encoding='utf-8') as f:
+                f.write(extension.strip())
         except Exception as e:
             self.show_error_message(f"Klasör oluşturulamadı: {e}")
             return False
 
-        self.custom_editors.append({'name': name, 'executable': executable_path})
+        self.custom_editors.append({'name': name, 'executable': executable_path, 'extension': extension.strip()})
         self.editor_map[name] = 'CUSTOM'
-        try:
-            filter_idx = self.editors_order.index("Filter")
-        except ValueError:
-            filter_idx = len(self.editors_order)
-        self.editors_order.insert(filter_idx, name)
+
+        if extension.strip():
+            self.editors_order.insert(0, name)
+        else:
+            insert_index = len(self.editors_order)
+            for i, ed in enumerate(self.editors_order):
+                if ed in self.fixed_base_names:
+                    insert_index = i
+                    break
+            self.editors_order.insert(insert_index, name)
+
         self.save_custom_editors_json()
         return True
 
     def remove_custom_editor(self, name):
-        """Özel editörü siler (sadece klasörü temizler, orijinal dosyaya dokunmaz)."""
         editor = next((e for e in self.custom_editors if e['name'] == name), None)
         if not editor:
             return False
@@ -535,11 +571,16 @@ class CoreWindow(QWidget):
         return True
 
     def get_custom_editor_executable(self, name):
-        """Bir özel editörün orijinal executable yolunu döndürür."""
         for e in self.custom_editors:
             if e['name'] == name:
                 return e['executable']
         return None
+
+    def get_custom_editor_extension(self, name):
+        for e in self.custom_editors:
+            if e['name'] == name:
+                return e.get('extension', "")
+        return ""
 
     def cleanup_boxes_for_custom_editor(self, editor_name):
         sphere_window = self.instantiated_editors.get("Sphere")
@@ -558,10 +599,6 @@ class CoreWindow(QWidget):
         QMessageBox.critical(self, "Hata", text)
 
     def safe_switch_to_editor(self, editor_name, close_current=False):
-        """
-        Tüm editör başlatma ve dosya yükleme işlemlerini korumaya alan 
-        Güvenlik Protokolü.
-        """
         return self.switchToEditor(editor_name, close_current=close_current)
 
     def switchToEditor(self, editor_name, close_current=False):
@@ -571,21 +608,17 @@ class CoreWindow(QWidget):
             self.handle_uncaught_editor_exception(type(e), e, e.__traceback__)
 
     def _internal_switch_to_editor(self, editor_name, close_current=False):
-        # 1. Özel Editör Kontrolü (Harici Executable)
         if editor_name in self.editor_map and self.editor_map[editor_name] == 'CUSTOM':
             executable = self.get_custom_editor_executable(editor_name)
             if executable and os.path.exists(executable):
-                # Temizlik: Kapanmış süreçleri listeden çıkar
                 self.spawned_external_processes = [
-                    p for p in self.spawned_external_processes 
+                    p for p in self.spawned_external_processes
                     if isinstance(p, dict) and p.get('process') and p['process'].poll() is None
                 ]
-                # Zaten açık mı kontrol et
                 for proc_info in self.spawned_external_processes:
                     if proc_info.get('name') == editor_name or proc_info.get('path') == executable:
                         process = proc_info.get('process')
                         if process and process.poll() is None:
-                            # Süreç açık -> Pencereyi öne getir ve odağa al
                             self.raise_process_window(process.pid, executable)
                             return
                 try:
@@ -595,7 +628,7 @@ class CoreWindow(QWidget):
                     if os.path.exists(lib_dir):
                         env['LD_LIBRARY_PATH'] = lib_dir + os.pathsep + env.get('LD_LIBRARY_PATH', '')
                     process = subprocess.Popen([executable], start_new_session=True, cwd=cwd, env=env)
-                    
+
                     self.spawned_external_processes.append({
                         'path': executable,
                         'name': editor_name,
@@ -607,6 +640,10 @@ class CoreWindow(QWidget):
                 QMessageBox.warning(self, "Hata", f"'{editor_name}' executable'ı bulunamadı.")
             return
 
+        if editor_name == "File":
+            self.open_file_manager()
+            return
+
         current_widget = self.stack.currentWidget()
         current_editor_name = None
         for name, widget_instance in self.instantiated_editors.items():
@@ -614,7 +651,7 @@ class CoreWindow(QWidget):
                 current_editor_name = name
                 break
 
-        if close_current and current_editor_name and current_editor_name != editor_name and current_editor_name not in ["Filter", "Convert"]:
+        if close_current and current_editor_name and current_editor_name != editor_name and current_editor_name not in ["Filter", "Convert", "File"]:
             if hasattr(current_widget, 'save_state_to_temp_file'):
                 current_widget.save_state_to_temp_file()
             self.stack.removeWidget(current_widget)
@@ -622,29 +659,26 @@ class CoreWindow(QWidget):
             current_widget.deleteLater()
             print(f"'{current_editor_name}' editörü kapatıldı.")
 
-        # 2. Filter Penceresi Kontrolü (Açıksa doğrudan öne getirir)
         if editor_name == "Filter":
             if not self.filter_window_instance:
                 module = importlib.import_module("filtre")
                 AudioCleanerUI = getattr(module, "AudioCleanerUI")
                 self.filter_window_instance = AudioCleanerUI()
-            
+
             self.filter_window_instance.showNormal()
             self.filter_window_instance.raise_()
             self.filter_window_instance.activateWindow()
 
-        # 3. Convert Penceresi Kontrolü (Açıksa doğrudan öne getirir)
         elif editor_name == "Convert":
             if not self.convert_window_instance:
                 module = importlib.import_module("convert")
                 UniversalConverter = getattr(module, "UniversalConverter")
                 self.convert_window_instance = UniversalConverter()
-            
+
             self.convert_window_instance.showNormal()
             self.convert_window_instance.raise_()
             self.convert_window_instance.activateWindow()
 
-        # 4. Dahili Stack Editörleri
         elif editor_name in self.instantiated_editors:
             self.stack.setCurrentWidget(self.instantiated_editors[editor_name])
             self.instantiated_editors[editor_name].showMaximized()
@@ -754,7 +788,7 @@ class CoreWindow(QWidget):
                     print("Python: Kullanıcı editör geçişini iptal etti.")
             else:
                 self.switchToEditor("Sphere", close_current=True)
-                
+
             event.accept()
         elif event.key() == Qt.Key_Q and (event.modifiers() & Qt.ControlModifier) and not (event.modifiers() & Qt.AltModifier):
             self.showSwitcher()
@@ -779,7 +813,6 @@ class CoreWindow(QWidget):
             QMessageBox.critical(self, "Hata", f"IDE_switcher.py bulunamadı: {e}")
 
     def safe_load_editor_file(self, editor_name, file_path):
-        """Dosya yükleme işlemlerini korumaya alan Güvenlik Protokolü."""
         return self.loadEditorFile(editor_name, file_path)
 
     def loadEditorFile(self, editor_name, file_path):
@@ -790,7 +823,7 @@ class CoreWindow(QWidget):
 
     def _internal_load_editor_file(self, editor_name, file_path):
         print(f"DEBUG: CoreWindow.loadEditorFile called. editor_name: {editor_name}, file_path: {file_path}")
-        
+
         if editor_name == "Drawing":
             if "Drawing" in self.instantiated_editors:
                 current_drawing_editor = self.instantiated_editors["Drawing"]
@@ -801,7 +834,7 @@ class CoreWindow(QWidget):
                 current_drawing_editor.deleteLater()
                 print("DEBUG: Mevcut Drawing editörü kapatıldı.")
             from Drawing_editor import DrawingEditorWindow
-            drawing_editor = DrawingEditorWindow()
+            drawing_editor = DrawingEditorWindow(core_window_ref=self)
             self.stack.addWidget(drawing_editor)
             self.instantiated_editors[editor_name] = drawing_editor
             self.stack.setCurrentWidget(drawing_editor)
@@ -999,7 +1032,7 @@ class CoreWindow(QWidget):
     def closeEvent(self, event):
         if self.force_close:
             self.clean_up_external_processes()
-            
+
             if "Sound" in self.instantiated_editors:
                 sound_editor = self.instantiated_editors["Sound"]
                 if hasattr(sound_editor, '_cleanup_engine'):
@@ -1010,14 +1043,28 @@ class CoreWindow(QWidget):
                             sound_editor.lib.stop_audio(sound_editor.audio_engine)
                         except Exception:
                             pass
-                            
+
+            if self.file_manager_instance is not None:
+                try:
+                    self.file_manager_instance.close()
+                except Exception:
+                    pass
+
             event.accept()
             return
-            
+
         if self.filter_window_instance and self.filter_window_instance.isVisible():
             self.filter_window_instance.close()
         if self.convert_window_instance and self.convert_window_instance.isVisible():
             self.convert_window_instance.close()
+        # FileManager kapanırken kontrol et, çünkü zaten silinmiş olabilir
+        if self.file_manager_instance is not None:
+            try:
+                if self.file_manager_instance.isVisible():
+                    self.file_manager_instance.close()
+            except RuntimeError:
+                # Nesne zaten silinmiş, referansı temizle
+                self.file_manager_instance = None
 
         is_recording = False
         for editor_name, editor_instance in self.instantiated_editors.items():
@@ -1088,7 +1135,7 @@ class CoreWindow(QWidget):
                             media_editor.audio_mode_btn.setText("Sound")
                         if hasattr(media_editor, '_update_record_button_state'):
                             media_editor._update_record_button_state()
-                            
+
                 self.force_close = True
                 self.clean_up_external_processes()
                 QTimer.singleShot(650, self.close)
@@ -1112,10 +1159,6 @@ class CoreWindow(QWidget):
         super().closeEvent(event)
 
 def global_exception_handler(exctype, value, tb):
-    """
-    Tüm Python ve PyQt5 döngülerindeki yakalanmamış hataları yakalar.
-    CoreDump ve Abort olmasını engelleyip çöken pencereyi kapatır.
-    """
     if issubclass(exctype, KeyboardInterrupt):
         sys.__excepthook__(exctype, value, tb)
         return
@@ -1125,11 +1168,13 @@ def global_exception_handler(exctype, value, tb):
         sys.__excepthook__(exctype, value, tb)
 
 if __name__ == "__main__":
-    # Küresel İstisna Dinleyicisi Entegrasyonu
     sys.excepthook = global_exception_handler
 
     app = QApplication(sys.argv)
     app.setApplicationName("Kavram")
+    icon_path = resource_path("ikon/Kavram.png")
+    if os.path.isfile(icon_path):
+        app.setWindowIcon(QIcon(icon_path))
 
     window = CoreWindow()
     window.show()

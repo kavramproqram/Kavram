@@ -48,7 +48,8 @@ from PyQt5.QtWidgets import (
     QTextEdit, QFileDialog, QProgressBar, QApplication,
     QLineEdit, QLabel, QMessageBox, QStackedWidget, QScrollArea,
     QSizePolicy, QMenu, QAction, QSlider, QDialog, QShortcut,
-    QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QGridLayout
+    QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QGridLayout,
+    QProgressDialog
 )
 from PyQt5.QtCore import Qt, QTimer, QDir, QSize, QEvent, QByteArray, QSettings, pyqtSignal, QRect, QUrl, QPointF
 from PyQt5.QtGui import QIcon, QPainter, QPixmap, QTextCursor, QFont, QColor, QTransform, QKeySequence, QWheelEvent, QMouseEvent, QDesktopServices
@@ -87,6 +88,7 @@ SVG_PLAY_ICON = """<svg viewBox="0 0 24 24" fill="white"><polygon points="5 3 19
 SVG_PAUSE_ICON = """<svg viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>"""
 SVG_IMAGE_ICON = """<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>"""
 SVG_FILE_ICON = """<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>"""
+
 
 class KavramDB:
     def __init__(self, db_path):
@@ -191,6 +193,7 @@ class KavramDB:
                      ORDER BY w.id ASC""")
         return [r[0] for r in c.fetchall()]
 
+
 class WaveformSlider(QSlider):
     def __init__(self, parent=None):
         super().__init__(Qt.Horizontal, parent)
@@ -229,6 +232,7 @@ class WaveformSlider(QSlider):
             self.sliderMoved.emit(int(val))
         else:
             super().mousePressEvent(event)
+
 
 class AudioPlayerWidget(QFrame):
     def __init__(self, filepath, parent_window, context_source=None, parent=None):
@@ -318,6 +322,7 @@ class AudioPlayerWidget(QFrame):
             self.player = None
         super().closeEvent(event)
 
+
 class ImageThumbnailWidget(QFrame):
     def __init__(self, filepath, parent_window, context_source=None, parent=None):
         super().__init__(parent)
@@ -344,6 +349,7 @@ class ImageThumbnailWidget(QFrame):
             self.parent_window.show_media_overlay(self.filepath, is_video=False, context_source=self.context_source)
         else:
             super().mousePressEvent(event)
+
 
 class VideoThumbnailWidget(QFrame):
     def __init__(self, filepath, parent_window, context_source=None, parent=None):
@@ -401,12 +407,13 @@ class FileAttachmentWidget(QFrame):
         
         layout.addWidget(self.icon_lbl)
         layout.addWidget(self.name_lbl, stretch=1)
-        
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             QDesktopServices.openUrl(QUrl.fromLocalFile(self.filepath))
         else:
             super().mousePressEvent(event)
+
 
 class MediaGraphicsView(QGraphicsView):
     def __init__(self, parent_overlay):
@@ -447,6 +454,7 @@ class MediaGraphicsView(QGraphicsView):
 
     def keyPressEvent(self, event):
         self.parent_overlay.keyPressEvent(event)
+
 
 class MediaOverlay(QWidget):
     def __init__(self, parent=None):
@@ -508,7 +516,6 @@ class MediaOverlay(QWidget):
         self.has_paused_initial = False
         self.is_video = False
         
-        # Sadece bir kere oluşturulan Tekil (Persistent) Oynatıcı mimarisi GStreamer sızıntılarını önler.
         self.player = None
         if QT_MULTIMEDIA_AVAILABLE:
             self.player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
@@ -570,7 +577,6 @@ class MediaOverlay(QWidget):
         self.is_video = is_video
         self.control_widget.hide()
         
-        # Eski oynatma durdurulur ve kaynak serbest bırakılır.
         if self.player:
             self.player.stop()
             self.player.setVideoOutput(None)
@@ -581,7 +587,6 @@ class MediaOverlay(QWidget):
         
         abs_filepath = os.path.abspath(filepath)
         
-        # Kritik Hata Önleme: Fiziksel dosya doğrulama testi
         if not os.path.exists(abs_filepath):
             fallback_dir = self.parent().temp_dir if hasattr(self.parent(), 'temp_dir') else ""
             fallback_path = os.path.join(fallback_dir, os.path.basename(filepath))
@@ -612,7 +617,6 @@ class MediaOverlay(QWidget):
             self.player.play()
             self.control_widget.show()
         else:
-            # Kritik Hata Önleme: NaN Matris Hatasını engelleyen bozuk resim testi
             pixmap = QPixmap(abs_filepath)
             if pixmap.isNull():
                 self.scene.clear()
@@ -632,7 +636,6 @@ class MediaOverlay(QWidget):
         self.raise_()
         self.setFocus()
         
-        # UI ölçeklendirme kuyruğuna gecikmeli tetikleyici eklenir
         QTimer.singleShot(50, self.reset_view_transform)
 
     def _video_size_changed(self, size):
@@ -680,7 +683,6 @@ class MediaOverlay(QWidget):
             if not hasattr(self, 'last_nav_time'):
                 self.last_nav_time = 0
                 
-            # Tuşa basılı tutulduğunda çok hızlı geçmesini engelleyip, 0.25 saniyelik limit koyar. (Sistemi yormaz)
             if event.isAutoRepeat() and (current_time - self.last_nav_time) < 0.25:
                 event.accept()
                 return
@@ -703,7 +705,6 @@ class MediaOverlay(QWidget):
         
         self.current_playlist_idx = (self.current_playlist_idx + direction) % len(self.playlist_data)
         
-        # Oynatıcıyı asenkron olarak silmek yerine sıfırlayarak koruruz.
         if self.player:
             self.player.stop()
             self.player.setVideoOutput(None)
@@ -844,6 +845,7 @@ class FontSelectorWidget(QPushButton):
         self.current_value = val
         self.setText(str(val))
 
+
 class PacketWidget(QFrame):
     def __init__(self, def_id, word, definition, parent_panel):
         super().__init__()
@@ -854,7 +856,7 @@ class PacketWidget(QFrame):
         self.media_files = []
         self.media_widgets = []
         self.is_active = False
-        
+
         self.initUI()
         self.set_inactive()
 
@@ -874,7 +876,7 @@ class PacketWidget(QFrame):
         
         self.active_container = QWidget()
         self.active_layout = QVBoxLayout(self.active_container)
-        self.active_layout.setContentsMargins(0,0,0,0)
+        self.active_layout.setContentsMargins(0, 0, 0, 0)
         self.active_layout.setSpacing(5)
         
         self.top_row_widget = QWidget()
@@ -1142,7 +1144,6 @@ class PacketWidget(QFrame):
             QMenu::item:selected { background-color: #444; }
         """)
         
-        # Değiştir seçeneği tamamen kaldırılarak sadece "Sil" seçeneği bırakılmıştır.
         del_action = QAction("Sil", self)
         menu.addAction(del_action)
         
@@ -1271,7 +1272,7 @@ class DataManagementPage(QWidget):
         super().__init__()
         self.parent_window = parent_window
         self.current_font_size = parent_window.data_font_size
-        self.active_packets = [] 
+        self.active_packets = []
         self.initUI()
 
     def initUI(self):
@@ -1341,7 +1342,8 @@ class ChatPanel(QWidget):
         super().__init__()
         self.parent_window = parent_window
         self.history = []
-        self.history_index = -1  
+        self.history_index = -1
+
         self.current_font_size = 16
         self.initUI()
 
@@ -1666,8 +1668,6 @@ class AiEditorWindow(QWidget):
         return super().eventFilter(obj, event)
 
     def show_media_overlay(self, filepath, is_video=False, context_source=None):
-        # ÖNEMLİ DÜZENLEME: Önce pencere boyutunu veriyoruz, sonra içeriği yüklüyoruz.
-        # Bu sayede fitInView çağrısı 0x0 veya küçük pencere boyutuyla değil, tam hedef boyutuyla hesaplanır.
         self.media_overlay.setGeometry(self.stack.geometry())
         self.media_overlay.set_context(filepath, context_source)
         self.media_overlay.set_media(filepath, is_video)
@@ -1755,6 +1755,14 @@ class AiEditorWindow(QWidget):
             if ext == ".ai":
                 try:
                     self.current_ai_path = file_path
+                    
+                    progress = QProgressDialog("AI Dosyası Yükleniyor...", "İptal", 0, 0, self)
+                    progress.setWindowTitle("Lütfen Bekleyin")
+                    progress.setWindowModality(Qt.WindowModal)
+                    progress.setCancelButton(None)
+                    progress.show()
+                    QApplication.processEvents()
+
                     for item in os.listdir(self.temp_dir):
                         p = os.path.join(self.temp_dir, item)
                         if os.path.isdir(p): shutil.rmtree(p)
@@ -1779,9 +1787,14 @@ class AiEditorWindow(QWidget):
                         os.remove(json_path)
 
                     self.chat_page.sync_history_with_dict()
+                    
+                    progress.close()
+                    
                     self.stack.setCurrentWidget(self.chat_page)
                     return
                 except Exception as e:
+                    if 'progress' in locals():
+                        progress.close()
                     QMessageBox.critical(self, "Hata", f"{file_path} okunurken hata oluştu:\n{str(e)}")
 
     def showChatPanel(self):
@@ -1858,14 +1871,34 @@ class AiEditorWindow(QWidget):
             medias = re.findall(r'\[(?:AUDIO|IMAGE|VIDEO|FILE):(.+?)\]', definition)
             used_files.update(medias)
             
-        with tarfile.open(target_path, "w:xz") as tar:
-            db_path = os.path.join(self.temp_dir, "data.db")
-            if os.path.exists(db_path):
-                tar.add(db_path, arcname="data.db")
-            for media_file in used_files:
-                media_path = os.path.join(self.temp_dir, media_file)
-                if os.path.exists(media_path):
-                    tar.add(media_path, arcname=media_file)
+        db_path = os.path.join(self.temp_dir, "data.db")
+        files_to_pack = []
+        if os.path.exists(db_path):
+            files_to_pack.append(("data.db", db_path))
+            
+        for media_file in used_files:
+            media_path = os.path.join(self.temp_dir, media_file)
+            if os.path.exists(media_path):
+                files_to_pack.append((media_file, media_path))
+
+        total_files = len(files_to_pack)
+        
+        progress = QProgressDialog("AI Dosyası Dışa Aktarılıyor...", "İptal", 0, total_files, self)
+        progress.setWindowTitle("Lütfen Bekleyin")
+        progress.setWindowModality(Qt.WindowModal)
+        progress.setCancelButton(None)
+        progress.show()
+
+        # w:gz ile arka planda gzip (gz) sıkıştırması kullanılıyor, uzantı .ai olarak kalıyor
+        with tarfile.open(target_path, "w:gz") as tar:
+            for idx, (arcname, filepath) in enumerate(files_to_pack):
+                progress.setValue(idx)
+                QApplication.processEvents()
+                tar.add(filepath, arcname=arcname)
+            progress.setValue(total_files)
+
+        progress.close()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

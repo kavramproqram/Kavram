@@ -1,0 +1,50 @@
+{
+    "keep_notes": [],
+    "tasks": [],
+    "habits": [
+        {
+            "id": "1786573145.3120031",
+            "name": "Spor 40 Gün",
+            "start_date": "2026-08-13",
+            "failed": [
+                1,
+                0,
+                5
+            ]
+        }
+    ],
+    "settings": {
+        "time_offset_seconds": 0,
+        "life_target_ts": null,
+        "mod3_seg1": 0,
+        "mod3_seg2": 8,
+        "mod3_seg3": 11,
+        "mod3_show_seconds": false,
+        "pomodoro": {
+            "sound_enabled": true,
+            "volume": 85,
+            "sound_work_end": true,
+            "sound_break_end": true,
+            "show_notification": true,
+            "work_min": 25,
+            "short_break_min": 5,
+            "long_break_min": 15,
+            "active_task_id": null
+        },
+        "screen": {
+            "red": 100,
+            "green": 100,
+            "blue_filter": 40,
+            "brightness": 100,
+            "darkness": 0,
+            "gray": false,
+            "reading": false,
+            "blue_mode": "Her Zaman",
+            "blue_start_hour": 20,
+            "blue_end_hour": 7,
+            "gray_mode": "Her Zaman",
+            "gray_start_hour": 22,
+            "gray_end_hour": 6
+        }
+    }
+}
