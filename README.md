@@ -18,13 +18,13 @@ Not : Linux mint xfce de kurun
 Üst bardaki butonlar
 1 File  - içeri arşiv almak ve kare ( dosya ) eklemk için kullanılır.
 
-2,3  işlemleri geri almak için .
+3 , 4  işlemleri geri almak için .
 
-4  +  kare eklemk için .
+5  +  kare eklemk için .
 
-5 bağlantıkların konum listesi .
+6 bağlantıkların konum listesi .
 
-6 Terminal  --- terminal komutları
+7 Terminal  --- terminal komutları
 1 reset her şeyi tamamen siler
 2 ap resim konumu    --duvar kagıdını  değiştir örnek   ( ap /home/lts/Pictures/resim4.png )
 3 isim proqram konumu ctrl + Q kısa yolu ile açılaan menüye alt kısma bir proqram ekler  /uydu proqram /   örnek  ( Zaman /home/lts/Kavram/Proqramlar/Zaman/Zaman )
@@ -32,19 +32,59 @@ Not : Linux mint xfce de kurun
 unutulmamalıdır ki bu proqram bir tür işletim sistemi gibi çalışdığı için esas proqram kapatılırsa bağlı olduğu proqramlar hepsi otomatik kapanır
 örnek olarak blender kaapatılmadan önce dosyayı kaydetmenizi ister eğer Kavram proqramını kapatırsanız blender hiçbir şey sormadan kapanır veri kaybı olamaması için önceden dosyaları yedekleyin .
 
-7  /  bu buton arka planda oluşan gridli yapıyı açıp kapatmak içindir .
+8  /  bu buton arka planda oluşan gridli yapıyı açıp kapatmak içindir .
 
-8 Export  butonu fare sol tık  xz formatında oluşan dosya daha küçük ama açılması daha uzun sürer  sağ tık gz formatında kaydeder dosya xz ye nisbeten daha büyük olur ama dosya daha hızlı oluşur
+9 Export  butonu fare sol tık  xz formatında oluşan dosya daha küçük ama açılması daha uzun sürer  sağ tık gz formatında kaydeder dosya xz ye nisbeten daha büyük olur ama dosya daha hızlı oluşur
 oluşan dosya     .kitap olarak şifreli bir şekilde  kaydedilir 
-9 Sphere  bu buton bütün proqramlar içinde üst barda en sağda farkli isimlele var .
+10 Sphere  bu buton bütün proqramlar içinde üst barda en sağda farkli isimlele var .
 ctrl + Q  kısa yolunda açılan menüyü açmak içindir .
 bu proqram içinde 3 tane teklikeli dikkat edilemsi geeken komut var 1 dosyaları yedekleyin veri kaybı ihtimali çok düşük olsa da 0 değil 2 reset komutu her şeyi siler bu komut
-3 ctrl + S kısa yolu bu sphere dışında  olan 7 esas proqram için geçerlidir o an açık olan proqramı yok eder ve ana ekrana yani shere ye geri döner . Hiçbir şey kaydetmez . sadece yok eder .
-hızlı kaydetme için her editorda file butonunun yanında bir ikon ver bu ikon sphere için geçerli değil .
+3 ctrl + S kısa yolu bu sphere dışında  olan 7 esas proqram için geçerlidir o an açık olan proqramı yok eder ve ana ekrana yani sphere ye geri döner . Hiçbir şey kaydetmez . sadece yok eder .
+hızlı kaydetme için her editorda file butonunun yanında bir ikon var bu ikon sphere için geçerli değil .
 sphere içinde olan bu ikonun görevi o an olan düzeni varsayılan yapmaktır . Yani proqram yeniden açılıdığında her şey aynı olacaktır .
 
 
-2) Text editor 
+2) Text 
+<img width="1920" height="1053" alt="text" src="https://github.com/user-attachments/assets/6fb6376b-4e56-4d7d-836a-1c4ae296180c" />
+1 File butonu sphere harici tümn esas editolarda o proqraamın aça bildiği formatları kolay bulmak için ayarlanmıştır . text için   metin.txr  Ai için  soru-ceyap.ai saund için  .sound ve .wav .... ve s
+
+2 en son export edilen dosyayı hızlı kaydetmek içindir dier bütün editlarda aynı fonksiondadır .
+
+3 ,4 işlemleri geri alma k için .
+
+5 metin  ve alt barda olan kısa yol butonlarının boyutunu ayarlamak için kullanılır .
+
+6   /   bu buton alt barı aç - kapa  butonu .
+
+7   8   metini otomatik kaydırmak için  8 kaydırma hızını düzenlemek için kullanılır .
+
+9 termimanl 
+terminal pencersi açılıktan sonra klavyeden   ↑   ↓   bu butonları kullanarak bütün komutları göre bilirsiniz .
+delete sembol         delete 0-9           delete japonca          delete fars            delete cin            delete rus                 delete latine            delete arabic         
+metinden hızlıca bazı şeyleri silmek için tasarlanmışdır 
+
+10 line: 12  satır sayısının gösterir .
+
+11 arama yeri metinde kelime aramak için .
+
+12  Export  dosyayı dışa aktarlam için  ( .txr )
+
+13 Text  ctrl + Q  kısayolu ile aynıı işi yapar .
+
+
+3) DraWing
+<img width="1920" height="1047" alt="draving" src="https://github.com/user-attachments/assets/63a773a8-40e1-48ea-bcca-467191a7822a" />
+
+
+
+
+
+
+
+
+
+
+
 
 
 
