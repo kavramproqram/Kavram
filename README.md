@@ -49,7 +49,7 @@ CONVERTER        DOSYA FORMAT DEĞİŞTİRME PROQRAMI
 
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
 
-NOT : KENDİ  GELİŞTİRDİĞİNİZ VEYA İNTERNETDEN İNDİRDİĞİNİZ PROQRAMLARI SİSTEME DAHİ ETMEK İÇİN TERMİNAL KULLANIN 
+NOT : KENDİ  GELİŞTİRDİĞİNİZ VEYA İNTERNETDEN İNDİRDİĞİNİZ PROQRAMLARI SİSTEME DAHİl ETMEK İÇİN TERMİNAL KULLANIN 
 
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
