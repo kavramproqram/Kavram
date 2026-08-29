@@ -2,6 +2,8 @@ Kavram
 
 Kavram açık kaynak eğitim platformudur .
 
+<img width="1251" height="140" alt="İKON" src="https://github.com/user-attachments/assets/4f6eea9b-7f45-41da-b152-3be8733c536a" />
+
 Kurulun 
 
 <img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
