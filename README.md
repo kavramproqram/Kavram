@@ -2,6 +2,9 @@ Kavram
 
 Kavram açık kaynak eğitim platformudur .
 
+[Kavram.ods](https://github.com/user-attachments/files/31610294/Kavram.ods)
+
+
 <img width="1251" height="140" alt="İKON" src="https://github.com/user-attachments/assets/4f6eea9b-7f45-41da-b152-3be8733c536a" />
 
 Kurulun 
