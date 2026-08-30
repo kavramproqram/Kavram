@@ -1,11 +1,20 @@
 Kavram
 
 Kavram açık kaynak eğitim platformudur .
-
-[Kavram.ods](https://github.com/user-attachments/files/31610294/Kavram.ods)
-
-
 <img width="1251" height="140" alt="İKON" src="https://github.com/user-attachments/assets/4f6eea9b-7f45-41da-b152-3be8733c536a" />
+
+Proqram	Ne işe yarar -Özet.
+SPHERE	Ana ekran — her şey buradan bağlanır  TERMINAL	+1 — kendi proqramını sisteme dahil et
+TEXT	Metin düzenleme
+DRAWING	Çizim
+SOUND	Ses düzenleme
+AI	Yapay hafıza
+MEDIA	Ses + video karma arşiv
+REC	Ekran ve ses kaydı
+COPY	Not defteri
+FILTER	Ses filtreleme
+CONVERTER	Format dönüştürme
+
 
 Kurulun 
 
