@@ -1,22 +1,21 @@
-Kavram
+Kavram<br>
 
-Kavram açık kaynak eğitim platformudur .
+Kavram açık kaynak eğitim platformudur .<br>
 <img width="1251" height="140" alt="İKON" src="https://github.com/user-attachments/assets/4f6eea9b-7f45-41da-b152-3be8733c536a" />
 
-Proqram	Ne işe yarar -Özet.
-SPHERE	Ana ekran — her şey buradan bağlanır  TERMINAL	+1 — kendi proqramını sisteme dahil et
-TEXT	Metin düzenleme
-DRAWING	Çizim
-SOUND	Ses düzenleme
-AI	Yapay hafıza
-MEDIA	Ses + video karma arşiv
-REC	Ekran ve ses kaydı
-COPY	Not defteri
-FILTER	Ses filtreleme
-CONVERTER	Format dönüştürme
+Proqram	Ne işe yarar -Özet.<br>
+SPHERE	Ana ekran — her şey buradan bağlanır  TERMINAL	+1 — kendi proqramını sisteme dahil et<br>
+TEXT	Metin düzenleme<br>
+DRAWING	Çizim<br>
+SOUND	Ses düzenleme<br>
+AI	Yapay hafıza<br>
+MEDIA	Ses + video karma arşiv<br>
+REC	Ekran ve ses kaydı<br>
+COPY	Not defteri<br>
+FILTER	Ses filtreleme<br>
+CONVERTER	Format dönüştürme<br>
 
-
-Kurulun 
+Kurulun <br/>
 
 <img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
 
