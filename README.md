@@ -1,7 +1,7 @@
 Kavram<br>
 
 Kavram açık kaynak eğitim platformudur .<br>
-<img width="1251" height="140" alt="İKON" src="https://github.com/user-attachments/assets/4f6eea9b-7f45-41da-b152-3be8733c536a" />
+<img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 
 Proqram	Ne işe yarar -Özet.<br>
 SPHERE	Ana ekran — her şey buradan bağlanır  TERMINAL	+1 — kendi proqramını sisteme dahil et<br>
