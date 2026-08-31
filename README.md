@@ -1,10 +1,9 @@
 # Kavram
 
-**'''Kavram''', eğitim ve medya düzenleme süreçlerini tek bir çatı altında toplamayı amaçlayan [[özgür ve açık kaynak kodlu yazılım|açık kaynak kodlu]] bir eğitim platformudur.**
+**''Kavram'', eğitim ve medya düzenleme süreçlerini tek bir çatı altında toplamayı amaçlayan özgür ve açık kaynak kodlu yazılım|açık kaynak kodlu bir eğitim platformudur.**
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik proqramlardan oluşur:
-## Programlar — Ne İşe Yarar? / Özet
 
 | Program       | Ne işe yarar?            |
 | ------------- | ------------------------ |
