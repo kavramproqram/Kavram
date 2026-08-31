@@ -1,110 +1,234 @@
-Kavram<br>
+# Kavram
 
-Kavram açık kaynak eğitim platformudur .<br>
+**Kavram, açık kaynaklı bir eğitim platformudur.**
+
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 
-Proqram	Ne işe yarar -Özet.<br>
-SPHERE	Ana ekran t<br>
-TEXT	Metin düzenleme<br>
-DRAWING	Çizim<br>
-SOUND	Ses düzenleme<br>
-AI	Yapay hafıza<br>
-MEDIA	Ses + video karma arşiv<br>
-REC	Ekran ve ses kaydı<br>
-COPY	Not defteri<br>
-FILTER	Ses filtreleme<br>
-CONVERTER	Format dönüştürme<br>
+## Programlar — Ne İşe Yarar? / Özet
 
-Kurulum <br/>
-Not : Linux mint xfce de kurun <br/>
+| Program       | Ne işe yarar?            |
+| ------------- | ------------------------ |
+| **SPHERE**    | Ana ekran                |
+| **TEXT**      | Metin düzenleme          |
+| **DRAWING**   | Çizim                    |
+| **SOUND**     | Ses düzenleme            |
+| **AI**        | Yapay hafıza             |
+| **MEDIA**     | Ses + video karma arşivi |
+| **REC**       | Ekran ve ses kaydı       |
+| **COPY**      | Not defteri              |
+| **FILTER**    | Ses filtreleme           |
+| **CONVERTER** | Format dönüştürme        |
+
+---
+
+# Kurulum
+
+> **Not:** Linux Mint XFCE üzerinde kurulması önerilir.
+
 <img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
 
-SPHERE <br/>             ANA EKRAN  <br/>
-Ana ekran —  zihin haritalarının  şifreli olarak arşivlendiği yer.
+---
+
+# SPHERE
+
+## Ana Ekran
+
+Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
+
 <img width="1918" height="1047" alt="s1" src="https://github.com/user-attachments/assets/4e6782df-e53e-4245-a70f-131ed9d720e4" />
 
-<img width="1911" height="1042" alt="1" src="https://github.com/user-attachments/assets/c8e427be-2e96-4e5e-b066-6960165e98b7" />  
+<img width="1911" height="1042" alt="1" src="https://github.com/user-attachments/assets/c8e427be-2e96-4e5e-b066-6960165e98b7" />
 
-Üst bardaki butonlar<br/>
-1 File  - içeri arşiv almak ve kare ( dosya ) eklemk için kullanılır.<br/>
+## Üst Bardaki Butonlar
 
-3 , 4  işlemleri geri almak için .<br/>
+**1. File** — İçeri arşiv almak ve kare (dosya) eklemek için kullanılır.
 
-5  +  kare eklemk için .<br/>
+**3 ve 4.** — Yapılan işlemleri geri almak için kullanılır.
 
-6 bağlantıkların konum listesi .<br/>
+**5. +** — Kare eklemek için kullanılır.
 
-7 Terminal  --- terminal komutları<br/>
-1 reset her şeyi tamamen siler<br/>
-2 ap resim konumu    --duvar kagıdını  değiştir örnek   ( ap /home/lts/Pictures/resim4.png )<br/>
-3 isim proqram konumu ctrl + Q kısa yolu ile açılaan menüye alt kısma bir proqram ekler  /uydu proqram /   örnek  ( Zaman /home/lts/Kavram/Proqramlar/Zaman/Zaman )<br/>
-4 k isim proqram konumu   ctrl + Q kısa yolu ile açılaan menüye üst  kısma bir proqram ekler  / esas proqram  /  dosya eklemek mümkündur .<br/>                                                                 örnek   ( k Blender /home/lts/blender-5.2.0-linux-x64/blender )<br/>
-unutulmamalıdır ki bu proqram bir tür işletim sistemi gibi çalışdığı için esas proqram kapatılırsa bağlı olduğu proqramlar hepsi otomatik kapanır<br/>
-örnek olarak blender kaapatılmadan önce dosyayı kaydetmenizi ister .<br/>
-Eğer Kavram proqramını kapatırsanız blender hiçbir şey sormadan kapanır veri kaybı olamaması için önceden dosyaları yedekleyin .<br/>
+**6.** — Bağlantıların konum listesini açar.
 
-8  /  bu buton arka planda oluşan gridli yapıyı açıp kapatmak içindir .<br/>
+**7. Terminal** — Terminal komutlarını kullanmak için açılır.
 
-9 Export  butonu fare sol tık  xz formatında oluşan dosya daha küçük ama açılması ve export edilmesi  daha uzun sürer .<br/> 
-sağ tık gz formatında kaydeder dosya xz ye nisbeten daha büyük olur ama dosya daha hızlı oluşur<br/>
-oluşan dosya     .kitap olarak şifreli bir şekilde  kaydedilir <br/>
-10 Sphere  bu buton bütün proqramlar içinde üst barda en sağda farkli isimlele var .<br/>
-ctrl + Q  kısa yolunda açılan menüyü açmak içindir .<br/>
-bu proqram içinde 3 tane teklikeli dikkat edilemsi geeken komut var <br/> 
-1 dosyaları yedekleyin veri kaybı ihtimali çok düşük olsa da 0 değil <br/>
-2 reset komutu terminalde yazılır ve  her şeyi siler <br/>
-3 ctrl + S kısa yolu bu sphere (ana ekran ) dışında  olan 7 esas proqram için geçerlidir o an açık olan proqramı yok eder ve ana ekrana geri döner . Hiçbir şey kaydetmez . sadece yok eder .
-hızlı kaydetme için her editorda file butonunun yanında bir ikon var bu ikon sphere için geçerli değil .
-2 sphere içinde olan bu ikonun görevi o an olan düzeni varsayılan yapmaktır . Yani proqram yeniden açılıdığında her şey aynı olacaktır .
+### Terminal Komutları
 
+**1. `reset`**
 
-TEXT<br/>               METİN DÜZENLEME PROQRAMI <br/>
+Her şeyi tamamen siler.
+
+**2. `ap resim konumu`**
+
+Duvar kâğıdını değiştirmek için kullanılır.
+
+Örnek:
+
+```text
+ap /home/lts/Pictures/resim4.png
+```
+
+**3. `isim program konumu`**
+
+`Ctrl + Q` kısayolu ile açılan menünün alt kısmına bir program ekler.
+
+Bu bölüm, yardımcı programlar için kullanılır.
+
+Örnek:
+
+```text
+Zaman /home/lts/Kavram/Programlar/Zaman/Zaman
+```
+
+**4. `k isim program konumu`**
+
+`Ctrl + Q` kısayolu ile açılan menünün üst kısmına bir program ekler.
+
+Bu bölüm, ana programlar için kullanılır. Dosya eklemek de mümkündür.
+
+Örnek:
+
+```text
+k Blender /home/lts/blender-5.2.0-linux-x64/blender
+```
+
+> **Önemli:** Kavram, bir tür işletim sistemi gibi çalıştığı için ana program kapatılırsa ona bağlı olan programların tamamı otomatik olarak kapanır.
+>
+> Örneğin Blender kapatılmadan önce dosyayı kaydetmenizi ister.
+>
+> Eğer Kavram programını kapatırsanız Blender hiçbir şey sormadan kapanır. Veri kaybı yaşanmaması için dosyalarınızı önceden yedekleyin.
+
+**8. `/`**
+
+Arka planda oluşan gridli yapıyı açıp kapatmak için kullanılır.
+
+**9. Export**
+
+**Sol tık:** XZ formatında bir dosya oluşturur. Dosya daha küçük olur ancak oluşturulması ve export edilmesi daha uzun sürer.
+
+**Sağ tık:** GZ formatında kaydeder. Dosya, XZ'ye kıyasla daha büyük olur ancak dosya daha hızlı oluşturulur.
+
+Oluşan dosya `.kitap` uzantısıyla şifreli bir şekilde kaydedilir.
+
+**10. Sphere**
+
+Bu buton, bütün programlarda üst barda en sağda farklı isimlerle bulunur.
+
+`Ctrl + Q` kısayolu ile açılan menüyü açmak için kullanılır.
+
+### Dikkat Edilmesi Gereken Komutlar
+
+Bu program içinde özellikle dikkat edilmesi gereken 3 komut/işlem vardır:
+
+**1. Dosyalarınızı yedekleyin.**
+
+Veri kaybı ihtimali çok düşük olsa da sıfır değildir.
+
+**2. `reset` komutu**
+
+Terminalde `reset` komutu yazıldığında her şey silinir.
+
+**3. `Ctrl + S`**
+
+`Ctrl + S` kısayolu, Sphere (ana ekran) dışında bulunan 7 ana program için geçerlidir.
+
+O anda açık olan programı yok eder ve ana ekrana geri döner. Hiçbir şeyi kaydetmez; yalnızca programı kapatır.
+
+Hızlı kaydetme için her editörde **File** butonunun yanında bir ikon bulunur. Bu ikon Sphere için geçerli değildir.
+
+Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâle getirmektir. Böylece program yeniden açıldığında her şey aynı şekilde açılır.
+
+---
+
+# TEXT
+
+## Metin Düzenleme Programı
 
 <img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
 
-DRAWİNG<br/>            ÇİZİM PROQRAMI <br/>
-Not : animasyon oluşturmak isterseniz export butonuna sağ tıklayın   
+---
+
+# DRAWING
+
+## Çizim Programı
+
+> **Not:** Animasyon oluşturmak istiyorsanız **Export** butonuna sağ tıklayın.
 
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
 
-SOUND<br/>              SES DÜZENLEME PROQRAMI <br/>
+---
+
+# SOUND
+
+## Ses Düzenleme Programı
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
 
-Aİ<br/>                 YAPAY HAFİZA <br/>
-Not : ses video ve resinleri de cevap kısmına kaydetmeniz mümkün olsa da çok büyük dosyalar kulanırsanız export süresi çok üzün ola bilir .<br/>
+---
+
+# AI
+
+## Yapay Hafıza
+
+> **Not:** Ses, video ve resimleri de cevap kısmına kaydetmeniz mümkündür. Ancak çok büyük dosyalar kullanırsanız export süresi çok uzun olabilir.
 
 <img width="1917" height="1045" alt="A" src="https://github.com/user-attachments/assets/71b257c1-c2e8-4335-bf5b-0616cd794ca4" />
 
-MEDİA<br/>              SES VE VİDEOLARDAN OLAUŞAN KARMA ARŞİV PROQRAMI  <br/>
+---
+
+# MEDIA
+
+## Ses ve Videolardan Oluşan Karma Arşiv Programı
 
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
 
-REC<br/>                EKRAN VE SES  KAYDETME  PROQRAMI <br/> 
-Not eski bilgisayrlarda çalişması için tasarlandı kullanırken dikkat edin süre sınırı var .  <br/> her bilgisayar için uyumlu olmaya bilir .Büyük dosyalar oluşturmadan önce test etmeniz tavsiye olunur 
+---
+
+# REC
+
+## Ekran ve Ses Kaydetme Programı
+
+> **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
+>
+> Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
 
 <img width="1920" height="1045" alt="R" src="https://github.com/user-attachments/assets/bbb4c6c4-e8c5-41cf-9273-8ffed6543335" />
 
+---
 
-COPY<br/>              NOT DEFTERİ PROQRAMI <br/> 
-Not : pdf ve drawing de üretiler pnf soayası da resinler de not olarak paketlemek mümkündür <br/>
+# COPY
+
+## Not Defteri Programı
+
+> **Not:** PDF ve Drawing'de üretilen `.pnf` dosyalarını, resimleri de not olarak paketlemek mümkündür.
 
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
 
-FİLTER<br/>           SES FİLTRELEME PROQRAMI <br/>
-Not : bu ptoqram   3 proqramla bağlantılıdır yani sound ,media  ve rec . bu 3 proqramda üst barda İ şu ikon var aktiv ederseniz ses kaydı aldığınızda dosyayı filtreler . <br/>
+---
+
+# FILTER
+
+## Ses Filtreleme Programı
+
+> **Not:** Bu program 3 programla bağlantılıdır: **Sound, Media ve Rec.**
+>
+> Bu 3 programın üst barında **İ** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
+
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
 
-CONVERTER<br/>        DOSYA FORMAT DEĞİŞTİRME PROQRAMI <br/>
+---
+
+# CONVERTER
+
+## Dosya Format Değiştirme Programı
 
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
 
-NOT : KENDİ  GELİŞTİRDİĞİNİZ VEYA İNTERNETDEN İNDİRDİĞİNİZ PROQRAMLARI SİSTEME DAHİl ETMEK İÇİN TERMİNAL KULLANIN <br/>
+---
+
+# Harici Programları Sisteme Dahil Etme
+
+> **Not:** Kendi geliştirdiğiniz veya internetten indirdiğiniz programları sisteme dâhil etmek için Terminal'i kullanın.
 
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
-
-
-
-
