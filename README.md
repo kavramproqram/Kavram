@@ -164,31 +164,32 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **Text** | Çekirdek modüller veya ana ekranlar arası geçişi tetikler. |
 
 ---
-
-# DRAWING
-
-## Çizim Programı
-###Programın Amacı
-**DRAWING**,temel seviye çizim ve animasyon aracı (kapsamlı projeler oluşturmak isterseniz Blender 3D gibi profesyönel proqramları kullanın)
-> **Not:** blender3D Kavram sistemi ile uyumludur
-
-<img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
-
 ### Üst Bar Butonlarının İşlevleri
 
-| Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
+| Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
 | :--- | :--- | :--- |
-| **`O` (Gezinme / Pan / Zoom)** | Gezinme modunu açar/kapatır (Fare tekerleği: Yakınlaştır/Uzaklaştır, Orta Tuş: Pan). | **Çözünürlük ve Boyut (`Aspect Ratio`)** diyalog penceresini açarak tuval boyutunu ve oranlarını yapılandırır. |
-| **`lm` (Lazy Mouse)** | Lazy Mouse (yavaşlatılmış hassas çizim) modunu aktif veya pasif hale getirir. | Lazy Mouse bağlam menüsünü veya ayar diyaloğunu açar. (Tekerlek: Yarıçap, Ctrl+Tekerlek: Hassasiyet). |
-| **Geri Al (`Undo`)** | Çizim geçmişindeki son adımı veya eylemi bir basamak geri alır. | Geri al geçmişi / yığın listesini veya detaylı sıfırlama seçeneklerini gösterir. |
-| **Yinele (`Redo`)** | Geri alınan son adımı ileri sararak yineler. | Yineleme geçmişi listesini veya kurtarma seçeneklerini açar. |
-| **Kaydet (`Save`)** | Çalışmayı ve aktif projeyi doğrudan güncel dosyaya kaydeder. | Farklı Kaydet (`Save As`) diyaloğunu tetikler. |
-| **Kalem / Silgi Boyutu** | Aktif fırça veya silgi boyutunu düzenleme paneli üzerinden değiştirir. | Boyut ve basınç hassasiyeti ayar katmanını (`RadiusOverlayDialog`) açar. |
-| **Renk Seçici / Palet** | Renk tekerleği (`CircleBrightnessDialog`) veya palet penceresini açar. | Son kullanılan renklerin geçmişini, hex kod kopyalama ve palet yönetim menüsünü gösterir. |
-| **Ayna Modu (`Mirror`)** | Yatay veya dikey simetri (ayna) çizim modunu açar/kapatır. | Ayna ekseni yönünü (`Dikey / Yatay`) veya çizgi konumunu yapılandırır. |
-| **Dışa Aktar (`Export`)** | Varsayılan formatta hızlı dışa aktarım (`Export`) işlemini başlatır. | Gelişmiş format seçeneklerini (`PNG, SVG, PDF, Video/FFmpeg`) içeren açılır menüyü gösterir. **Video** sağ tıkında sadece **`mkv`** format seçeneği ile **FPS** (kare hızı) ayar menüsü açılır. |
+| **File** | Görsel veya proje dosyası içe aktar. | Referans görsel ekle. |
+| **Kaydet** | Projeyi kaydeder. | — |
+| **Sayfa Numarası** | Sayfa menüsünü açar. | — |
+| **+** | Yeni sayfa ekler. | — |
+| **-** | Mevcut sayfayı siler. | — |
+| **Geri Al** | Son işlemi geri alır. | — |
+| **Yinele** | Geri alınan işlemi yineler. | — |
+| **Kalem Stili** | Fırça stilini değiştirir. | — |
+| **O** | Gezinme modunu açar/kapatır. | Tuval boyutu/çözünürlük diyaloğunu açar. |
+| **G** | Referans görseli göster/gizle. | Referans saydamlık ve katman konumu menüsü. |
+| **Mix Açısı** | Karışım açısı menüsünü açar. | Karışım modu menüsünü açar. |
+| **Color** | Renk seçimi menüsünü açar. | — |
+| **Eraser** | Silgi modunu açar/kapatır. | Arka plan rengini değiştirir. |
+| **R:** | Fırça/silgi boyutu menüsünü açar. | — |
+| **Çizim** | Katman menüsünü açar. | — |
+| **#** | Aktif katmanı en üstte sabitle. | — |
+| **lm** | Lazy Mouse modunu açar/kapatır. | Lazy Mouse ayar menüsünü açar. |
+| **/** | Basınç hassasiyetini açar/kapatır. | — |
+| **» «** | Dikey ayna modunu açar/kapatır. | Yatay ayna modunu açar/kapatır. |
+| **Export** | Dışa aktarım diyaloğunu açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
+| **Drawing** | Ana uygulamaya geçiş. | — |
 
----
 ---
 
 # SOUND
