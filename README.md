@@ -211,9 +211,13 @@ Ses düzenleme programı
 ---
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
+
 ---
+
 ## Butonlarının İşlevleri
+
 ---
+
 
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
