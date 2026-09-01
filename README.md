@@ -36,7 +36,7 @@ Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
 
 <img width="1918" height="1047" alt="s1" src="https://github.com/user-attachments/assets/4e6782df-e53e-4245-a70f-131ed9d720e4" />
 
-<img width="1911" height="1042" alt="1" src="https://github.com/user-attachments/assets/c8e427be-2e96-4e5e-b066-6960165e98b7" />
+<img width="1920" height="1047" alt="sphere" src="https://github.com/user-attachments/assets/bccf70d7-1060-4ec4-a2be-36493d3fe0f6" />
 
 ## Üst Bardaki Butonlar
 
