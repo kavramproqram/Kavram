@@ -292,8 +292,11 @@ Temel amaçları şunlardır:
 ## Ses ve Videolardan Oluşan Karma Arşiv Programı
 ---
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
+
 ---
+
 ## Butonlarının İşlevleri
+
 ---
 
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
@@ -329,6 +332,8 @@ Temel amaçları şunlardır:
 ## Programın Amacı
 
 Bu programın temel amacı, ekran ve ses kaydetmektir .
+
+<img width="1918" height="1046" alt="r1" src="https://github.com/user-attachments/assets/9e91a992-8da1-4b17-b614-d4e0e4f235fa" />
 
 ---
 
