@@ -280,7 +280,7 @@ Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşz
 | **Windows** | Ekran kaydı alıp alınmayacağını belirler. Aktifken buton rengi değişir. Sadece ses kaydı alınacaksa kapatılabilir. |
 | **Sound** | Sistem/Mikrofon ses kaydının alınıp alınmayacağını belirler. EasyEffects ve varsayılan PulseAudio kaynaklarını otomatik algılar. |
 | **I (Noise Filter)** | Gürültü engelleme ve ses filtreleme zincirini aktif/deaktif eder. Aktif olduğunda dışa aktarım sırasında gelişmiş ses temizleme uygulanır. |
-| **S (Kurtarma/Denetim)** | Segment dosya yapısını ve kayıt durumunu kontrol ederek olası aksamaları doğrular ve kurtarma/düzenleme işlevini çalıştırır. |
+| **S (Sil)** | Her şeyi siler ve kapatır. |
 | **Thickness (Sayı Butonu)** | Yüzen zaman/input penceresinin kalınlığını (30-50 px) ayarlar. <br>• **Fare Tekerleği:** Kalınlığı artırır/azaltır.<br>• **Sol Tık:** Yüzen pencereyi varsayılan konumuna sıfırlar.<br>• **Sağ Tık:** Yüzen pencerenin mevcut konumunu varsayılan yapar. |
 | **/** | **Input Overlay Toggle:** Klavye tuş basımlarını ve fare tıklamalarını (ekranın üzerinde yüzen siyah panelde) gösteren mekanizmayı açar/kapatır. |
 | **Z** | **Time Overlay Toggle:** Ekranın üstünde duran yüzen canlı kayıt süresi panelinin görünürlüğünü açar/kapatır. |
