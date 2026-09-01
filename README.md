@@ -3,7 +3,7 @@
 **''Kavram'', eğitim ve medya düzenleme süreçlerini tek bir çatı altında toplamayı amaçlayan özgür ve açık kaynak kodlu bir arşiv platformudur.**
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
-Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik proqramlardan oluşur:
+Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik programlardan oluşur:
 
 | Program       | Ne işe yarar?            |
 | ------------- | ------------------------ |
@@ -40,7 +40,7 @@ Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
 
 ## Üst Bardaki Butonlar
 
-**1. File** — İçeri arşiv almak ve kare (dosya) eklemek için kullanılır.
+**1. File** — İçeriye arşiv almak ve kare (dosya) eklemek için kullanılır.
 
 **3 ve 4.** — Yapılan işlemleri geri almak için kullanılır.
 
@@ -161,14 +161,14 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **Auto Scroll / Read Mode** | Belirlenen hızda otomatik kaydırma (okuma) modunu tetikler. |
 | **Arama ve Eşleşme Butonları** | Metin içinde arama yapar, bulunan sonuçlar arasında ileri/geri gezinir. |
 | **Export** | Oluşturulan belgeleri dışa aktarır. |
-| **Text** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **Text** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
 
 ---
 
 # DRAWING
 
 ##  Programın Amacı
-Çizim ve Animasyon .  
+Çizim ve animasyon.  
 
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
 ### Üst Bar Butonlarının İşlevleri
@@ -195,14 +195,13 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **/** | Basınç hassasiyetini açar/kapatır. | — |
 | **» «** | Dikey ayna modunu açar/kapatır. | Yatay ayna modunu açar/kapatır. |
 | **Export** | Dışa aktarım diyaloğunu açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
-| **Drawing** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+| **Drawing** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. | — |
 
 ---
 
 # SOUND
 ##  Programın Amacı
-Ses Düzenleme Programı
-
+Ses düzenleme programı.
 
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
@@ -226,7 +225,7 @@ Ses Düzenleme Programı
 | **O** | Paneldeki metni ortalar / sola yaslar. | — |
 | **Yazı Boyutu (rakam)** | Paneldeki yazı boyutunu ayarlar (tekerlek ile de değişir). | — |
 | **Export** | Sesi `WAV` dosyası olarak dışa aktarır. | Sesi metin ve ayarlarla birlikte `.sound` paketi olarak dışa aktarır. |
-| **Sound** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+| **Sound** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. | — |
 ---
 
 # AI
@@ -259,15 +258,15 @@ Temel amaçları şunlardır:
 | **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
 | **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
 | **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
-| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **Ai Modu** | Ai | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
 
-> **Not:** cevap olarak ses video ve resimmleri eklemek mümkün  .
+> **Not:** cevap olarak ses, video ve resimleri eklemek mümkündür  .
 
 ---
 
 # MEDIA
 
-## Ses ve Videolardan Oluşan Karma Arşiv Programı  ()
+## Ses ve Videolardan Oluşan Karma Arşiv Programı
 
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
 
@@ -286,7 +285,7 @@ Markdown
 
 ## Programın Amacı
 
-Bu proqrmın temel amacı, ekran ve ses kaydetmektir .
+Bu programın temel amacı, ekran ve ses kaydetmektir .
 
 ---
 
@@ -307,9 +306,9 @@ Bu proqrmın temel amacı, ekran ve ses kaydetmektir .
 | **Segment Açılır Menüsü** | **Segment Süresi (Örn: 30 sn):** Kayıt yapılırken arka planda kaç saniyede bir yeni parça dosya (`s1.mkv`, `s2.mkv`...) oluşturulacağını belirler. |
 | **Play / Pause** | Kaydı veya medya oynatmayı başlatır/duraklatır. (Global Kısayol: `Ctrl + M`) |
 | **X** | Açık olan dosya oynatma çubuğunu kapatır ve oynatıcıyı sıfırlar. |
-| **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkanı sunar. |
-| **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihayi MKV/WAV dosyası olarak kaydeder. |
-| **Rec** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
+| **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkânı sunar. |
+| **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihai MKV/WAV dosyası olarak kaydeder. |
+| **Rec** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler.. |
 > **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
 >
 > Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
@@ -320,7 +319,7 @@ Bu proqrmın temel amacı, ekran ve ses kaydetmektir .
 
 # COPY
 ## Programın Amacı
-Not Defteri Programı
+Not defteri programı.
 
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
 ## Üst Bar Butonlarının İşlevleri
@@ -339,7 +338,7 @@ Not Defteri Programı
 | **`_` (alt çizgi)** | Genişletilmiş notu küçültür (kapatır). |
 | **`/` (eğik çizgi)** | Aktif notun içeriğini panoya kopyalar (resimlerde dosya yolları, metinlerde düz metin). |
 | **Export** | Mevcut projeyi `.copya` arşivi olarak dışa aktarır. |
-| **Copy** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **Copy** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
 
 ---
 
@@ -415,6 +414,5 @@ Dosya Format Değiştirme Programı
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
-
 
 
