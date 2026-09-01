@@ -142,14 +142,14 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 ## Metin Düzenleme Programı
 
-### Programın Amacı
+## Programın Amacı
 
 **Text**, kullanıcıların zengin metin belgeleri oluşturmasını, biçimlendirmesini, dosyalar üzerinde temel metin işlemlerini gerçekleştirmesini ve not/kod bloklarını organize etmesini sağlayan PyQt5 tabanlı bir metin düzenleme platformudur.
 
 ---
 <img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
 
-### Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 
 | Buton  | İşlevi |
 | :--- | :--- |
@@ -167,11 +167,11 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 # DRAWING
 
-##  Programın Amacı
+## Programın Amacı
 Çizim ve animasyon.  
 
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
-### Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 
 | Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
 | :--- | :--- | :--- |
@@ -200,12 +200,12 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 ---
 
 # SOUND
-##  Programın Amacı
+## Programın Amacı
 Ses düzenleme programı.
 
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
-### Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
 | **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
@@ -244,7 +244,7 @@ Temel amaçları şunlardır:
 
 ---
 
-## Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 
 | Buton / Bileşen | Metin / Simge | İşlevi |
 | :--- | :--- | :--- |
@@ -275,9 +275,8 @@ Temel amaçları şunlardır:
 # REC
 
 ## Ekran ve Ses Kaydetme Programı
-Markdown
 
-# Kavram - Media & Screen Recording Module
+### Kavram - Media & Screen Recording Module
 
 **Kavram**, Linux Mint (ve diğer Linux dağıtımları) üzerinde gelişmiş ekran/ses kaydı, segment tabanlı medya yönetimi ve klavye/fare (input) gösterimi sağlayan PyQt5 tabanlı modüler bir masaüstü uygulaması bileşenidir.
 
@@ -289,7 +288,7 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 
 ---
 
-## Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 
 | Sembol / İsim | Açıklama / İşlev |
 | :--- | :--- |
@@ -322,7 +321,7 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 Not defteri programı.
 
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
-## Üst Bar Butonlarının İşlevleri
+## Butonlarının İşlevleri
 | Buton Adı | Sol Tık İşlevi (`Left Click`) |
 | :--- | :--- |
 | **File** | `.copya` proje dosyasını açar. |
@@ -414,5 +413,4 @@ Dosya Format Değiştirme Programı
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
-
 
