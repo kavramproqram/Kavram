@@ -161,9 +161,16 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **Auto Scroll / Read Mode** | Belirlenen hızda otomatik kaydırma (okuma) modunu tetikler. |
 | **Arama ve Eşleşme Butonları** | Metin içinde arama yapar, bulunan sonuçlar arasında ileri/geri gezinir. |
 | **Export** | Oluşturulan belgeleri dışa aktarır. |
-| **Text** | Çekirdek modüller veya ana ekranlar arası geçişi tetikler. |
+| **Text** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
 
 ---
+
+# DRAWING
+
+##  Programın Amacı
+Çizim ve Animasyon .  
+
+<img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
 ### Üst Bar Butonlarının İşlevleri
 
 | Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
@@ -188,7 +195,7 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **/** | Basınç hassasiyetini açar/kapatır. | — |
 | **» «** | Dikey ayna modunu açar/kapatır. | Yatay ayna modunu açar/kapatır. |
 | **Export** | Dışa aktarım diyaloğunu açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
-| **Drawing** | Ana uygulamaya geçiş. | — |
+| **Drawing** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
 
 ---
 
@@ -229,7 +236,7 @@ Temel amaçları şunlardır:
 | **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
 | **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
 | **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
-| **Ai Modu** | Ai | Ana çekirdek modülleri veya AI editör modları arasında geçişi tetikler. |
+| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
 
 ---
 
@@ -283,7 +290,7 @@ Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşz
 | **X** | Açık olan dosya oynatma çubuğunu kapatır ve oynatıcıyı sıfırlar. |
 | **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkanı sunar. |
 | **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihayi MKV/WAV dosyası olarak kaydeder. |
-| **Rec** | Modül/Ana pencere görünüm geçişlerini sağlar. |
+| **Rec** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
 > **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
 >
 > Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
