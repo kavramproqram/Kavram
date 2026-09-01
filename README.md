@@ -209,6 +209,7 @@ Ses düzenleme programı
 ---
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
+---
 ## Butonlarının İşlevleri
 
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
@@ -346,7 +347,7 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 # COPY
 ## Programın Amacı
 Not defteri programı
-
+---
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
 ## Butonlarının İşlevleri
 
@@ -374,6 +375,7 @@ Not defteri programı
 ## Programın Amacı
 Ses Filtreleme Programı
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
+---
 ## Butonlarının İşlevleri
 
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
@@ -408,7 +410,7 @@ Ses Filtreleme Programı
 # CONVERTER
 ## Programın Amacı
 Dosya Format Değiştirme Programı
-
+---
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
 ## Butonlarının İşlevleri
 
@@ -439,7 +441,7 @@ Dosya Format Değiştirme Programı
 ---
 
 # Harici Programları Sisteme Dahil Etme
-
+---
 > **Not:** Kendi geliştirdiğiniz veya internetten indirdiğiniz programları sisteme dâhil etmek için Terminal'i kullanın.
 
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
