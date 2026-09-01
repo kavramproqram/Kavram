@@ -207,7 +207,46 @@ Ai: Ana uygulama penceresine veya modüller arası geçiş ekranına dönmeyi sa
 # REC
 
 ## Ekran ve Ses Kaydetme Programı
+Markdown
 
+# Kavram - Media & Screen Recording Module
+
+**Kavram**, Linux Mint (ve diğer Linux dağıtımları) üzerinde gelişmiş ekran/ses kaydı, segment tabanlı medya yönetimi ve klavye/fare (input) gösterimi sağlayan PyQt5 tabanlı modüler bir masaüstü uygulaması bileşenidir.
+
+---
+
+## Programın Amacı
+
+Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşzamanlı veya bağımsız olarak kaydetmek, kayıt sürecini dinamik segmentlere ayırarak yönetmek ve video/ses oynatma ile filtreleme süreçlerini tek bir merkezden yürütmektir.
+
+* **Esnek Kayıt Modları:** Sadece ekran (MKV), sadece ses (WAV) veya ekran ve ses bir arada (MKV) kayıt alabilme.
+* **Segment Tabanlı Kayıt:** Uzun süreli kayıtları belirlenen sürelerde (20 sn - 3 dk) parçalara (segment) ayırarak veri kaybı riskini en aza indirme.
+* **Yüzen (Floating) Zaman ve Input Göstergesi:** Ekran kaydı sırasında en üstte duran, Ctrl + Sol Tık ile taşınabilen süre ve basılan tuşları/fare komutlarını anlık gösteren bildirim pencereleri.
+* **Ses Filtreleme ve Dışa Aktarma:** Dahili FFmpeg ve ses işleme hattı (noise reduce, EQ, compressor) desteği ile kayıtları filtreleyip tek bir dosyada birleştirerek dışa aktarma.
+* **Dahili Medya Oynatıcı:** Kaydedilen veya harici olarak yüklenen `.mkv`, `.mp4`, `.rec` ve `.wav` dosyalarını uygulama içerisinden oynatma.
+
+---
+
+## Üst Bar Butonlarının İşlevleri
+
+| Sembol / İsim | Açıklama / İşlev |
+| :--- | :--- |
+| **File** | Harici bir video (`.rec`, `.mp4`, `.mkv`) veya ses (`.wav`) dosyasını oynatıcıya yüklemek için dosya seçici penceresini açar. |
+| **Camera** | Geliştirme aşamasında olan kamera modülü . |
+| **Windows** | Ekran kaydı alıp alınmayacağını belirler. Aktifken buton rengi değişir. Sadece ses kaydı alınacaksa kapatılabilir. |
+| **Sound** | Sistem/Mikrofon ses kaydının alınıp alınmayacağını belirler. EasyEffects ve varsayılan PulseAudio kaynaklarını otomatik algılar. |
+| **I (Noise Filter)** | Gürültü engelleme ve ses filtreleme zincirini aktif/deaktif eder. Aktif olduğunda dışa aktarım sırasında gelişmiş ses temizleme uygulanır. |
+| **S (Kurtarma/Denetim)** | Segment dosya yapısını ve kayıt durumunu kontrol ederek olası aksamaları doğrular ve kurtarma/düzenleme işlevini çalıştırır. |
+| **Thickness (Sayı Butonu)** | Yüzen zaman/input penceresinin kalınlığını (30-50 px) ayarlar. <br>• **Fare Tekerleği:** Kalınlığı artırır/azaltır.<br>• **Sol Tık:** Yüzen pencereyi varsayılan konumuna sıfırlar.<br>• **Sağ Tık:** Yüzen pencerenin mevcut konumunu varsayılan yapar. |
+| **/** | **Input Overlay Toggle:** Klavye tuş basımlarını ve fare tıklamalarını (ekranın üzerinde yüzen siyah panelde) gösteren mekanizmayı açar/kapatır. |
+| **Z** | **Time Overlay Toggle:** Ekranın üstünde duran yüzen canlı kayıt süresi panelinin görünürlüğünü açar/kapatır. |
+| **Süre Açılır Menüsü** | **Kayıt Limiti (Örn: 5 dk):** Belirlenen süreye ulaşıldığında kaydın otomatik olarak duraklatılmasını sağlar (1 dk - 30 dk arası). |
+| **Segment Açılır Menüsü** | **Segment Süresi (Örn: 30 sn):** Kayıt yapılırken arka planda kaç saniyede bir yeni parça dosya (`s1.mkv`, `s2.mkv`...) oluşturulacağını belirler. |
+| **Play / Pause** | Kaydı veya medya oynatmayı başlatır/duraklatır. (Global Kısayol: `Ctrl + M`) |
+| **X** | Açık olan dosya oynatma çubuğunu kapatır ve oynatıcıyı sıfırlar. |
+| **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkanı sunar. |
+| **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihayi MKV/WAV dosyası olarak kaydeder. |
+| **Rec** | Modül/Ana pencere görünüm geçişlerini sağlar. |
 > **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
 >
 > Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
