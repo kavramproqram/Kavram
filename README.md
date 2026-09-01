@@ -172,7 +172,7 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 > **Üst Bar Butonlarının İşlevleri:**   File: Arayüzden var olan .ai uzantılı paket/hafıza dosyalarını açar ve yükler.
 
-Kaydet (Disket Simgesi): Yapılan değişiklikleri mevcut .ai dosyasına kaydeder.
+File (Disket Simgesi): Yapılan değişiklikleri mevcut .ai dosyasına kaydeder.
 
 New: Yeni bir soru-cevap paketi (kartı) oluşturma alanına yönlendirir.
 
