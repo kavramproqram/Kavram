@@ -283,7 +283,6 @@ Temel amaçları şunlardır:
 | **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
 
 
-> **Not:** Cevap olarak ses, video ve resimleri eklemek mümkündür.
 
 ---
 
