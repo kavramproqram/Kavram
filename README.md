@@ -322,21 +322,22 @@ Temel amaçları şunlardır:
 
 ## Ekran ve Ses Kaydetme Programı
 
-### Kavram - Media & Screen Recording Module
-
-**Kavram**, Linux Mint (ve diğer Linux dağıtımları) üzerinde gelişmiş ekran/ses kaydı, segment tabanlı medya yönetimi ve klavye/fare (input) gösterimi sağlayan PyQt5 tabanlı modüler bir masaüstü uygulaması bileşenidir.
-
 ---
 
 ## Programın Amacı
 
+---
+
 Bu programın temel amacı, ekran ve ses kaydetmektir .
+---
+
 
 <img width="1918" height="1046" alt="r1" src="https://github.com/user-attachments/assets/9e91a992-8da1-4b17-b614-d4e0e4f235fa" />
 
 ---
 
 ## Butonlarının İşlevleri
+
 ---
 
 | Sembol / İsim | Açıklama / İşlev |
