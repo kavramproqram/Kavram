@@ -142,9 +142,27 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 ## Metin Düzenleme Programı
 
+### Programın Amacı
 
+**Text**, kullanıcıların zengin metin belgeleri oluşturmasını, biçimlendirmesini, dosyalar üzerinde temel metin işlemlerini gerçekleştirmesini ve not/kod bloklarını organize etmesini sağlayan PyQt5 tabanlı bir metin düzenleme platformudur[cite: 1].
 
+---
 <img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
+
+### Üst Bar Butonlarının İşlevleri
+
+| Buton / Bileşen | İşlevi |
+| :--- | :--- |
+| **File** | Dosya açma ve içeri aktarma diyalogunu başlatır[cite: 1]. |
+| **Kaydet (Save)** | Aktif metin belgesindeki değişiklikleri ve güncellemeleri kaydeder[cite: 1]. |
+| **Geri Al / Yinele (Undo / Redo)** | Düzenleme geçmişindeki adımları geri alır veya yineler[cite: 1]. |
+| **Font Seçici** | Arayüzdeki metin boyutunu dinamik olarak değiştirir[cite: 1]. |
+| **Terminal** | Özel silme komutlarını (örneğin dil veya karakter gruplarını silme) çalıştırmayı sağlar[cite: 1]. |
+| **Auto Scroll / Read Mode** | Belirlenen hızda otomatik kaydırma (okuma) modunu tetikler[cite: 1]. |
+| **Arama ve Eşleşme Butonları** | Metin içinde arama yapar, bulunan sonuçlar arasında ileri/geri gezinir[cite: 1]. |
+| **Export** | Oluşturulan belgeleri dışa aktarır[cite: 1]. |
+| **Text** | Çekirdek modüller veya ana ekranlar arası geçişi tetikler[cite: 1]. |
+
 
 ---
 
