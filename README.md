@@ -200,17 +200,40 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 ---
 
 # SOUND
+##  Programın Amacı
+Ses Düzenleme Programı
 
-## Ses Düzenleme Programı
+
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
-
+### Üst Bar Butonlarının İşlevleri
+| Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
+| :--- | :--- | :--- |
+| **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
+| **Kaydet (disk ikonu)** | Geçerli sesi veya `.sound` paketini kaydeder. | — |
+| **Geri Al** | Son işlemi geri alır (`Ctrl+Z`). | — |
+| **Yinele** | Geri alınan işlemi yineler (`Ctrl+Shift+Z` veya `Ctrl+Y`). | — |
+| **Cut** | Oynatma başlığının bulunduğu konuma kesme noktası ekler. | — |
+| **`::`** | Seçili alanın kalınlığındaki (ses düzeyi) tüm boşlukları otomatik siler. | — |
+| **Delete** | Seçili ses bölümlerini siler. | — |
+| **Play** | Oynatmayı başlatır / duraklatır. | — |
+| **Record** | Mikrofon kaydını başlatır / durdurur. | — |
+| **I** | Kayıt sonrası filtreleri açar/kapatır (kalıcı ayar). | — |
+| **Dalga Ölçeği (rakam)** | Dalga formu genişliğini ayarlar (1–7 arası). | — |
+| **Hız (`Speed`)** | Oynatma hızını değiştirir (`0.1x – 3x`). | — |
+| **Kaydırma Adımı** | Fare tekerleği ile kaydırma adımını ayarlar (`0.1s – 30s`). | — |
+| **`/`** | Geçici metin panelini açar / kapatır. | — |
+| **O** | Paneldeki metni ortalar / sola yaslar. | — |
+| **Yazı Boyutu (rakam)** | Paneldeki yazı boyutunu ayarlar (tekerlek ile de değişir). | — |
+| **Export** | Sesi `WAV` dosyası olarak dışa aktarır. | Sesi metin ve ayarlarla birlikte `.sound` paketi olarak dışa aktarır. |
+| **Sound** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
 ---
 
 # AI
 
 ## Yapay Hafıza
 ## Programın Amacı
+<img width="1920" height="1043" alt="ai" src="https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04" />
 
 **AI**, SQLite tabanlı dinamik veri/soru-cevap yönetimi, multimedya entegrasyonu (ses, görsel, video, harici dosya) ve özelleştirilmiş AI/Chat etkileşim arayüzü sunan bir masaüstü yazılımıdır. 
 
@@ -236,7 +259,9 @@ Temel amaçları şunlardır:
 | **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
 | **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
 | **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
-| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
+| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+
+> **Not:** cevap olarak ses video ve resimmleri eklemek mümkün  .
 
 ---
 
@@ -261,13 +286,7 @@ Markdown
 
 ## Programın Amacı
 
-Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşzamanlı veya bağımsız olarak kaydetmek, kayıt sürecini dinamik segmentlere ayırarak yönetmek ve video/ses oynatma ile filtreleme süreçlerini tek bir merkezden yürütmektir.
-
-* **Esnek Kayıt Modları:** Sadece ekran (MKV), sadece ses (WAV) veya ekran ve ses bir arada (MKV) kayıt alabilme.
-* **Segment Tabanlı Kayıt:** Uzun süreli kayıtları belirlenen sürelerde (20 sn - 3 dk) parçalara (segment) ayırarak veri kaybı riskini en aza indirme.
-* **Yüzen (Floating) Zaman ve Input Göstergesi:** Ekran kaydı sırasında en üstte duran, Ctrl + Sol Tık ile taşınabilen süre ve basılan tuşları/fare komutlarını anlık gösteren bildirim pencereleri.
-* **Ses Filtreleme ve Dışa Aktarma:** Dahili FFmpeg ve ses işleme hattı (noise reduce, EQ, compressor) desteği ile kayıtları filtreleyip tek bir dosyada birleştirerek dışa aktarma.
-* **Dahili Medya Oynatıcı:** Kaydedilen veya harici olarak yüklenen `.mkv`, `.mp4`, `.rec` ve `.wav` dosyalarını uygulama içerisinden oynatma.
+Bu proqrmın temel amacı, ekran ve ses kaydetmektir .
 
 ---
 
@@ -300,32 +319,92 @@ Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşz
 ---
 
 # COPY
-
-## Not Defteri Programı
-
-> **Not:** PDF ve Drawing'de üretilen `.pnf` dosyalarını, resimleri de not olarak paketlemek mümkündür.
+## Programın Amacı
+Not Defteri Programı
 
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
+## Üst Bar Butonlarının İşlevleri
+| Buton Adı | Sol Tık İşlevi (`Left Click`) |
+| :--- | :--- |
+| **File** | `.copya` proje dosyasını açar. |
+| **Kaydet (disk ikonu)** | Geçerli projeyi kaydeder (eğer dosya yoksa farklı kaydet açar). |
+| **`+`** | Yeni bir boş not ekler. |
+| **Galeri** | Görseller, `.txt` ve `.txr` metin dosyalarını seçip mevcut veya yeni bir galeri notu olarak ekler. |
+| **Belge** | `PDF` veya `PNF` (`Drawing`) dosyasını seçip sayfa sayfa galeri notu olarak içe aktarır. |
+| **`#` (sayfa numarası)** | Genişletilmiş galerideki öğeler arasında gezinmek için menü açar. |
+| **`I`** | Otomatik kaydırma (okuma modu) başlatır/durdurur. |
+| **Hız (rakam)** | Otomatik kaydırma hızını ayarlamak için menü açar. |
+| **Boyut (rakam)** | Belge modunda görüntülenen sayfanın boyutunu ayarlar. |
+| **`X`** | Aktif olarak genişletilmiş notu siler. |
+| **`_` (alt çizgi)** | Genişletilmiş notu küçültür (kapatır). |
+| **`/` (eğik çizgi)** | Aktif notun içeriğini panoya kopyalar (resimlerde dosya yolları, metinlerde düz metin). |
+| **Export** | Mevcut projeyi `.copya` arşivi olarak dışa aktarır. |
+| **Copy** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
 
 ---
 
 # FILTER
+## Programın Amacı
+Ses Filtreleme Programı
+<img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
+## Butonlarının İşlevleri
+| Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
+| :--- | :--- | :--- |
+| **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
+| **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
+| **Reset** | Buton | Tüm dönüştürme ayarlarını (format, hız, efekt, filtreler vb.) varsayılan değerlerine sıfırlar. |
+| **Export** | Buton | Dönüştürme sonucu oluşan çıktı dosyasını, kullanıcının seçtiği konuma kaydeder (kopyalar). |
+| **Format (`Export Format`)** | Açılır Kutu (`ComboBox`) | Dönüştürme sonrası oluşacak dosyanın uzantısını/formatını belirler (örn: `.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg`). |
+| **Frekans Değiştir (`Frequency`)** | Açılır Kutu (`ComboBox`) | Ses örnekleme frekansını değiştirme özelliğini açar (`Açık`) veya kapatır (`Kapalı`). |
+| **Yeni Frekans Hz** | Metin Girişi (`LineEdit`) | Frekans değiştirme aktifken, hedef örnekleme frekansını (Hz cinsinden) girilen değere ayarlar. |
+| **Ses Hızı (`Speed`)** | Açılır Kutu (`ComboBox`) | Sesin oynatma/dönüştürme hızını ayarlar (`0.10x ile 4.0x arası`). |
+| **Ses Perdesi (`Pitch`)** | Açılır Kutu (`ComboBox`) | Sesin perdesini yükseltir (eksi ton) veya düşürür (artı ton) (`-6 Ton ile +6 Ton arası`). |
+| **Ses Efekti** | Açılır Kutu (`ComboBox`) | Sese uygulanacak özel efekti seçer (`Normalleştir`, `Sıkıştır`, `Filtre`, `Fade`, `Kaydırma` vb.). |
+| **Kapak Resmi Seç** | Buton | Sesi videoya dönüştürürken (ses+resim->video) kullanılacak kapak resmini seçmek için diyalog açar. |
+| **Video Renkleri Ters Çevir** | Açılır Kutu (`ComboBox`) | Video çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **Video Gri Ton (`Grayscale`)** | Açılır Kutu (`ComboBox`) | Video çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Video Sesini Tamamen Sil** | Açılır Kutu (`ComboBox`) | Video dosyasındaki orijinal ses kanallarını tamamen kaldırır (`Evet` seçiliyse). |
+| **Harici Ses Ekle (`Sync`)** | Buton | Videoya ana ses olarak eklenecek harici bir ses dosyası seçmek için diyalog açar. |
+| **PDF Ters Çevir** | Açılır Kutu (`ComboBox`) | PDF sayfalarının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **PDF Gri Ton** | Açılır Kutu (`ComboBox`) | PDF sayfalarını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Resim Ters Çevir** | Açılır Kutu (`ComboBox`) | Resim çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
 
-## Ses Filtreleme Programı
 
 > **Not:** Bu program 3 programla bağlantılıdır: **Sound, Media ve Rec.**
 >
 > Bu 3 programın üst barında **İ** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
-
-<img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
-
 ---
 
 # CONVERTER
-
-## Dosya Format Değiştirme Programı
+## Programın Amacı
+Dosya Format Değiştirme Programı
 
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
+## Butonlarının İşlevleri
+| Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
+| :--- | :--- | :--- |
+| **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
+| **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
+| **Reset** | Buton | Tüm dönüştürme ayarlarını (format, hız, efekt, filtreler vb.) varsayılan değerlerine sıfırlar. |
+| **Export** | Buton | Dönüştürme sonucu oluşan çıktı dosyasını, kullanıcının seçtiği konuma kaydeder (kopyalar). |
+| **Format (`Export Format`)** | Açılır Kutu (`ComboBox`) | Dönüştürme sonrası oluşacak dosyanın uzantısını/formatını belirler (örn: `.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg`). |
+| **Frekans Değiştir (`Frequency`)** | Açılır Kutu (`ComboBox`) | Ses örnekleme frekansını değiştirme özelliğini açar (`Açık`) veya kapatır (`Kapalı`). |
+| **Yeni Frekans Hz** | Metin Girişi (`LineEdit`) | Frekans değiştirme aktifken, hedef örnekleme frekansını (Hz cinsinden) girilen değere ayarlar. |
+| **Ses Hızı (`Speed`)** | Açılır Kutu (`ComboBox`) | Sesin oynatma/dönüştürme hızını ayarlar (`0.10x ile 4.0x arası`). |
+| **Ses Perdesi (`Pitch`)** | Açılır Kutu (`ComboBox`) | Sesin perdesini yükseltir (eksi ton) veya düşürür (artı ton) (`-6 Ton ile +6 Ton arası`). |
+| **Ses Efekti** | Açılır Kutu (`ComboBox`) | Sese uygulanacak özel efekti seçer (`Normalleştir`, `Sıkıştır`, `Filtre`, `Fade`, `Kaydırma` vb.). |
+| **Kapak Resmi Seç** | Buton | Sesi videoya dönüştürürken (ses+resim->video) kullanılacak kapak resmini seçmek için diyalog açar. |
+| **Video Renkleri Ters Çevir** | Açılır Kutu (`ComboBox`) | Video çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **Video Gri Ton (`Grayscale`)** | Açılır Kutu (`ComboBox`) | Video çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Video Sesini Tamamen Sil** | Açılır Kutu (`ComboBox`) | Video dosyasındaki orijinal ses kanallarını tamamen kaldırır (`Evet` seçiliyse). |
+| **Harici Ses Ekle (`Sync`)** | Buton | Videoya ana ses olarak eklenecek harici bir ses dosyası seçmek için diyalog açar. |
+| **PDF Ters Çevir** | Açılır Kutu (`ComboBox`) | PDF sayfalarının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **PDF Gri Ton** | Açılır Kutu (`ComboBox`) | PDF sayfalarını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Resim Ters Çevir** | Açılır Kutu (`ComboBox`) | Resim çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
+| **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
+| **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
 
 ---
 
