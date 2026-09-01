@@ -18,6 +18,7 @@ Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarla
 | **FILTER**    | Ses filtreleme           |
 | **CONVERTER** | Format dönüştürme        |
 
+
 ---
 
 # Kurulum
@@ -38,9 +39,9 @@ Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
 
 <img width="1920" height="1047" alt="sphere" src="https://github.com/user-attachments/assets/bccf70d7-1060-4ec4-a2be-36493d3fe0f6" />
 
-## Üst Bardaki Butonlar
+## Butonlarının İşlevleri
 
-**1. File** — İçeriye arşiv almak ve kare (dosya) eklemek için kullanılır.
+**1. File** — İçeri arşiv almak ve kare (dosya) eklemek için kullanılır.
 
 **3 ve 4.** — Yapılan işlemleri geri almak için kullanılır.
 
@@ -108,7 +109,7 @@ Arka planda oluşan gridli yapıyı açıp kapatmak için kullanılır.
 
 Oluşan dosya `.kitap` uzantısıyla şifreli bir şekilde kaydedilir.
 
-**10. Sphere** 
+**10. Sphere**
 
 Bu buton, bütün programlarda üst barda en sağda farklı isimlerle bulunur.
 
@@ -116,7 +117,7 @@ Bu buton, bütün programlarda üst barda en sağda farklı isimlerle bulunur.
 
 ### Dikkat Edilmesi Gereken Komutlar
 
-Bu program içinde özellikle dikkat edilmesi gereken 3 komut/işlem vardır:
+Bu programda özellikle dikkat edilmesi gereken 3 komut/işlem vardır:
 
 **1. Dosyalarınızı yedekleyin.**
 
@@ -161,7 +162,8 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **Auto Scroll / Read Mode** | Belirlenen hızda otomatik kaydırma (okuma) modunu tetikler. |
 | **Arama ve Eşleşme Butonları** | Metin içinde arama yapar, bulunan sonuçlar arasında ileri/geri gezinir. |
 | **Export** | Oluşturulan belgeleri dışa aktarır. |
-| **Text** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
+| **Text** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+
 
 ---
 
@@ -195,17 +197,19 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 | **/** | Basınç hassasiyetini açar/kapatır. | — |
 | **» «** | Dikey ayna modunu açar/kapatır. | Yatay ayna modunu açar/kapatır. |
 | **Export** | Dışa aktarım diyaloğunu açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
-| **Drawing** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. | — |
+| **Drawing** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+
 
 ---
 
 # SOUND
 ## Programın Amacı
-Ses düzenleme programı.
+Ses düzenleme programı
 
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
 ## Butonlarının İşlevleri
+
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
 | **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
@@ -225,7 +229,8 @@ Ses düzenleme programı.
 | **O** | Paneldeki metni ortalar / sola yaslar. | — |
 | **Yazı Boyutu (rakam)** | Paneldeki yazı boyutunu ayarlar (tekerlek ile de değişir). | — |
 | **Export** | Sesi `WAV` dosyası olarak dışa aktarır. | Sesi metin ve ayarlarla birlikte `.sound` paketi olarak dışa aktarır. |
-| **Sound** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. | — |
+| **Sound** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+
 ---
 
 # AI
@@ -258,9 +263,10 @@ Temel amaçları şunlardır:
 | **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
 | **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
 | **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
-| **Ai Modu** | Ai | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
+| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
 
-> **Not:** cevap olarak ses, video ve resimleri eklemek mümkündür  .
+
+> **Not:** Cevap olarak ses, video ve resimleri eklemek mümkündür.
 
 ---
 
@@ -307,7 +313,8 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 | **X** | Açık olan dosya oynatma çubuğunu kapatır ve oynatıcıyı sıfırlar. |
 | **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkânı sunar. |
 | **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihai MKV/WAV dosyası olarak kaydeder. |
-| **Rec** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler.. |
+| **Rec** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
+
 > **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
 >
 > Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
@@ -318,10 +325,11 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 
 # COPY
 ## Programın Amacı
-Not defteri programı.
+Not defteri programı
 
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
 ## Butonlarının İşlevleri
+
 | Buton Adı | Sol Tık İşlevi (`Left Click`) |
 | :--- | :--- |
 | **File** | `.copya` proje dosyasını açar. |
@@ -337,7 +345,8 @@ Not defteri programı.
 | **`_` (alt çizgi)** | Genişletilmiş notu küçültür (kapatır). |
 | **`/` (eğik çizgi)** | Aktif notun içeriğini panoya kopyalar (resimlerde dosya yolları, metinlerde düz metin). |
 | **Export** | Mevcut projeyi `.copya` arşivi olarak dışa aktarır. |
-| **Copy** | Bu buton bütün esas programlarda var program ismini gösterir ve Ctrl + Q kısayolunu tetikler. |
+| **Copy** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+
 
 ---
 
@@ -346,6 +355,7 @@ Not defteri programı.
 Ses Filtreleme Programı
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
 ## Butonlarının İşlevleri
+
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
@@ -381,6 +391,7 @@ Dosya Format Değiştirme Programı
 
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
 ## Butonlarının İşlevleri
+
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
@@ -404,6 +415,7 @@ Dosya Format Değiştirme Programı
 | **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
 | **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
 
+
 ---
 
 # Harici Programları Sisteme Dahil Etme
@@ -413,4 +425,3 @@ Dosya Format Değiştirme Programı
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
-
