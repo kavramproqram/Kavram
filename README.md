@@ -108,7 +108,7 @@ Arka planda oluşan gridli yapıyı açıp kapatmak için kullanılır.
 
 Oluşan dosya `.kitap` uzantısıyla şifreli bir şekilde kaydedilir.
 
-**10. Sphere**
+**10. Sphere** 
 
 Bu buton, bütün programlarda üst barda en sağda farklı isimlerle bulunur.
 
