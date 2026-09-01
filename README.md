@@ -168,7 +168,29 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 ## Yapay Hafıza
 
-> **Not:** Ses, video ve resimleri de cevap kısmına kaydetmeniz mümkündür. Ancak çok büyük dosyalar kullanırsanız export süresi çok uzun olabilir.
+> **Programın Amacı:** Yerel SQLite veritabanı üzerinde soru-cevap mantığıyla çalışan paketler (kartlar) oluşturmanızı, bunlara ses, görsel, video veya dosya eklemenizi ve soru-cevap tabanlı bir sohbet arayüzü üzerinden bu verilere erişip yönetmenizi sağlayan bir AI/Hafıza Editörüdür.
+
+> **Üst Bar Butonlarının İşlevleri:**   File: Arayüzden var olan .ai uzantılı paket/hafıza dosyalarını açar ve yükler.
+
+Kaydet (Disket Simgesi): Yapılan değişiklikleri mevcut .ai dosyasına kaydeder.
+
+New: Yeni bir soru-cevap paketi (kartı) oluşturma alanına yönlendirir.
+
+Chat: Soru sorup veritabanındaki karşılıklarını sohbet baloncukları şeklinde görüntüleyeceğiniz ana ekranı açar.
+
+_ (Tire): Tam ekran medya önizleme modunu kapatır.
+
+Edit: Tüm soru-cevap veri paketlerini liste halinde görebileceğiniz ve düzenleyebileceğiniz hafıza yönetim panelini açar.
+
+Sohbeti Temizle (X Simgesi): Sadece ekrandaki aktif sohbet geçmişini temizler.
+
+Font Boyutu (Sayı Kutusu): Yazı tipinin boyutunu değiştirir.
+
+S (Sil): Çalışma klasörünü (ai) ve açık olan tüm verileri tamamen sıfırlar.
+
+Export: Hazırlanan tüm metin ve medya içeriklerini sıkıştırılmış tek bir .ai dosyası olarak dışa aktarır.
+
+Ai: Ana uygulama penceresine veya modüller arası geçiş ekranına dönmeyi sağlar.
 
 <img width="1917" height="1045" alt="A" src="https://github.com/user-attachments/assets/71b257c1-c2e8-4335-bf5b-0616cd794ca4" />
 
@@ -176,7 +198,7 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 # MEDIA
 
-## Ses ve Videolardan Oluşan Karma Arşiv Programı
+## Ses ve Videolardan Oluşan Karma Arşiv Programı  ()
 
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
 
