@@ -173,9 +173,9 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 Çizim ve animasyon.  
 ---
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
-
+---
 ## Butonlarının İşlevleri
-
+---
 | Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
 | :--- | :--- | :--- |
 | **File** | Görsel veya proje dosyası içe aktar. | Referans görsel ekle. |
@@ -211,7 +211,7 @@ Ses düzenleme programı
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
 ---
 ## Butonlarının İşlevleri
-
+---
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
 | **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
@@ -252,7 +252,7 @@ Temel amaçları şunlardır:
 ---
 
 ## Butonlarının İşlevleri
-
+---
 | Buton / Bileşen | Metin / Simge | İşlevi |
 | :--- | :--- | :--- |
 | **File** | File | Veritabanı veya medya dosyalarını içeri aktarmak / açmak için dosya seçim diyalogunu başlatır. |
@@ -277,7 +277,9 @@ Temel amaçları şunlardır:
 ## Ses ve Videolardan Oluşan Karma Arşiv Programı
 ---
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
+---
 ## Butonlarının İşlevleri
+---
 
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
@@ -316,6 +318,7 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 ---
 
 ## Butonlarının İşlevleri
+---
 
 | Sembol / İsim | Açıklama / İşlev |
 | :--- | :--- |
@@ -349,7 +352,10 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 Not defteri programı
 ---
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
+---
+
 ## Butonlarının İşlevleri
+---
 
 | Buton Adı | Sol Tık İşlevi (`Left Click`) |
 | :--- | :--- |
@@ -374,9 +380,12 @@ Not defteri programı
 # FILTER
 ## Programın Amacı
 Ses Filtreleme Programı
+---
+
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
 ---
 ## Butonlarının İşlevleri
+---
 
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
 | :--- | :--- | :--- |
@@ -412,8 +421,9 @@ Ses Filtreleme Programı
 Dosya Format Değiştirme Programı
 ---
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
+---
 ## Butonlarının İşlevleri
-
+---
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
