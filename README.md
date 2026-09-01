@@ -206,7 +206,7 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 # SOUND
 ## Programın Amacı
 Ses düzenleme programı
-
+---
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
 ## Butonlarının İşlevleri
@@ -274,10 +274,28 @@ Temel amaçları şunlardır:
 # MEDIA
 
 ## Ses ve Videolardan Oluşan Karma Arşiv Programı
-
-<img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
-
 ---
+<img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
+## Butonlarının İşlevleri
+| Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
+| :--- | :--- | :--- |
+| **File** | Medya dosyalarını (video, ses, `.media` arşivi) içe aktarır. | — |
+| **Kaydet (disk ikonu)** | Mevcut projeyi hızlıca kaydeder (daha önce kaydedildiyse üzerine yazar, değilse farklı kaydet açar). | — |
+| **Geri Al** | Son işlemi geri alır (`Ctrl+Z`). | — |
+| **Yinele** | Geri alınan işlemi yineler (`Ctrl+Shift+Z`). | — |
+| **Play** | Seçili medya segmentinin oynatmasını başlatır / duraklatır. | — |
+| **`/`** | Sıralı oynatma modunu açar/kapatır (segmentler arası otomatik geçiş). | — |
+| **Cut** | Aktif segmenti, oynatma başlığının bulunduğu konumdan iki parçaya böler (keser). | — |
+| **Delete** | Zaman çizelgesinde seçili olan segmenti siler. | — |
+| **Camera** | Kamerayı açar (geliştirme aşamasındadır). | — |
+| **Sound** | Mikrofon ile ses kaydını başlatır / durdurur. | — |
+| **`I`** | Gürültü filtreleme özelliğini açar/kapatır (kalıcı ayardır). | — |
+| **`S`** | `medya_cut` çalışma klasörünü temizler ve zaman çizelgesini tamamen sıfırlar. | — |
+| **Seek Aralığı (Açılır Kutu)** | Fare tekerleği ile ileri/geri sarma veya atlama adımını ayarlar (örn. 2s, 5s, 1dk). | — |
+| **Oynatma Hızı (Açılır Kutu)** | Medya oynatma hızını değiştirir (örn. 0.5x, 1x, 2x). | — |
+| **Export** | Zaman çizelgesindeki tüm segmentleri `.media` arşiv dosyası olarak dışa aktarır (proje olarak kaydeder). | Tüm zaman çizelgesini tek bir `.mkv` video dosyası olarak render eder ve dışa aktarır. |
+| **Media** | Ana uygulamaya (`Kavram`) geçiş yapar. | — |
+
 
 # REC
 
