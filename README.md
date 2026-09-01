@@ -167,32 +167,33 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 # AI
 
 ## Yapay Hafıza
+## Programın Amacı
 
-> **Programın Amacı:** Yerel SQLite veritabanı üzerinde soru-cevap mantığıyla çalışan paketler (kartlar) oluşturmanızı, bunlara ses, görsel, video veya dosya eklemenizi ve soru-cevap tabanlı bir sohbet arayüzü üzerinden bu verilere erişip yönetmenizi sağlayan bir AI/Hafıza Editörüdür.
+**AI**, SQLite tabanlı dinamik veri/soru-cevap yönetimi, multimedya entegrasyonu (ses, görsel, video, harici dosya) ve özelleştirilmiş AI/Chat etkileşim arayüzü sunan bir masaüstü yazılımıdır. 
 
-> **Üst Bar Butonlarının İşlevleri:**   File: Arayüzden var olan .ai uzantılı paket/hafıza dosyalarını açar ve yükler.
+Temel amaçları şunlardır:
+- **Sorular ve Yanıtlar (Paket Yönetimi):** Veritabanı üzerinde benzersiz soru kontrolü ile soru-cevap paketleri oluşturma, düzenleme ve silme.
+- **Çoklu Medya Desteği:** Soru yanıtlarına çoklu ses (`.mp3`, `.wav`), resim (`.png`, `.jpg`), video (`.mp4`) ve harici dosya ekleri bağlama.
+- **Sohbet ve Etkileşim Modu:** Kayıtlı soru-cevap verileri üzerinden arama yapma ve geçmiş modunda gezinme.
+- **Lazy Loading ve Performans:** SQLite veritabanı yapısı ve önbellek yönetimi ile kaynak tüketimini optimize etme.
 
-File (Disket Simgesi): Yapılan değişiklikleri mevcut .ai dosyasına kaydeder.
+---
 
-New: Yeni bir soru-cevap paketi (kartı) oluşturma alanına yönlendirir.
+## Üst Bar Butonlarının İşlevleri
 
-Chat: Soru sorup veritabanındaki karşılıklarını sohbet baloncukları şeklinde görüntüleyeceğiniz ana ekranı açar.
-
-_ (Tire): Tam ekran medya önizleme modunu kapatır.
-
-Edit: Tüm soru-cevap veri paketlerini liste halinde görebileceğiniz ve düzenleyebileceğiniz hafıza yönetim panelini açar.
-
-Sohbeti Temizle (X Simgesi): Sadece ekrandaki aktif sohbet geçmişini temizler.
-
-Font Boyutu (Sayı Kutusu): Yazı tipinin boyutunu değiştirir.
-
-S (Sil): Çalışma klasörünü (ai) ve açık olan tüm verileri tamamen sıfırlar.
-
-Export: Hazırlanan tüm metin ve medya içeriklerini sıkıştırılmış tek bir .ai dosyası olarak dışa aktarır.
-
-Ai: Ana uygulama penceresine veya modüller arası geçiş ekranına dönmeyi sağlar.
-
-<img width="1917" height="1045" alt="A" src="https://github.com/user-attachments/assets/71b257c1-c2e8-4335-bf5b-0616cd794ca4" />
+| Buton / Bileşen | Metin / Simge | İşlevi |
+| :--- | :--- | :--- |
+| **File** | File | Veritabanı veya medya dosyalarını içeri aktarmak / açmak için dosya seçim diyalogunu başlatır. |
+| **Kaydet** | Save | Mevcut değişiklikleri, paketleri ve veritabanı güncellemelerini kaydeder. |
+| **New** | New | Veri yönetimi panelinde yeni bir boş soru-cevap paketi oluşturur ve odaklanır. |
+| **Chat** | Chat | Sohbet (etkileşim ve arama) panelini aktif görünüme getirir. |
+| **Exit Fullscreen** | Exit Fullscreen | Aktif multimedya overlay veya tam ekran modundan çıkış yapar. |
+| **Edit** | Edit | Veri yönetimi (SQLite soru-cevap paketleri) sayfasını aktif görünüme getirir. |
+| **Sohbeti Temizle** | Clear | Sohbet ekranındaki mevcut mesaj balonlarını ve sohbet geçmişi görünümünü temizler. |
+| **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
+| **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
+| **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
+| **Ai Modu** | Ai | Ana çekirdek modülleri veya AI editör modları arasında geçişi tetikler. |
 
 ---
 
