@@ -214,6 +214,7 @@ Ses düzenleme programı
 ---
 ## Butonlarının İşlevleri
 ---
+
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
 | **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
@@ -255,6 +256,7 @@ Temel amaçları şunlardır:
 
 ## Butonlarının İşlevleri
 ---
+
 | Buton / Bileşen | Metin / Simge | İşlevi |
 | :--- | :--- | :--- |
 | **File** | File | Veritabanı veya medya dosyalarını içeri aktarmak / açmak için dosya seçim diyalogunu başlatır. |
@@ -354,8 +356,9 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 Not defteri programı
 ---
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
----
 
+
+---
 ## Butonlarının İşlevleri
 ---
 
@@ -385,6 +388,8 @@ Ses Filtreleme Programı
 ---
 
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
+
+
 ---
 ## Butonlarının İşlevleri
 ---
@@ -423,9 +428,13 @@ Ses Filtreleme Programı
 Dosya Format Değiştirme Programı
 ---
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
+
+
 ---
 ## Butonlarının İşlevleri
 ---
+
+
 | Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
@@ -454,7 +463,7 @@ Dosya Format Değiştirme Programı
 
 # Harici Programları Sisteme Dahil Etme
 ---
-> **Not:** Kendi geliştirdiğiniz veya internetten indirdiğiniz programları sisteme dâhil etmek için Terminal'i kullanın.
+> **Bilgi:** Kendi geliştirdiğiniz veya internetten indirdiğiniz programları sisteme dâhil etmek için Terminal'i kullanın.
 
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
