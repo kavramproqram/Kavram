@@ -171,8 +171,9 @@ Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâl
 
 ## Programın Amacı
 Çizim ve animasyon.  
-
+---
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
+
 ## Butonlarının İşlevleri
 
 | Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
