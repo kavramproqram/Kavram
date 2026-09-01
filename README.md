@@ -277,6 +277,7 @@ Temel amaçları şunlardır:
 ---
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
 ## Butonlarının İşlevleri
+
 | Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
 | :--- | :--- | :--- |
 | **File** | Medya dosyalarını (video, ses, `.media` arşivi) içe aktarır. | — |
