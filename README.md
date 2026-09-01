@@ -293,3 +293,289 @@ Bu modülün temel amacı, ekran ve ses kaynaklarını yüksek performansla eşz
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
+
+
+
+
+
+## 📦 Modüller ve Özellikleri
+
+---
+
+### 1. AI Editor (`---.txt` / `ai_editor.py`)
+
+**Programın Amacı:**
+SQLite tabanlı dinamik veri/soru-cevap yönetimi, multimedya entegrasyonu (ses, görsel, video, harici dosya) ve özelleştirilmiş AI/Chat etkileşim arayüzü sunar.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | `.ai` dosyasını veya JSON verilerini içe aktarır |
+| **Save** | 🖫 | Mevcut `.ai` dosyasını üzerine kaydeder |
+| **New** | `New` | Veri yönetimi panelinde yeni boş paket oluşturur |
+| **Chat** | `Chat` | Sohbet panelini aktif görünüme getirir |
+| **Exit Fullscreen** | `_` | Aktif multimedya overlay'den çıkış yapar |
+| **Edit** | `Edit` | Veri yönetimi sayfasını aktif görünüme getirir |
+| **Sohbeti Temizle** | ✕ | Sohbet mesajlarını ve geçmişi temizler |
+| **Font Seçici** | Sayısal | Metin boyutunu dinamik değiştirir |
+| **Temizle (AI/Klasör)** | `S` | `ai` çalışma klasörünü ve veri belleğini temizler |
+| **Export** | `Export` | Veri paketlerini `.ai` formatında dışa aktarır |
+| **Ai** | `Ai` | Ana çekirdek modülleri arasında geçiş yapar |
+
+---
+
+### 2. Drawing Editor (`Drawing_editor.py`)
+
+**Programın Amacı:**
+Katmanlı çizim, referans görsel yönetimi, gelişmiş fırça motoru ve video dışa aktarma desteği sunan profesyonel bir dijital çizim aracı.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | Veritabanı veya medya dosyalarını içe aktarır. **Sağ tık:** Referans görsel ekler |
+| **Save** | 🖫 | Değişiklikleri ve veritabanı güncellemelerini kaydeder |
+| **New** | `New` | Yeni boş soru-cevap paketi oluşturur |
+| **Chat** | `Chat` | Sohbet panelini aktif görünüme getirir |
+| **Exit Fullscreen** | `_` | Multimedya overlay'den çıkış yapar |
+| **Edit** | `Edit` | Veri yönetimi sayfasını aktif görünüme getirir |
+| **Sohbeti Temizle** | ✕ | Sohbet mesajlarını temizler |
+| **Font Seçici** | Sayısal | Metin boyutunu dinamik değiştirir |
+| **Temizle (AI/Klasör)** | `S` | `ai` çalışma klasörünü temizler |
+| **Export** | `Export` | Veri paketlerini dışa aktarır |
+| **Ai Modu** | `Ai` | AI editör modları arasında geçiş yapar |
+
+---
+
+### 3. Filtre (`filtre.py`)
+
+**Programın Amacı:**
+Gelişmiş spektral gürültü azaltma, akıllı VAD (Ses Aktivite Tespiti) ve çok katmanlı filtreleme motoru ile ses ve video dosyalarını işler.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | Ses veya video dosyası yükler |
+| **:: (Profil Ekle)** | `::` | Gürültü profili ekler (maks. 8) |
+| **/ (Düzenleme)** | `/` | Ses düzenleme panelini açar/kapatır |
+| **Process** | `Process` | Aktif filtreleri dosyaya uygular |
+| **Reset** | `Reset` | Profilleri varsayılana döndürür |
+| **Play** | `Play` | 5 saniyelik önizlemeyi oynatır |
+| **Müzik** | `Müzik` | Arka plan müziği seçer. **Sağ tık:** Kalıcı yapar |
+| **Export** | `Export` | Filtrelenmiş ses/videoyu kaydeder |
+
+---
+
+### 4. Copya (`copya.py`)
+
+**Programın Amacı:**
+Notlar, görseller, PDF'ler, PNF projeleri ve metin dosyalarını tek bir çatı altında toplayan gelişmiş belge yönetim sistemi.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | `.copya` proje dosyası açar |
+| **Save** | 🖫 | Projeyi kaydeder |
+| **+** | `+` | Yeni boş not kartı ekler |
+| **Galeri** | `Galeri` | Görsel/metin dosyalarıyla galeri kartı oluşturur |
+| **Belge** | `Belge` | PDF veya PNF dosyası ile belge kartı oluşturur |
+| **#1** | `#1` | Öğe numarasını gösterir, tık: öğe listesi |
+| **I (Okuma)** | `I` | Otomatik kaydırma modunu açar/kapatır |
+| **Hız** | `1.0` | Kaydırma hızını ayarlar |
+| **Boyut** | `15` | Belge görüntüleme boyutunu ayarlar |
+| **X (Sil)** | `X` | Aktif kartı siler |
+| **_ (Küçült)** | `_` | Aktif kartı daraltır |
+| **/ (Kopyala)** | `/` | Kart içeriğini panoya kopyalar |
+| **Export** | `Export` | Projeyi `.copya` formatında dışa aktarır |
+| **Copy** | `Copy` | Core switcher |
+
+---
+
+### 5. Camera Editor (`camera_editor.py`)
+
+**Programın Amacı:**
+Ekran ve ses kaydı, video/audio oynatma, gelişmiş filtreleme ve canlı input gösterimi sunan profesyonel kayıt aracı.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | Video veya ses dosyası açar |
+| **Camera** | `Camera` | Kamera özelliği (geliştirme aşamasında) |
+| **Windows** | `Windows` | Ekran kaydı modunu açar/kapatır |
+| **Sound** | `Sound` | Ses kaydı modunu açar/kapatır |
+| **I (Filtre)** | `I` | Gürültü filtresini açar/kapatır (kalıcı) |
+| **S (Temizle)** | `S` | Kayıt klasörünü temizler ve ayarları sıfırlar |
+| **Kalınlık** | `40` | Overlay kalınlığını ayarlar (30-50) |
+| **/ (Input)** | `/` | Klavye/Mouse input gösterimini açar/kapatır |
+| **Z (Overlay)** | `Z` | Yüzen zaman göstergesini gösterir/gizler |
+| **Kayıt Süresi** | `5 dk` | Otomatik durdurma süresini ayarlar |
+| **Segment Süresi** | `30 sn` | Segment bölme süresini ayarlar |
+| **Play/Pause** | `Play` | Oynatmayı başlatır/duraklatır |
+| **X (Kapat)** | `X` | Oynatma çubuğunu kapatır |
+| **Segment Sayısı** | `Segment 0` | Segment menüsü (tek silme, hepsini silme) |
+| **Export** | `Export` | Segmentleri birleştirip dışa aktarır |
+| **Rec** | `Rec` | Core switcher |
+
+---
+
+### 6. Convert (`convert.py`)
+
+**Programın Amacı:**
+Ses, video, PDF ve görsel dosyalarını dönüştüren, düzenleyen ve birleştiren evrensel medya dönüştürücü.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | Dönüştürülecek dosyayı seçer |
+| **Convert** | `Convert` | Seçili dosyayı ayarlarla dönüştürür |
+| **Reset** | `Reset` | Tüm ayarları varsayılana döndürür |
+| **Export** | `Export` | Dönüştürülen dosyayı kaydeder |
+
+**Ayarlar Paneli (Sol - Ses):**
+
+| Kontrol | İşlev |
+| :--- | :--- |
+| **Format** | Çıktı formatını seçer |
+| **Frekans Değiştir** | Örnekleme frekansını değiştirir |
+| **Ses Hızı** | Oynatma hızını ayarlar (0.10x - 4.00x) |
+| **Ses Perdesi** | Ses tonunu ayarlar (-6 ila +6 semiton) |
+| **Ses Efekti** | Normalleştir, Sıkıştır, Filtre, Fade, Faz Ters Çevir |
+
+**Ayarlar Paneli (Sağ - Gelişmiş):**
+
+| Kontrol | İşlev |
+| :--- | :--- |
+| **Kapak Resmi Seç** | Ses → Video dönüşümünde kapak resmi |
+| **Video Renk Ters** | Video renklerini negatif yapar |
+| **Video Gri Ton** | Videoyu siyah-beyaz yapar |
+| **Video Ses Sil** | Videodaki orijinal sesi kaldırır |
+| **Harici Ses Ekle** | Videoya harici ses dosyası ekler |
+| **PDF Ters Çevir** | PDF renklerini ters çevirir |
+| **PDF Gri Ton** | PDF sayfalarını gri ton yapar |
+| **Resim Ters Çevir** | Görsel renklerini ters çevirir |
+| **Resim Gri Ton** | Görseli siyah-beyaz yapar |
+| **Resim Çözünürlük** | Görsel boyutunu ölçeklendirir |
+
+---
+
+### 7. Media Editor (`media_editor.py`)
+
+**Programın Amacı:**
+Video ve ses dosyalarını zaman çizelgesi üzerinde düzenleme, kesme, birleştirme ve dışa aktarma.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | Medya dosyaları veya `.media` proje arşivi açar |
+| **Save** | 🖫 | Hızlı kaydet (mevcut projeyi üzerine yazar) |
+| **Undo** | ↩️ | Son işlemi geri alır (Ctrl+Z) |
+| **Redo** | ↪️ | Geri alınan işlemi yeniden yapar |
+| **Play** | `Play` | Aktif segmenti oynatır/duraklatır |
+| **/ (Sequence)** | `/` | Sıralı oynatma modunu açar/kapatır |
+| **Cut** | `Cut` | Aktif segmenti mevcut konumdan keser |
+| **Delete** | `Delete` | Seçili segmenti siler |
+| **Camera** | `Camera` | Kamera modu (geliştirme aşamasında) |
+| **Sound** | `Sound` | Ses kaydını başlatır/durdurur |
+| **I (Filtre)** | `I` | Gürültü filtresini açar/kapatır (kalıcı) |
+| **S (Temizle)** | `S` | `medya_cut` klasörünü temizler ve sıfırlar |
+| **Arama Aralığı** | `2s` | Fare tekerleği sarım miktarı |
+| **Oynatma Hızı** | `1` | Oynatma hızını değiştirir |
+| **Süre Göstergesi** | `00:00:00.0` | Mevcut konumu gösterir |
+| **Export** | `Export` | **Sol tık:** `.media` arşiv. **Sağ tık:** MKV render |
+| **Media** | `Media` | Core switcher |
+
+---
+
+### 8. Zaman (`Zaman.py`)
+
+**Programın Amacı:**
+Pomodoro zamanlayıcı, görev planlayıcı, notlar, takvim, ömür sayacı, ekran ayarları ve alışkanlık takibi.
+
+**Mod Seçici (Üst Bar):**
+
+| Mod | Adı | İşlev |
+| :--- | :--- | :--- |
+| **Mod 0** | Pomodoro | Çalışma/mola zamanlayıcı, sesli alarm, görev bağlama |
+| **Mod 1** | Görev / Planlayıcı | Görev yönetimi, öncelik, Pomodoro sayacı |
+| **Mod 2** | Notlar | Not ekleme, düzenleme, silme, arama |
+| **Mod 3** | Normal Takvim | Haftalık ay takvimi, görev entegrasyonu |
+| **Mod 4** | Rakamlı Takvim | Sade sayısal takvim (1-7) |
+| **Mod 5** | Sekizli Takvim | 40 günlük bölümler, 3 zaman dilimi |
+| **Mod 6** | Ömür Sayacı | Belirlenen yıl hedefine geri sayım |
+| **Mod 7** | Tarih Ayarı | Referans saat ayarı, tüm modları senkronize |
+| **Mod 8** | Ekran Ayarı | Mavi ışık filtresi, RGB, parlaklık, gri mod |
+| **Mod 9** | Alışkanlık Takibi | 40 günlük alışkanlık takibi |
+
+---
+
+### 9. Sound Editor (`sound_GUI.py`)
+
+**Programın Amacı:**
+Dalga formu görüntüleme, kesme, silme, kayıt, filtreleme ve metin entegrasyonu sunan profesyonel ses düzenleyici.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | WAV veya `.sound` paket dosyası açar |
+| **Save** | 🖫 | Hızlı kaydet (`.sound` ise üzerine yazar) |
+| **Undo** | ↩️ | Son işlemi geri alır (Ctrl+Z) |
+| **Redo** | ↪️ | Geri alınan işlemi yeniden yapar |
+| **Cut** | `Cut` | Oynatma konumuna split noktası ekler |
+| **:: (Kalınlık Sil)** | `::` | Seçili alanın kalınlığındaki tüm sessiz bölgeleri siler |
+| **Delete** | `Delete` | Seçili segmenti siler |
+| **Play** | `Play` | Ses oynatmayı başlatır/duraklatır |
+| **Record** | `Record` | Mikrofon kaydını başlatır/durdurur |
+| **I (Filtre)** | `I` | Gürültü filtresini açar/kapatır (kalıcı) |
+| **Dalga Ölçek** | `1` | Dalga formu genişliğini ayarlar (1-7) |
+| **Hız** | `1x` | Oynatma hızını değiştirir |
+| **Scroll Step** | `5s` | Fare tekerleği kaydırma adımı |
+| **/ (Panel)** | `/` | Geçici metin panelini açar/kapatır |
+| **O (Hizalama)** | `O` | Metin hizalamasını Ortala/Sola Yasla |
+| **Font Boyutu** | `14` | Metin font boyutunu ayarlar |
+| **Export** | `Export` | **Sol tık:** WAV. **Sağ tık:** `.sound` paketi |
+| **Sound** | `Sound` | Core switcher |
+
+---
+
+### 10. Text Editor (`text_editor.py`)
+
+**Programın Amacı:**
+Sembol paneli, terminal komutları, akıllı otomatik kaydırma ve gelişmiş metin işleme özellikleri sunan metin düzenleyici.
+
+**Üst Bar Butonları:**
+
+| Buton | Etiket | İşlev |
+| :--- | :--- | :--- |
+| **File** | `File` | `.txr`, `.txt`, `.md`, `.log` dosyalarını açar |
+| **Save** | 🖫 | Hızlı kaydet (mevcut dosyaya kaydeder) |
+| **Undo** | ↩️ | Son işlemi geri alır (Ctrl+Z) |
+| **Redo** | ↪️ | Geri alınan işlemi yeniden yapar |
+| **Font Boyutu** | `15` | Metin font boyutunu ayarlar |
+| **/ (Panel)** | `/` | Sembol panelini açar/kapatır |
+| **I (Okuma)** | `I` | Otomatik kaydırma modunu açar/kapatır |
+| **Hız Göstergesi** | `1.0` | Kaydırma hızını ayarlar |
+| **Terminal** | `Terminal` | Terminal penceresini açar |
+| **Line** | `Line: 0` | Mevcut satır sayısını gösterir |
+| **Arama Kutusu** | `Ara...` | Metin içinde arama yapar |
+| **🔍 / ⬆ / ⬇** | - | Arama ve eşleşme gezinme |
+| **Export** | `Export` | Metni `.txr` formatında dışa aktarır |
+| **Text** | `Text` | Core switcher |
+
+**Sembol Paneli Özellikleri:**
+
+| Kontrol | İşlev |
+| :--- | :--- |
+| **. ^ (Dot)** | Enter çift tıklama ile otomatik nokta |
+| **A (Caps)** | Satır başında otomatik büyük harf |
+| **O (Center)** | Metin hizalamasını değiştirir |
+| **@ (Nav)** | Ok tuşları ile sembol panelinde gezinme |
+| **+ (Ekle)** | Özel sembol ekleme |
+
+---
