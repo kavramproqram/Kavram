@@ -66,6 +66,10 @@ Duvar kâğıdını değiştirmek için kullanılır.
 ```text
 ap /home/lts/Pictures/resim4.png
 ```
+---
+
+# Harici Programları Sisteme Dahil Etme
+---
 
 **3. `isim program konumu`**
 
@@ -78,6 +82,7 @@ Bu bölüm, yardımcı programlar için kullanılır.
 ```text
 Zaman /home/lts/Kavram/Programlar/Zaman/Zaman
 ```
+<img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
 **4. `k isim program konumu`**
 
@@ -90,6 +95,8 @@ Bu bölüm, ana programlar için kullanılır. Dosya eklemek de mümkündür.
 ```text
 k Blender /home/lts/blender-5.2.0-linux-x64/blender
 ```
+<img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
+
 
 > **Önemli:** Kavram, bir tür işletim sistemi gibi çalıştığı için ana program kapatılırsa ona bağlı olan programların tamamı otomatik olarak kapanır.
 >
@@ -462,13 +469,3 @@ Dosya Format Değiştirme Programı
 | **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
 | **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
 
-
----
-
-# Harici Programları Sisteme Dahil Etme
----
-> **Bilgi:** Kendi geliştirdiğiniz veya internetten indirdiğiniz programları sisteme dâhil etmek için Terminal'i kullanın.
-
-<img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
-
-<img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
