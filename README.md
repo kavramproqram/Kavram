@@ -274,9 +274,9 @@ Temel amaçları şunlardır:
 | **Kaydet** | Save | Mevcut değişiklikleri, paketleri ve veritabanı güncellemelerini kaydeder. |
 | **New** | New | Veri yönetimi panelinde yeni bir boş soru-cevap paketi oluşturur ve odaklanır. |
 | **Chat** | Chat | Sohbet (etkileşim ve arama) panelini aktif görünüme getirir. |
-| **Exit Fullscreen** | Exit Fullscreen | Aktif multimedya overlay veya tam ekran modundan çıkış yapar. |
+| **Exit Fullscreen** | _ | Aktif multimedya overlay veya tam ekran modundan çıkış yapar. |
 | **Edit** | Edit | Veri yönetimi (SQLite soru-cevap paketleri) sayfasını aktif görünüme getirir. |
-| **Sohbeti Temizle** | Clear | Sohbet ekranındaki mevcut mesaj balonlarını ve sohbet geçmişi görünümünü temizler. |
+| **Sohbeti Temizle** | X | Sohbet ekranındaki mevcut mesaj balonlarını ve sohbet geçmişi görünümünü temizler. |
 | **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
 | **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
 | **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
