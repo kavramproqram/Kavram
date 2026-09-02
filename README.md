@@ -1,6 +1,12 @@
 # Kavram
 
-**''Kavram'', eğitim ve medya düzenleme süreçlerini tek bir çatı altında toplamayı amaçlayan özgür ve açık kaynak kodlu bir arşiv platformudur.**
+**''Kavram'', eğitim ve medya çalışmalarını tek bir çatı altında birleştiren, özgür ve açık kaynak kodlu bir masaüstü platformudur.
+
+Metin, çizim, ses, video, ekran kaydı, ve notlar gibi farklı araçları tek bir sistem içerisinde sunar. Oluşturduğunuz içerikleri düzenleyebilir, birbirleriyle ilişkilendirebilir ve SPHERE üzerinden zihin haritaları oluşturarak şifreli şekilde arşivleyebilirsiniz.
+
+Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi geliştirdiğiniz programları da sisteme dahil edebilirsiniz. Bu yönüyle Kavram, klasik bir uygulama paketinden çok, kendi çalışma ortamınızı oluşturabileceğiniz bir platform olarak tasarlanmıştır.
+
+10 entegre program + genişletilebilir program sistemi.**
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik programlardan oluşur:
