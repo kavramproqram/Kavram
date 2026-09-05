@@ -407,10 +407,26 @@ Not defteri programı
 
 ---
 
-# FILTER
-## Programın Amacı
-Ses Filtreleme Programı
+# Filtre -  Ses & Video Filtreleme Sistemi
+
+**Filtre**, gelişmiş spektral gürültü azaltma, akıllı VAD (Ses Aktivite Tespiti) ve çok katmanlı filtreleme motoru ile ses ve video dosyalarını işleyen profesyonel bir masaüstü uygulamasıdır.
+
 ---
+
+**Filtre**, ses ve video dosyaları üzerinde gelişmiş filtreleme ve düzenleme işlemleri sunar:
+
+- **x1 Filtresi (Spektral Temizleme):** 2 aşamalı spektral gürültü azaltma algoritması ile ses kalitesini artırır. Güç ayarı (1-9) ile hassasiyet kontrolü.
+- **x2 Filtresi (Akıllı Alt Frekans Susturma):** 30-200 Hz aralığında belirlenen frekansın altındaki gürültü bölgelerini %100 susturur. VAD tabanlı akıllı tespit.
+- **Gürültü Profili Yönetimi:** Kullanıcı tarafından oluşturulan gürültü profilleri ile hedefe yönelik filtreleme. Maksimum 8 profil.
+- **Video Desteği:** Video dosyalarından ses çıkarma, filtreleme ve işlenmiş ses ile video birleştirme (FFmpeg entegrasyonu).
+- **Ses Düzenleme Paneli:** Genel ses yüksekliği, arka plan müzik şiddeti, ses tonu (pitch), oynatma hızı ve bitiş sonrası müzik süresi ayarları.
+- **Kalıcı Müzik Ekleme:** Arka plan müziğini kalıcı olarak kaydedip her seferinde otomatik ekleme.
+- **5 Saniye Önizleme:** Filtrelenmiş sesi işlem öncesi dinleme imkanı.
+- **Rapor Paneli:** Son 5 işlem kaydı, seçilebilir ve kopyalanabilir metin alanı.
+- **Harici Bağlantı Desteği:** `process_audio_background()` metodu ile Media, Camera gibi modüllerden gelen sesleri işleme.
+
+---
+
 
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
 
@@ -419,30 +435,20 @@ Ses Filtreleme Programı
 ## Butonlarının İşlevleri
 ---
 
-| Kontrol Adı | Türü |  Etkileşim İşlevi / Açıklama |
-| :--- | :--- | :--- |
-| **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
-| **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
-| **Reset** | Buton | Tüm dönüştürme ayarlarını (format, hız, efekt, filtreler vb.) varsayılan değerlerine sıfırlar. |
-| **Export** | Buton | Dönüştürme sonucu oluşan çıktı dosyasını, kullanıcının seçtiği konuma kaydeder (kopyalar). |
-| **Format (`Export Format`)** | Açılır Kutu (`ComboBox`) | Dönüştürme sonrası oluşacak dosyanın uzantısını/formatını belirler (örn: `.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg`). |
-| **Frekans Değiştir (`Frequency`)** | Açılır Kutu (`ComboBox`) | Ses örnekleme frekansını değiştirme özelliğini açar (`Açık`) veya kapatır (`Kapalı`). |
-| **Yeni Frekans Hz** | Metin Girişi (`LineEdit`) | Frekans değiştirme aktifken, hedef örnekleme frekansını (Hz cinsinden) girilen değere ayarlar. |
-| **Ses Hızı (`Speed`)** | Açılır Kutu (`ComboBox`) | Sesin oynatma/dönüştürme hızını ayarlar (`0.10x ile 4.0x arası`). |
-| **Ses Perdesi (`Pitch`)** | Açılır Kutu (`ComboBox`) | Sesin perdesini yükseltir (eksi ton) veya düşürür (artı ton) (`-6 Ton ile +6 Ton arası`). |
-| **Ses Efekti** | Açılır Kutu (`ComboBox`) | Sese uygulanacak özel efekti seçer (`Normalleştir`, `Sıkıştır`, `Filtre`, `Fade`, `Kaydırma` vb.). |
-| **Kapak Resmi Seç** | Buton | Sesi videoya dönüştürürken (ses+resim->video) kullanılacak kapak resmini seçmek için diyalog açar. |
-| **Video Renkleri Ters Çevir** | Açılır Kutu (`ComboBox`) | Video çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **Video Gri Ton (`Grayscale`)** | Açılır Kutu (`ComboBox`) | Video çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Video Sesini Tamamen Sil** | Açılır Kutu (`ComboBox`) | Video dosyasındaki orijinal ses kanallarını tamamen kaldırır (`Evet` seçiliyse). |
-| **Harici Ses Ekle (`Sync`)** | Buton | Videoya ana ses olarak eklenecek harici bir ses dosyası seçmek için diyalog açar. |
-| **PDF Ters Çevir** | Açılır Kutu (`ComboBox`) | PDF sayfalarının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **PDF Gri Ton** | Açılır Kutu (`ComboBox`) | PDF sayfalarını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Resim Ters Çevir** | Açılır Kutu (`ComboBox`) | Resim çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
+## 🧰 Üst Bar Butonları ve İşlevleri
 
+| Buton | Etiket | Sol Tık | Sağ Tık |
+| :--- | :--- | :--- | :--- |
+| **File** | `File` | Ses veya video dosyası yükler. | *(Yok)* |
+| **:: (Profil Ekle)** | `::` | Gürültü profili eklemek için ses dosyası seçer. Maksimum 8 profil. | *(Yok)* |
+| **/ (Düzenleme)** | `/` | Ses düzenleme panelini açar/kapatır (genel ses, müzik şiddeti, pitch, hız, ekstra süre). | *(Yok)* |
+| **Process** | `Process` | Aktif filtreleri seçili dosyaya uygular ve işlemi başlatır. | *(Yok)* |
+| **Reset** | `Reset` | Düzenleme paneli açık ise ayarları sıfırlar, kapalı ise tüm profilleri varsayılana döndürür (x1 güç=5, x2 kesim=75 Hz). | *(Yok)* |
+| **Play** | `Play` | Filtrelenmiş sesin 5 saniyelik önizlemesini oynatır. Tekrar tık duraklatır. | *(Yok)* |
+| **Müzik** | `Müzik` | Arka plan müziği seçer (geçici). | Seçili müziği kalıcı hale getirir veya iptal eder. |
+| **Export** | `Export` | Filtrelenmiş sesi veya videoyu kaydeder. Ses: WAV, MP3, FLAC; Video: Orijinal format. | *(Yok)* |
 
+--- 
 > **Not:** Bu program 3 programla bağlantılıdır: **Sound, Media ve Rec.**
 >
 > Bu 3 programın üst barında **İ** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
