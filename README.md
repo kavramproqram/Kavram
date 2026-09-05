@@ -259,7 +259,7 @@ Ses düzenleme programı
 
 ## Yapay Hafıza
 ## Programın Amacı
-<img width="1920" height="1043" alt="ai" src="https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04" />
+
 
 **AI**, SQLite tabanlı dinamik veri/soru-cevap yönetimi, multimedya entegrasyonu (ses, görsel, video, harici dosya) ve özelleştirilmiş AI/Chat etkileşim arayüzü sunan bir masaüstü yazılımıdır. 
 
@@ -273,6 +273,8 @@ Temel amaçları şunlardır:
 
 ## Butonlarının İşlevleri
 ---
+
+https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04
 
 | Buton / Bileşen | Metin / Simge | İşlevi |
 | :--- | :--- | :--- |
