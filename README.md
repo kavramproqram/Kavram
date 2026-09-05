@@ -9,6 +9,16 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 10 entegre program + genişletilebilir program sistemi.**
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
+
+--- 
+> **İŞ AKIŞI :** ESAS PPROQRAMLARDA DOSSYA ÜRETİLİR .**
+>   **BU DOSYALAR ANA EKRADA HARİTALARNDIRILIR  .** 
+>   **EN SONDA BU ZİHİN HARTASSI ŞİFRELİ BİŞİMDE EXPORT EDİLR .  .** 
+> BU DOSYAYI ŞİFRESİZ BİÇİMDE DAĞITA BİLİR VEYA ŞİFRESİNİ SATA BİLRİSİNİZ .
+> **NOT :** AİDIĞINIZ .kitap  DOSYALARININ  GÜVENİLİR KAYNAKTAN OLDUĞUNDAAN EMİN OLUN .**
+---
+
+
 Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik programlardan oluşur:
 
 | Program       | Ne işe yarar?            |
