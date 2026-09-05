@@ -10,14 +10,17 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 
---- 
-> **İŞ AKIŞI :** ESAS PPROQRAMLARDA DOSSYA ÜRETİLİR .**
->   **BU DOSYALAR ANA EKRADA HARİTALARNDIRILIR  .** 
->   **EN SONDA BU ZİHİN HARTASSI ŞİFRELİ BİŞİMDE EXPORT EDİLR .  .** 
-> BU DOSYAYI ŞİFRESİZ BİÇİMDE DAĞITA BİLİR VEYA ŞİFRESİNİ SATA BİLRİSİNİZ .
-> 
-> **NOT :** ALDIĞINIZ `.kitap`  DOSYALARININ  GÜVENİLİR KAYNAKTAN OLDUĞUNDAAN EMİN OLUN .**
+###  İş Akışı
+
+1. **Dosya Üretimi:** Esas programlarda gerekli dosyalar oluşturulur.
+2. **Haritalandırma:** Üretilen bu dosyalar ana ekranda  haritalandırılır.
+3. **Dışa Aktarma:** Zihin haritası şifrelenmiş biçimde dışa aktarılır (`Export`).
+
+>  **İpucu:** Oluşturduğunuz dosyayı şifresiz olarak doğrudan paylaşabilir veya erişim şifresini satabilirsiniz.
+
 ---
+
+ **Önemli Not:** İndirdiğiniz `.kitap` uzantılı dosyaların güvenilir bir kaynaktan olduğundan lütfen emin olun.
 
 
 Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik programlardan oluşur:
