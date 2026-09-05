@@ -15,7 +15,8 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 >   **BU DOSYALAR ANA EKRADA HARİTALARNDIRILIR  .** 
 >   **EN SONDA BU ZİHİN HARTASSI ŞİFRELİ BİŞİMDE EXPORT EDİLR .  .** 
 > BU DOSYAYI ŞİFRESİZ BİÇİMDE DAĞITA BİLİR VEYA ŞİFRESİNİ SATA BİLRİSİNİZ .
-> **NOT :** AİDIĞINIZ .kitap  DOSYALARININ  GÜVENİLİR KAYNAKTAN OLDUĞUNDAAN EMİN OLUN .**
+> 
+> **NOT :** ALDIĞINIZ `.kitap`  DOSYALARININ  GÜVENİLİR KAYNAKTAN OLDUĞUNDAAN EMİN OLUN .**
 ---
 
 
