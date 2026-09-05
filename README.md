@@ -449,7 +449,7 @@ Not defteri programı
 --- 
 > **Not:** Bu program 3 programla bağlantılıdır: **Sound, Media ve Rec.**
 >
-> Bu 3 programın üst barında **İ** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
+> Bu 3 programın üst barında **I** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
 ---
 
 # CONVERTER
