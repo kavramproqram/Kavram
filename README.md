@@ -435,8 +435,6 @@ Not defteri programı
 ## Butonlarının İşlevleri
 ---
 
-## Üst Bar Butonları ve İşlevleri
-
 | Buton | Etiket | Sol Tık | Sağ Tık |
 | :--- | :--- | :--- | :--- |
 | **File** | `File` | Ses veya video dosyası yükler. | *(Yok)* |
