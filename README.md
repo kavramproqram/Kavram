@@ -419,7 +419,7 @@ Ses Filtreleme Programı
 ## Butonlarının İşlevleri
 ---
 
-| Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
+| Kontrol Adı | Türü |  Etkileşim İşlevi / Açıklama |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
 | **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
@@ -460,7 +460,7 @@ Dosya Format Değiştirme Programı
 ---
 
 
-| Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi (`Left Click / Interaction`) |
+| Kontrol Adı | Türü | Sol Tık / Etkileşim İşlevi / Açıklama |
 | :--- | :--- | :--- |
 | **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
 | **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
