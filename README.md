@@ -274,7 +274,10 @@ Temel amaçları şunlardır:
 ## Butonlarının İşlevleri
 ---
 
+
 https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04
+
+
 
 | Buton / Bileşen | Metin / Simge | İşlevi |
 | :--- | :--- | :--- |
