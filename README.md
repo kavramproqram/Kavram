@@ -387,7 +387,7 @@ Not defteri programı
 ## Butonlarının İşlevleri
 ---
 
-| Buton Adı | Sol Tık İşlevi (`Left Click`) |
+| Buton Adı | Açıklama / İşlev |
 | :--- | :--- |
 | **File** | `.copya` proje dosyasını açar. |
 | **Kaydet (disk ikonu)** | Geçerli projeyi kaydeder (eğer dosya yoksa farklı kaydet açar). |
