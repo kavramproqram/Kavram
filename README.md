@@ -435,7 +435,7 @@ Not defteri programı
 ## Butonlarının İşlevleri
 ---
 
-## 🧰 Üst Bar Butonları ve İşlevleri
+## Üst Bar Butonları ve İşlevleri
 
 | Buton | Etiket | Sol Tık | Sağ Tık |
 | :--- | :--- | :--- | :--- |
