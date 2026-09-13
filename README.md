@@ -1,51 +1,51 @@
 # Kavram
 
-**''Kavram'', eğitim ve medya çalışmalarını tek bir çatı altında toplayan, özgür ve açık kaynak kodlu bir arşiv platformudur.
+**''Kavram'' is a free and open-source archive platform that brings educational and media projects together under a single roof.
 
-Metin, çizim, ses, video, ekran kaydı, ve notlar gibi farklı araçları tek bir sistem içerisinde sunar. Oluşturduğunuz içerikleri düzenleyebilir, birbirleriyle ilişkilendirebilir ve SPHERE üzerinden zihin haritaları oluşturarak şifreli şekilde arşivleyebilirsiniz.
+It provides different tools such as text, drawing, sound, video, screen recording, and notes within a single system. You can edit the content you create, connect it with other content, and create mind maps through SPHERE to archive them in encrypted form.
 
-Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi geliştirdiğiniz programları da sisteme dahil edebilirsiniz. Bu yönüyle Kavram, klasik bir uygulama paketinden çok, kendi çalışma ortamınızı oluşturabileceğiniz bir platform olarak tasarlanmıştır.
+Kavram is not limited to ready-made programs. You can also integrate programs that you develop yourself according to your needs. In this respect, Kavram is designed not simply as a collection of applications, but as a platform where you can create your own working environment.
 
-10 entegre program + genişletilebilir program sistemi.**
+10 integrated programs + extensible program system.**
 
 <img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 
-###  İş Akışı
+###  Workflow
 
-1. **Dosya Üretimi:** Esas programlarda gerekli dosyalar oluşturulur.
-2. **Haritalandırma:** Üretilen bu dosyalar ana ekranda  haritalandırılır.
-3. **Dışa Aktarma:** Zihin haritası şifrelenmiş biçimde dışa aktarılır (`Export`).
+1. **File Creation:** The required files are created in the main programs.
+2. **Mapping:** These files are mapped on the main screen.
+3. **Export:** The mind map is exported in encrypted form (`Export`).
 
->  **İpucu:** Oluşturduğunuz dosyayı şifresiz olarak doğrudan paylaşabilir veya erişim şifresini satabilirsiniz.
+>  **Tip:** You can share the file you create directly without a password, or sell its access password.
 
 ---
 
- **Önemli Not:** İndirdiğiniz `.kitap` uzantılı dosyaların güvenilir bir kaynaktan olduğundan lütfen emin olun.
+**Important Note:** Please make sure that the `.kitap` files you download come from a trusted source.
 
 
-###  Platform, kullanıcıların farklı ihtiyaçlarına yanıt vermek üzere tasarlanmış çeşitli tümleşik programlardan oluşur:
+###  The platform consists of various integrated programs designed to meet the different needs of users:
 
 
 
-| Program       | Ne işe yarar?            |
+| Program       | What does it do?            |
 | ------------- | ------------------------ |
-| **SPHERE**    | Ana ekran                |
-| **TEXT**      | Metin düzenleme          |
-| **DRAWING**   | Çizim                    |
-| **SOUND**     | Ses düzenleme            |
-| **AI**        | Yapay hafıza             |
-| **MEDIA**     | Ses + video karma arşivi |
-| **REC**       | Ekran ve ses kaydı       |
-| **COPY**      | Not defteri              |
-| **FILTER**    | Ses filtreleme           |
-| **CONVERTER** | Format dönüştürme        |
+| **SPHERE**    | Main screen                |
+| **TEXT**      | Text editing          |
+| **DRAWING**   | Drawing                    |
+| **SOUND**     | Audio editing           |
+| **AI**        | Artificial memory             |
+| **MEDIA**     | Combined audio + video archive |
+| **REC**       | Screen and audio recording       |
+| **COPY**      | Notebook              |
+| **FILTER**    | Audio filtering           |
+| **CONVERTER** | Format conversion        |
 
 
 ---
 
-# Kurulum
+# Installation
 
-> **Not:** Linux Mint XFCE üzerinde kurulması önerilir.
+> **Note:** Installation on Linux Mint XFCE is recommended.
 
 <img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
 
@@ -53,259 +53,261 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 
 # SPHERE
 
-## Ana Ekran
+## Main Screen
 
-Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
+The main screen is where mind maps are archived in encrypted form.
 
 <img width="1918" height="1047" alt="s1" src="https://github.com/user-attachments/assets/4e6782df-e53e-4245-a70f-131ed9d720e4" />
 
 <img width="1920" height="1047" alt="sphere" src="https://github.com/user-attachments/assets/bccf70d7-1060-4ec4-a2be-36493d3fe0f6" />
 
-## Butonlarının İşlevleri
+## Button Functions
 
-**1. File** — İçeri arşiv almak ve kare (dosya) eklemek için kullanılır.
+**1. File** — Used to import content into the archive and add a square (file).
 
-**3 ve 4.** — Yapılan işlemleri geri almak için kullanılır.
+**3 and 4.** — Used to undo performed actions.
 
-**5. +** — Kare eklemek için kullanılır.
+**5. +** — Used to add a square.
 
-**6.** — Bağlantıların konum listesini açar.
+**6.** — Opens the location list of connections.
 
-**7. Terminal** — Terminal komutlarını kullanmak için açılır.
+**7. Terminal** — Opens the terminal for using terminal commands.
 
-### Terminal Komutları
+### Terminal Commands
 
 **1. `reset`**
 
-Her şeyi tamamen siler.
+Deletes everything completely.
 
-**2. `ap resim konumu`**
+**2. `ap image location`**
 
-Duvar kâğıdını değiştirmek için kullanılır.
+Used to change the wallpaper.
 
-Örnek:
+Example:
 
 ```text
 ap /home/lts/Pictures/resim4.png
 ```
 ---
 
-# Harici Programları Sisteme Dahil Etme
+# Adding External Programs to the System
 ---
 
-**3. `isim program konumu`**
+**3. `name program location`**
 
-`Ctrl + Q` kısayolu ile açılan menünün alt kısmına bir program ekler.
+Adds a program to the bottom section of the menu opened with the `Ctrl + Q` shortcut.
 
-Bu bölüm, yardımcı programlar için kullanılır.
+This section is used for utility programs.
 
-Örnek:
+Example:
 
 ```text
 Zaman /home/lts/Kavram/Programlar/Zaman/Zaman
 ```
+
 <img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
-**4. `k isim program konumu`**
+**4. `k name program location`**
 
-`Ctrl + Q` kısayolu ile açılan menünün üst kısmına bir program ekler.
+Adds a program to the top section of the menu opened with the `Ctrl + Q` shortcut.
 
-Bu bölüm, ana programlar için kullanılır. Dosya eklemek de mümkündür.
+This section is used for main programs. Adding files is also possible.
 
-Örnek:
+Example:
 
 ```text
 k Blender /home/lts/blender-5.2.0-linux-x64/blender
 ```
+
 <img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
 
 
-> **Önemli:** Kavram, bir tür işletim sistemi gibi çalıştığı için ana program kapatılırsa ona bağlı olan programların tamamı otomatik olarak kapanır.
+> **Important:** Since Kavram works somewhat like an operating system, when the main program is closed, all programs connected to it are automatically closed.
 >
-> Örneğin Blender kapatılmadan önce dosyayı kaydetmenizi ister.
+> For example, Blender asks you to save the file before it is closed.
 >
-> Eğer Kavram programını kapatırsanız Blender hiçbir şey sormadan kapanır. Veri kaybı yaşanmaması için dosyalarınızı önceden yedekleyin.
+> If you close the Kavram program, Blender will close without asking anything. Back up your files beforehand to prevent data loss.
 
 **8. `/`**
 
-Arka planda oluşan gridli yapıyı açıp kapatmak için kullanılır.
+Used to turn the grid structure created in the background on or off.
 
 **9. Export**
 
-**Sol tık:** XZ formatında bir dosya oluşturur. Dosya daha küçük olur ancak oluşturulması ve export edilmesi daha uzun sürer.
+**Left click:** Creates a file in XZ format. The file is smaller, but creation and export take longer.
 
-**Sağ tık:** GZ formatında kaydeder. Dosya, XZ'ye kıyasla daha büyük olur ancak dosya daha hızlı oluşturulur.
+**Right click:** Saves in GZ format. The file is larger compared to XZ, but it is created faster.
 
-Oluşan dosya `.kitap` uzantısıyla şifreli bir şekilde kaydedilir.
+The resulting file is saved in encrypted form with the `.kitap` extension.
 
 **10. Sphere**
 
-Bu buton, bütün programlarda üst barda en sağda farklı isimlerle bulunur.
+This button is located on the far right of the top bar in all programs, with different names.
 
-`Ctrl + Q` kısayolu ile açılan menüyü açmak için kullanılır.
+It is used to open the menu triggered by the `Ctrl + Q` shortcut.
 
-### Dikkat Edilmesi Gereken Komutlar
+### Commands That Require Attention
 
-Bu programda özellikle dikkat edilmesi gereken 3 komut/işlem vardır:
+There are 3 commands/actions that require particular attention in this program:
 
-**1. Dosyalarınızı yedekleyin.**
+**1. Back up your files.**
 
-Veri kaybı ihtimali çok düşük olsa da sıfır değildir.
+Although the possibility of data loss is very low, it is not zero.
 
-**2. `reset` komutu**
+**2. `reset` command**
 
-Terminalde `reset` komutu yazıldığında her şey silinir.
+When `reset` is entered in the terminal, everything is deleted.
 
 **3. `Ctrl + S`**
 
-`Ctrl + S` kısayolu, Sphere (ana ekran) dışında bulunan 7 ana program için geçerlidir.
+The `Ctrl + S` shortcut applies to the 7 main programs outside of Sphere (the main screen).
 
-O anda açık olan programı yok eder ve ana ekrana geri döner. Hiçbir şeyi kaydetmez; yalnızca programı kapatır.
+It closes the currently open program and returns to the main screen. It does not save anything; it only closes the program.
 
-Hızlı kaydetme için her editörde **File** butonunun yanında bir ikon bulunur. Bu ikon Sphere için geçerli değildir.
+For quick saving, there is an icon next to the **File** button in every editor. This icon does not apply to Sphere.
 
-Sphere içindeki bu ikonun görevi, o anda oluşturulan düzeni varsayılan hâle getirmektir. Böylece program yeniden açıldığında her şey aynı şekilde açılır.
+The function of this icon in Sphere is to make the layout currently being created the default layout. This way, everything opens in the same state when the program is opened again.
 
 ---
 
 # TEXT
 
-## Metin Düzenleme Programı
+## Text Editing Program
 
-## Programın Amacı
+## Program Purpose
 
-**Text**, kullanıcıların zengin metin belgeleri oluşturmasını, biçimlendirmesini, dosyalar üzerinde temel metin işlemlerini gerçekleştirmesini ve not/kod bloklarını organize etmesini sağlayan PyQt5 tabanlı bir metin düzenleme platformudur.
+**Text** is a PyQt5-based text editing platform that allows users to create and format rich-text documents, perform basic file operations, and organize notes/code blocks.
 
 ---
 <img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
 
-## Butonlarının İşlevleri
+## Button Functions
 
-| Buton  | İşlevi |
+| Button  | Function |
 | :--- | :--- |
-| **File** | Dosya açma ve içeri aktarma diyalogunu başlatır. |
-| **Kaydet (Save)** | Aktif metin belgesindeki değişiklikleri ve güncellemeleri kaydeder. |
-| **Geri Al / Yinele (Undo / Redo)** | Düzenleme geçmişindeki adımları geri alır veya yineler. |
-| **Font Seçici** | Arayüzdeki metin boyutunu dinamik olarak değiştirir. |
-| **Terminal** | Özel silme komutlarını (örneğin dil veya karakter gruplarını silme) çalıştırmayı sağlar. |
-| **Auto Scroll / Read Mode** | Belirlenen hızda otomatik kaydırma (okuma) modunu tetikler. |
-| **Arama ve Eşleşme Butonları** | Metin içinde arama yapar, bulunan sonuçlar arasında ileri/geri gezinir. |
-| **Export** | Oluşturulan belgeleri dışa aktarır. |
-| **Text** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **File** | Starts the file opening and import dialog. |
+| **Save** | Saves changes and updates made to the active text document. |
+| **Undo / Redo** | Undoes or redoes steps in the editing history. |
+| **Font Selector** | Dynamically changes the text size in the interface. |
+| **Terminal** | Allows special deletion commands (such as deleting language or character groups) to be executed. |
+| **Auto Scroll / Read Mode** | Activates automatic scrolling (reading) mode at the specified speed. |
+| **Search and Match Buttons** | Searches within the text and navigates forward/backward between found results. |
+| **Export** | Exports created documents. |
+| **Text** | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. |
 
 
 ---
 
 # DRAWING
 
-## Programın Amacı
-Çizim ve animasyon.  
+## Program Purpose
+Drawing and animation.  
 ---
 <img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
 
 ---
-## Butonlarının İşlevleri
+## Button Functions
 ---
 
-| Buton Adı | Sol Tık İşlevi | Sağ Tık İşlevi |
+| Button Name | Left Click Function | Right Click Function |
 | :--- | :--- | :--- |
-| **File** | Görsel veya proje dosyası içe aktar. | Referans görsel ekle. |
-| **Kaydet** | Projeyi kaydeder. | — |
-| **Sayfa Numarası** | Sayfa menüsünü açar. | — |
-| **+** | Yeni sayfa ekler. | — |
-| **-** | Mevcut sayfayı siler. | — |
-| **Geri Al** | Son işlemi geri alır. | — |
-| **Yinele** | Geri alınan işlemi yineler. | — |
-| **Kalem Stili** | Fırça stilini değiştirir. | — |
-| **O** | Gezinme modunu açar/kapatır. | Tuval boyutu/çözünürlük diyaloğunu açar. |
-| **G** | Referans görseli göster/gizle. | Referans saydamlık ve katman konumu menüsü. |
-| **Mix Açısı** | Karışım açısı menüsünü açar. | Karışım modu menüsünü açar. |
-| **Color** | Renk seçimi menüsünü açar. | — |
-| **Eraser** | Silgi modunu açar/kapatır. | Arka plan rengini değiştirir. |
-| **R:** | Fırça/silgi boyutu menüsünü açar. | — |
-| **Çizim** | Katman menüsünü açar. | — |
-| **#** | Aktif katmanı en üstte sabitle. | — |
-| **lm** | Lazy Mouse modunu açar/kapatır. | Lazy Mouse ayar menüsünü açar. |
-| **/** | Basınç hassasiyetini açar/kapatır. | — |
-| **» «** | Dikey ayna modunu açar/kapatır. | Yatay ayna modunu açar/kapatır. |
-| **Export** | Dışa aktarım diyaloğunu açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
-| **Drawing** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+| **File** | Import an image or project file. | Add a reference image. |
+| **Save** | Saves the project. | — |
+| **Page Number** | Opens the page menu. | — |
+| **+** | Adds a new page. | — |
+| **-** | Deletes the current page. | — |
+| **Undo** | Undoes the last action. | — |
+| **Redo** | Redoes the undone action. | — |
+| **Pen Style** | Changes the brush style. | — |
+| **O** | Turns navigation mode on/off. | Opens the canvas size/resolution dialog. |
+| **G** | Shows/hides the reference image. | Reference transparency and layer position menu. |
+| **Mix Angle** | Opens the mix angle menu. | Opens the blending mode menu. |
+| **Color** | Opens the color selection menu. | — |
+| **Eraser** | Turns eraser mode on/off. | Changes the background color. |
+| **R:** | Opens the brush/eraser size menu. | — |
+| **Drawing** | Opens the layer menu. | — |
+| **#** | Pins the active layer to the top. | — |
+| **lm** | Turns Lazy Mouse mode on/off. | Opens the Lazy Mouse settings menu. |
+| **/** | Turns pressure sensitivity on/off. | — |
+| **» «** | Turns vertical mirror mode on/off. | Turns horizontal mirror mode on/off. |
+| **Export** | Opens the export dialog. | Advanced export (FPS) menu. |
+| **Drawing** | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. | — |
 
 
 ---
 
 # SOUND
-## Programın Amacı
-Ses düzenleme programı
+## Program Purpose
+Audio editing program
 ---
 
 <img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
 
 ---
 
-## Butonlarının İşlevleri
+## Button Functions
 
 ---
 
 
-| Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
+| Button Name | Left Click Function (`Left Click`) | Right Click Function (`Right Click`) |
 | :--- | :--- | :--- |
-| **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
-| **Kaydet (disk ikonu)** | Geçerli sesi veya `.sound` paketini kaydeder. | — |
-| **Geri Al** | Son işlemi geri alır (`Ctrl+Z`). | — |
-| **Yinele** | Geri alınan işlemi yineler (`Ctrl+Shift+Z` veya `Ctrl+Y`). | — |
-| **Cut** | Oynatma başlığının bulunduğu konuma kesme noktası ekler. | — |
-| **`::`** | Seçili alanın kalınlığındaki (ses düzeyi) tüm boşlukları otomatik siler. | — |
-| **Delete** | Seçili ses bölümlerini siler. | — |
-| **Play** | Oynatmayı başlatır / duraklatır. | — |
-| **Record** | Mikrofon kaydını başlatır / durdurur. | — |
-| **I** | Kayıt sonrası filtreleri açar/kapatır (kalıcı ayar). | — |
-| **Dalga Ölçeği (rakam)** | Dalga formu genişliğini ayarlar (1–7 arası). | — |
-| **Hız (`Speed`)** | Oynatma hızını değiştirir (`0.1x – 3x`). | — |
-| **Kaydırma Adımı** | Fare tekerleği ile kaydırma adımını ayarlar (`0.1s – 30s`). | — |
-| **`/`** | Geçici metin panelini açar / kapatır. | — |
-| **O** | Paneldeki metni ortalar / sola yaslar. | — |
-| **Yazı Boyutu (rakam)** | Paneldeki yazı boyutunu ayarlar (tekerlek ile de değişir). | — |
-| **Export** | Sesi `WAV` dosyası olarak dışa aktarır. | Sesi metin ve ayarlarla birlikte `.sound` paketi olarak dışa aktarır. |
-| **Sound** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. | — |
+| **File** | Imports audio files (`.wav`) or a `.sound` package. | — |
+| **Save (disk icon)** | Saves the current audio or `.sound` package. | — |
+| **Undo** | Undoes the last action (`Ctrl+Z`). | — |
+| **Redo** | Redoes the undone action (`Ctrl+Shift+Z` or `Ctrl+Y`). | — |
+| **Cut** | Adds a cut point at the position of the playback cursor. | — |
+| **`::`** | Automatically removes all silent areas within the selected range. | — |
+| **Delete** | Deletes selected audio sections. | — |
+| **Play** | Starts / pauses playback. | — |
+| **Record** | Starts / stops microphone recording. | — |
+| **I** | Turns post-recording filters on/off (persistent setting). | — |
+| **Waveform Scale (number)** | Adjusts the waveform width (between 1–7). | — |
+| **Speed** | Changes playback speed (`0.1x – 3x`). | — |
+| **Scroll Step** | Sets the scrolling step with the mouse wheel (`0.1s – 30s`). | — |
+| **`/`** | Opens / closes the temporary text panel. | — |
+| **O** | Centers / left-aligns the text in the panel. | — |
+| **Text Size (number)** | Sets the text size in the panel (also adjustable with the mouse wheel). | — |
+| **Export** | Exports audio as a `WAV` file. | Exports audio as a `.sound` package together with text and settings. |
+| **Sound** | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. | — |
 
 ---
 
 # AI
 
-## Yapay Hafıza
-## Programın Amacı
+## Artificial Memory
+## Program Purpose
 
 
-**AI**, SQLite tabanlı dinamik veri/soru-cevap yönetimi, multimedya entegrasyonu (ses, görsel, video, harici dosya) ve özelleştirilmiş AI/Chat etkileşim arayüzü sunan bir masaüstü yazılımıdır. 
+**AI** is a desktop application that provides SQLite-based dynamic data/question-answer management, multimedia integration (audio, images, video, external files), and a customized AI/Chat interaction interface.
 
-Temel amaçları şunlardır:
-- **Sorular ve Yanıtlar (Paket Yönetimi):** Veritabanı üzerinde benzersiz soru kontrolü ile soru-cevap paketleri oluşturma, düzenleme ve silme.
-- **Çoklu Medya Desteği:** Soru yanıtlarına çoklu ses (`.mp3`, `.wav`), resim (`.png`, `.jpg`), video (`.mp4`) ve harici dosya ekleri bağlama.
-- **Sohbet ve Etkileşim Modu:** Kayıtlı soru-cevap verileri üzerinden arama yapma ve geçmiş modunda gezinme.
-- **Lazy Loading ve Performans:** SQLite veritabanı yapısı ve önbellek yönetimi ile kaynak tüketimini optimize etme.
+Its main purposes are:
+- **Questions and Answers (Package Management):** Creating, editing, and deleting question-answer packages with unique question validation in the database.
+- **Multimedia Support:** Attaching multiple audio (`.mp3`, `.wav`), image (`.png`, `.jpg`), video (`.mp4`), and external file attachments to question-answer entries.
+- **Chat and Interaction Mode:** Searching through saved question-answer data and navigating through history mode.
+- **Lazy Loading and Performance:** Optimizing resource usage through the SQLite database structure and cache management.
 
 ---
 
-## Butonlarının İşlevleri
+## Button Functions
 ---
 
 <img width="1920" height="1043" alt="ai" src="https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04" />
 
 
-| Buton / Bileşen | Metin / Simge | İşlevi |
+| Button / Component | Text / Icon | Function |
 | :--- | :--- | :--- |
-| **File** | File | Veritabanı veya medya dosyalarını içeri aktarmak / açmak için dosya seçim diyalogunu başlatır. |
-| **Kaydet** | Save | Mevcut değişiklikleri, paketleri ve veritabanı güncellemelerini kaydeder. |
-| **New** | New | Veri yönetimi panelinde yeni bir boş soru-cevap paketi oluşturur ve odaklanır. |
-| **Chat** | Chat | Sohbet (etkileşim ve arama) panelini aktif görünüme getirir. |
-| **Exit Fullscreen** | _ | Aktif multimedya overlay veya tam ekran modundan çıkış yapar. |
-| **Edit** | Edit | Veri yönetimi (SQLite soru-cevap paketleri) sayfasını aktif görünüme getirir. |
-| **Sohbeti Temizle** | X | Sohbet ekranındaki mevcut mesaj balonlarını ve sohbet geçmişi görünümünü temizler. |
-| **Font Seçici** | Sayısal Değer | Arayüzdeki metin boyutunu dinamik olarak değiştirir (tıklama, menü veya tekerlek ile). |
-| **Temizle (AI/Klasör)** | S | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
-| **Export** | Export | Oluşturulan veri paketlerini ve bağlı medyayı dışa aktarır. |
-| **Ai Modu** | Ai | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **File** | File | Starts the file selection dialog for importing/opening a database or media files. |
+| **Save** | Save | Saves current changes, packages, and database updates. |
+| **New** | New | Creates a new empty question-answer package in the data management panel and gives it focus. |
+| **Chat** | Chat | Activates the chat (interaction and search) panel. |
+| **Exit Fullscreen** | _ | Exits the active multimedia overlay or fullscreen mode. |
+| **Edit** | Edit | Activates the data management (SQLite question-answer packages) page. |
+| **Clear Chat** | X | Clears the current message bubbles and chat history view. |
+| **Font Selector** | Numeric Value | Dynamically changes the text size in the interface (through clicking, menu, or mouse wheel). |
+| **Clear (AI/Folder)** | S | Clears the temporary `ai` working folder and open data memory. |
+| **Export** | Export | Exports created data packages and attached media. |
+| **AI Mode** | AI | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. |
 
 
 
@@ -313,47 +315,47 @@ Temel amaçları şunlardır:
 
 # MEDIA
 
-## Ses ve Videolardan Oluşan Karma Arşiv Programı
+## Combined Audio and Video Archive Program
 ---
 <img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
 
 ---
 
-## Butonlarının İşlevleri
+## Button Functions
 
 ---
 
-| Buton Adı | Sol Tık İşlevi (`Left Click`) | Sağ Tık İşlevi (`Right Click`) |
+| Button Name | Left Click Function (`Left Click`) | Right Click Function (`Right Click`) |
 | :--- | :--- | :--- |
-| **File** | Medya dosyalarını (video, ses, `.media` arşivi) içe aktarır. | — |
-| **Kaydet (disk ikonu)** | Mevcut projeyi hızlıca kaydeder (daha önce kaydedildiyse üzerine yazar, değilse farklı kaydet açar). | — |
-| **Geri Al** | Son işlemi geri alır (`Ctrl+Z`). | — |
-| **Yinele** | Geri alınan işlemi yineler (`Ctrl+Shift+Z`). | — |
-| **Play** | Seçili medya segmentinin oynatmasını başlatır / duraklatır. | — |
-| **`/`** | Sıralı oynatma modunu açar/kapatır (segmentler arası otomatik geçiş). | — |
-| **Cut** | Aktif segmenti, oynatma başlığının bulunduğu konumdan iki parçaya böler (keser). | — |
-| **Delete** | Zaman çizelgesinde seçili olan segmenti siler. | — |
-| **Camera** | Kamerayı açar (geliştirme aşamasındadır). | — |
-| **Sound** | Mikrofon ile ses kaydını başlatır / durdurur. | — |
-| **`I`** | Gürültü filtreleme özelliğini açar/kapatır (kalıcı ayardır). | — |
-| **`S`** | `medya_cut` çalışma klasörünü temizler ve zaman çizelgesini tamamen sıfırlar. | — |
-| **Seek Aralığı (Açılır Kutu)** | Fare tekerleği ile ileri/geri sarma veya atlama adımını ayarlar (örn. 2s, 5s, 1dk). | — |
-| **Oynatma Hızı (Açılır Kutu)** | Medya oynatma hızını değiştirir (örn. 0.5x, 1x, 2x). | — |
-| **Export** | Zaman çizelgesindeki tüm segmentleri `.media` arşiv dosyası olarak dışa aktarır (proje olarak kaydeder). | Tüm zaman çizelgesini tek bir `.mkv` video dosyası olarak render eder ve dışa aktarır. |
-| **Media** | Ana uygulamaya (`Kavram`) geçiş yapar. | — |
+| **File** | Imports media files (video, audio, `.media` archive). | — |
+| **Save (disk icon)** | Quickly saves the current project (overwrites if previously saved, otherwise opens Save As). | — |
+| **Undo** | Undoes the last action (`Ctrl+Z`). | — |
+| **Redo** | Redoes the undone action (`Ctrl+Shift+Z`). | — |
+| **Play** | Starts / pauses playback of the selected media segment. | — |
+| **`/`** | Turns sequential playback mode on/off (automatic transition between segments). | — |
+| **Cut** | Splits the active segment into two parts at the position of the playback cursor. | — |
+| **Delete** | Deletes the selected segment on the timeline. | — |
+| **Camera** | Opens the camera (under development). | — |
+| **Sound** | Starts / stops audio recording with the microphone. | — |
+| **`I`** | Turns noise filtering on/off (persistent setting). | — |
+| **`S`** | Clears the `medya_cut` working folder and completely resets the timeline. | — |
+| **Seek Interval (Combo Box)** | Sets the forward/backward seeking or skipping step with the mouse wheel (e.g. 2s, 5s, 1min). | — |
+| **Playback Speed (Combo Box)** | Changes media playback speed (e.g. 0.5x, 1x, 2x). | — |
+| **Export** | Exports all timeline segments as a `.media` archive file (saves as a project). | Exports the entire timeline as a single `.mkv` video file by rendering it. |
+| **Media** | Switches to the main application (`Kavram`). | — |
 
 
 # REC
 
-## Ekran ve Ses Kaydetme Programı
+## Screen and Audio Recording Program
 
 ---
 
-## Programın Amacı
+## Program Purpose
 
 ---
 
-Bu programın temel amacı, ekran ve ses kaydetmektir .
+The main purpose of this program is to record screen and audio.
 ---
 
 
@@ -361,145 +363,143 @@ Bu programın temel amacı, ekran ve ses kaydetmektir .
 
 ---
 
-## Butonlarının İşlevleri
+## Button Functions
 
 ---
 
-| Sembol / İsim | Açıklama / İşlev |
+| Symbol / Name | Description / Function |
 | :--- | :--- |
-| **File** | Harici bir video (`.rec`, `.mp4`, `.mkv`) veya ses (`.wav`) dosyasını oynatıcıya yüklemek için dosya seçici penceresini açar. |
-| **Camera** | Geliştirme aşamasında olan kamera modülü . |
-| **Windows** | Ekran kaydı alıp alınmayacağını belirler. Aktifken buton rengi değişir. Sadece ses kaydı alınacaksa kapatılabilir. |
-| **Sound** | Sistem/Mikrofon ses kaydının alınıp alınmayacağını belirler. EasyEffects ve varsayılan PulseAudio kaynaklarını otomatik algılar. |
-| **I (Noise Filter)** | Gürültü engelleme ve ses filtreleme zincirini aktif/deaktif eder. Aktif olduğunda dışa aktarım sırasında gelişmiş ses temizleme uygulanır. |
-| **S (Sil)** | Her şeyi siler ve kapatır. |
-| **Thickness (Sayı Butonu)** | Yüzen zaman/input penceresinin kalınlığını (30-50 px) ayarlar. <br>• **Fare Tekerleği:** Kalınlığı artırır/azaltır.<br>• **Sol Tık:** Yüzen pencereyi varsayılan konumuna sıfırlar.<br>• **Sağ Tık:** Yüzen pencerenin mevcut konumunu varsayılan yapar. |
-| **/** | **Input Overlay Toggle:** Klavye tuş basımlarını ve fare tıklamalarını (ekranın üzerinde yüzen siyah panelde) gösteren mekanizmayı açar/kapatır. |
-| **Z** | **Time Overlay Toggle:** Ekranın üstünde duran yüzen canlı kayıt süresi panelinin görünürlüğünü açar/kapatır. |
-| **Süre Açılır Menüsü** | **Kayıt Limiti (Örn: 5 dk):** Belirlenen süreye ulaşıldığında kaydın otomatik olarak duraklatılmasını sağlar (1 dk - 30 dk arası). |
-| **Segment Açılır Menüsü** | **Segment Süresi (Örn: 30 sn):** Kayıt yapılırken arka planda kaç saniyede bir yeni parça dosya (`s1.mkv`, `s2.mkv`...) oluşturulacağını belirler. |
-| **Play / Pause** | Kaydı veya medya oynatmayı başlatır/duraklatır. (Global Kısayol: `Ctrl + M`) |
-| **X** | Açık olan dosya oynatma çubuğunu kapatır ve oynatıcıyı sıfırlar. |
-| **Segment X Menüsü** | O an bellekte/diskte biriken kayıt segmentlerini listeler. İstenen parçayı münferit olarak silme veya **Hepsi** seçeneğiyle tüm parçaları temizleme imkânı sunar. |
-| **Export** | Kaydedilmiş tüm segment parçalarını sırasıyla birleştirir, isteğe bağlı ses filtresini uygular ve nihai MKV/WAV dosyası olarak kaydeder. |
-| **Rec** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler.. |
+| **File** | Opens the file selector window to load an external video (`.rec`, `.mp4`, `.mkv`) or audio (`.wav`) file into the player. |
+| **Camera** | Camera module currently under development. |
+| **Windows** | Determines whether screen recording should be enabled. The button color changes when active. Can be disabled when recording audio only. |
+| **Sound** | Determines whether system/microphone audio should be recorded. Automatically detects EasyEffects and default PulseAudio sources. |
+| **I (Noise Filter)** | Activates/deactivates the noise reduction and audio filtering chain. When active, advanced audio cleaning is applied during export. |
+| **S (Delete)** | Deletes everything and closes. |
+| **Thickness (Number Button)** | Adjusts the thickness (30–50 px) of the floating time/input window. <br>• **Mouse Wheel:** Increases/decreases thickness.<br>• **Left Click:** Resets the floating window to its default position.<br>• **Right Click:** Sets the current position of the floating window as the default. |
+| **/** | **Input Overlay Toggle:** Turns the mechanism that displays keyboard key presses and mouse clicks (on a floating black panel over the screen) on/off. |
+| **Z** | **Time Overlay Toggle:** Turns the visibility of the floating live recording duration panel at the top of the screen on/off. |
+| **Duration Dropdown Menu** | **Recording Limit (e.g. 5 min):** Automatically pauses the recording when the specified duration is reached (between 1 min and 30 min). |
+| **Segment Dropdown Menu** | **Segment Duration (e.g. 30 sec):** Determines how often a new segment file (`s1.mkv`, `s2.mkv`...) is created in the background during recording. |
+| **Play / Pause** | Starts/pauses recording or media playback. (Global Shortcut: `Ctrl + M`) |
+| **X** | Closes the currently open file playback bar and resets the player. |
+| **Segment X Menu** | Lists the recording segments currently accumulated in memory/on disk. Allows individual segments to be deleted or all segments to be cleared with the **All** option. |
+| **Export** | Combines all recorded segments in sequence, optionally applies audio filtering, and saves the final file as MKV/WAV. |
+| **Rec** | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. |
 
-> **Not:** Eski bilgisayarlarda çalışması için tasarlanmıştır. Kullanırken dikkat edin; süre sınırı vardır.
+> **Note:** Designed to work on older computers. Use with caution; there is a time limit.
 >
-> Her bilgisayarla uyumlu olmayabilir. Büyük dosyalar oluşturmadan önce test etmeniz tavsiye edilir.
+> **It may not be compatible with every computer.** Testing is recommended before creating large files.
 
 <img width="1920" height="1045" alt="R" src="https://github.com/user-attachments/assets/bbb4c6c4-e8c5-41cf-9273-8ffed6543335" />
 
 ---
 
 # COPY
-## Programın Amacı
-Not defteri programı
+## Program Purpose
+Notebook program
 ---
 <img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
 
 
 ---
-## Butonlarının İşlevleri
+## Button Functions
 ---
 
-| Buton Adı | Açıklama / İşlev |
+| Button Name | Description / Function |
 | :--- | :--- |
-| **File** | `.copya` proje dosyasını açar. |
-| **Kaydet (disk ikonu)** | Geçerli projeyi kaydeder (eğer dosya yoksa farklı kaydet açar). |
-| **`+`** | Yeni bir boş not ekler. |
-| **Galeri** | Görseller, `.txt` ve `.txr` metin dosyalarını seçip mevcut veya yeni bir galeri notu olarak ekler. |
-| **Belge** | `PDF` veya `PNF` (`Drawing`) dosyasını seçip sayfa sayfa galeri notu olarak içe aktarır. |
-| **`#` (sayfa numarası)** | Genişletilmiş galerideki öğeler arasında gezinmek için menü açar. |
-| **`I`** | Otomatik kaydırma (okuma modu) başlatır/durdurur. |
-| **Hız (rakam)** | Otomatik kaydırma hızını ayarlamak için menü açar. |
-| **Boyut (rakam)** | Belge modunda görüntülenen sayfanın boyutunu ayarlar. |
-| **`X`** | Aktif olarak genişletilmiş notu siler. |
-| **`_` (alt çizgi)** | Genişletilmiş notu küçültür (kapatır). |
-| **`/` (eğik çizgi)** | Aktif notun içeriğini panoya kopyalar (resimlerde dosya yolları, metinlerde düz metin). |
-| **Export** | Mevcut projeyi `.copya` arşivi olarak dışa aktarır. |
-| **Copy** | Bu buton bütün eses proqramlarda var proqram ismini gösterir ve ctrl +q kısa yolunu tetikler. |
+| **File** | Opens a `.copya` project file. |
+| **Save (disk icon)** | Saves the current project (opens Save As if there is no existing file). |
+| **`+`** | Adds a new empty note. |
+| **Gallery** | Selects images, `.txt`, and `.txr` text files and adds them as an existing or new gallery note. |
+| **Document** | Selects a `PDF` or `PNF` (`Drawing`) file and imports it page by page as a gallery note. |
+| **`#` (page number)** | Opens a menu for navigating between items in the expanded gallery. |
+| **`I`** | Starts/stops automatic scrolling (reading mode). |
+| **Speed (number)** | Opens a menu for adjusting automatic scrolling speed. |
+| **Size (number)** | Adjusts the size of the page displayed in document mode. |
+| **`X`** | Deletes the currently expanded note. |
+| **`_` (underscore)** | Minimizes (closes) the expanded note. |
+| **`/` (slash)** | Copies the content of the active note to the clipboard (file paths for images, plain text for text). |
+| **Export** | Exports the current project as a `.copya` archive. |
+| **Copy** | This button exists in all other programs, displays the program name, and triggers the `Ctrl + Q` shortcut. |
 
 
 ---
 
-# Filtre -  Ses & Video Filtreleme Sistemi
+# Filter - Audio & Video Filtering System
 
-**Filtre**, gelişmiş spektral gürültü azaltma, akıllı VAD (Ses Aktivite Tespiti) ve çok katmanlı filtreleme motoru ile ses ve video dosyalarını işleyen profesyonel bir masaüstü uygulamasıdır.
+**Filter** is a professional desktop application that processes audio and video files using advanced spectral noise reduction, intelligent VAD (Voice Activity Detection), and a multi-layer filtering engine.
 
 ---
 
-**Filtre**, ses ve video dosyaları üzerinde gelişmiş filtreleme ve düzenleme işlemleri sunar:
+**Filter** provides advanced filtering and editing operations for audio and video files:
 
-- **x1 Filtresi (Spektral Temizleme):** 2 aşamalı spektral gürültü azaltma algoritması ile ses kalitesini artırır. Güç ayarı (1-9) ile hassasiyet kontrolü.
-- **x2 Filtresi (Akıllı Alt Frekans Susturma):** 30-200 Hz aralığında belirlenen frekansın altındaki gürültü bölgelerini %100 susturur. VAD tabanlı akıllı tespit.
-- **Gürültü Profili Yönetimi:** Kullanıcı tarafından oluşturulan gürültü profilleri ile hedefe yönelik filtreleme. Maksimum 8 profil.
-- **Video Desteği:** Video dosyalarından ses çıkarma, filtreleme ve işlenmiş ses ile video birleştirme (FFmpeg entegrasyonu).
-- **Ses Düzenleme Paneli:** Genel ses yüksekliği, arka plan müzik şiddeti, ses tonu (pitch), oynatma hızı ve bitiş sonrası müzik süresi ayarları.
-- **Kalıcı Müzik Ekleme:** Arka plan müziğini kalıcı olarak kaydedip her seferinde otomatik ekleme.
-- **5 Saniye Önizleme:** Filtrelenmiş sesi işlem öncesi dinleme imkanı.
-- **Rapor Paneli:** Son 5 işlem kaydı, seçilebilir ve kopyalanabilir metin alanı.
-- **Harici Bağlantı Desteği:** `process_audio_background()` metodu ile Media, Camera gibi modüllerden gelen sesleri işleme.
+- **x1 Filter (Spectral Cleaning):** Improves audio quality with a 2-stage spectral noise reduction algorithm. Sensitivity is controlled with a power setting (1–9).
+- **x2 Filter (Smart Low-Frequency Suppression):** Completely silences noise regions below the selected frequency within the 30–200 Hz range. Intelligent VAD-based detection.
+- **Noise Profile Management:** Targeted filtering using user-created noise profiles. Maximum of 8 profiles.
+- **Video Support:** Extracts audio from video files, filters it, and combines the processed audio with the video (FFmpeg integration).
+- **Audio Editing Panel:** Settings for overall volume, background music level, pitch, playback speed, and post-completion music duration.
+- **Persistent Music Addition:** Permanently saves background music and automatically adds it each time.
+- **5-Second Preview:** Allows the filtered audio to be listened to before processing.
+- **Report Panel:** Last 5 processing records in a selectable and copyable text field.
+- **External Connection Support:** Processes audio coming from modules such as Media and Camera through the `process_audio_background()` method.
 
 ---
 
 
 <img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
 
-
 ---
-## Butonlarının İşlevleri
+## Button Functions
 ---
 
-| Buton | Etiket | Sol Tık | Sağ Tık |
+| Button | Label | Left Click | Right Click |
 | :--- | :--- | :--- | :--- |
-| **File** | `File` | Ses veya video dosyası yükler. | *(Yok)* |
-| **:: (Profil Ekle)** | `::` | Gürültü profili eklemek için ses dosyası seçer. Maksimum 8 profil. | *(Yok)* |
-| **/ (Düzenleme)** | `/` | Ses düzenleme panelini açar/kapatır (genel ses, müzik şiddeti, pitch, hız, ekstra süre). | *(Yok)* |
-| **Process** | `Process` | Aktif filtreleri seçili dosyaya uygular ve işlemi başlatır. | *(Yok)* |
-| **Reset** | `Reset` | Düzenleme paneli açık ise ayarları sıfırlar, kapalı ise tüm profilleri varsayılana döndürür (x1 güç=5, x2 kesim=75 Hz). | *(Yok)* |
-| **Play** | `Play` | Filtrelenmiş sesin 5 saniyelik önizlemesini oynatır. Tekrar tık duraklatır. | *(Yok)* |
-| **Müzik** | `Müzik` | Arka plan müziği seçer (geçici). | Seçili müziği kalıcı hale getirir veya iptal eder. |
-| **Export** | `Export` | Filtrelenmiş sesi veya videoyu kaydeder. Ses: WAV, MP3, FLAC; Video: Orijinal format. | *(Yok)* |
+| **File** | `File` | Loads an audio or video file. | *(None)* |
+| **:: (Add Profile)** | `::` | Selects an audio file to add a noise profile. Maximum 8 profiles. | *(None)* |
+| **/ (Editing)** | `/` | Opens/closes the audio editing panel (overall volume, music level, pitch, speed, extra duration). | *(None)* |
+| **Process** | `Process` | Applies the active filters to the selected file and starts processing. | *(None)* |
+| **Reset** | `Reset` | Resets the settings if the editing panel is open; if closed, restores all profiles to their defaults (x1 power=5, x2 cutoff=75 Hz). | *(None)* |
+| **Play** | `Play` | Plays a 5-second preview of the filtered audio. Clicking again pauses it. | *(None)* |
+| **Music** | `Music` | Selects background music (temporary). | Makes the selected music permanent or cancels it. |
+| **Export** | `Export` | Saves the filtered audio or video. Audio: WAV, MP3, FLAC; Video: Original format. | *(None)* |
 
 --- 
-> **Not:** Bu program 3 programla bağlantılıdır: **Sound, Media ve Rec.**
+> **Note:** This program is connected to 3 programs: **Sound, Media and Rec.**
 >
-> Bu 3 programın üst barında **I** ikonu bulunur. Bu ikonu aktif ederseniz ses kaydı aldığınızda dosya filtrelenir.
+> These 3 programs have an **I** icon in their top bar. If you activate this icon, the audio is filtered when you make a recording.
 ---
 
 # CONVERTER
-## Programın Amacı
-Dosya Format Değiştirme Programı
+## Program Purpose
+File Format Conversion Program
 ---
 <img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
 
 
 ---
-## Butonlarının İşlevleri
+## Button Functions
 ---
 
 
-| Kontrol Adı | Türü |  Etkileşim İşlevi / Açıklama |
+| Control Name | Type | Interaction Function / Description |
 | :--- | :--- | :--- |
-| **File** | Buton | Dönüştürülecek kaynak dosyayı (ses, video, PDF, resim) seçmek için dosya açma diyaloğunu açar. |
-| **Convert** | Buton | Seçilen dosyayı, aşağıda yapılan tüm ayarlara göre dönüştürme işlemini başlatır. |
-| **Reset** | Buton | Tüm dönüştürme ayarlarını (format, hız, efekt, filtreler vb.) varsayılan değerlerine sıfırlar. |
-| **Export** | Buton | Dönüştürme sonucu oluşan çıktı dosyasını, kullanıcının seçtiği konuma kaydeder (kopyalar). |
-| **Format (`Export Format`)** | Açılır Kutu (`ComboBox`) | Dönüştürme sonrası oluşacak dosyanın uzantısını/formatını belirler (örn: `.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg`). |
-| **Frekans Değiştir (`Frequency`)** | Açılır Kutu (`ComboBox`) | Ses örnekleme frekansını değiştirme özelliğini açar (`Açık`) veya kapatır (`Kapalı`). |
-| **Yeni Frekans Hz** | Metin Girişi (`LineEdit`) | Frekans değiştirme aktifken, hedef örnekleme frekansını (Hz cinsinden) girilen değere ayarlar. |
-| **Ses Hızı (`Speed`)** | Açılır Kutu (`ComboBox`) | Sesin oynatma/dönüştürme hızını ayarlar (`0.10x ile 4.0x arası`). |
-| **Ses Perdesi (`Pitch`)** | Açılır Kutu (`ComboBox`) | Sesin perdesini yükseltir (eksi ton) veya düşürür (artı ton) (`-6 Ton ile +6 Ton arası`). |
-| **Ses Efekti** | Açılır Kutu (`ComboBox`) | Sese uygulanacak özel efekti seçer (`Normalleştir`, `Sıkıştır`, `Filtre`, `Fade`, `Kaydırma` vb.). |
-| **Kapak Resmi Seç** | Buton | Sesi videoya dönüştürürken (ses+resim->video) kullanılacak kapak resmini seçmek için diyalog açar. |
-| **Video Renkleri Ters Çevir** | Açılır Kutu (`ComboBox`) | Video çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **Video Gri Ton (`Grayscale`)** | Açılır Kutu (`ComboBox`) | Video çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Video Sesini Tamamen Sil** | Açılır Kutu (`ComboBox`) | Video dosyasındaki orijinal ses kanallarını tamamen kaldırır (`Evet` seçiliyse). |
-| **Harici Ses Ekle (`Sync`)** | Buton | Videoya ana ses olarak eklenecek harici bir ses dosyası seçmek için diyalog açar. |
-| **PDF Ters Çevir** | Açılır Kutu (`ComboBox`) | PDF sayfalarının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **PDF Gri Ton** | Açılır Kutu (`ComboBox`) | PDF sayfalarını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Resim Ters Çevir** | Açılır Kutu (`ComboBox`) | Resim çıktısının renklerini negatifine çevirir (`Evet` seçiliyse). |
-| **Resim Gri Ton** | Açılır Kutu (`ComboBox`) | Resim çıktısını siyah-beyaz (gri tonlamalı) yapar (`Evet` seçiliyse). |
-| **Resim Çözünürlüğü** | Açılır Kutu (`ComboBox`) | Resim çıktısının ölçek oranını ayarlar (`-5 = %25 küçült, 0 = Orijinal, +5 = %250 büyüt`). |
-
+| **File** | Button | Opens the file dialog to select the source file to be converted (audio, video, PDF, image). |
+| **Convert** | Button | Starts the conversion process according to all settings configured below. |
+| **Reset** | Button | Resets all conversion settings (format, speed, effects, filters, etc.) to their default values. |
+| **Export** | Button | Saves (copies) the converted output file to the location selected by the user. |
+| **Format (`Export Format`)** | Dropdown (`ComboBox`) | Determines the extension/format of the file produced after conversion (e.g. `.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg`). |
+| **Change Frequency (`Frequency`)** | Dropdown (`ComboBox`) | Turns the audio sampling frequency conversion feature on (`On`) or off (`Off`). |
+| **New Frequency Hz** | Text Input (`LineEdit`) | When frequency conversion is active, sets the target sampling frequency in Hz according to the entered value. |
+| **Audio Speed (`Speed`)** | Dropdown (`ComboBox`) | Adjusts audio playback/conversion speed (`0.10x to 4.0x`). |
+| **Pitch** | Dropdown (`ComboBox`) | Raises or lowers the pitch (`-6 Tones to +6 Tones`). |
+| **Audio Effect** | Dropdown (`ComboBox`) | Selects a special effect to apply to the audio (`Normalize`, `Compress`, `Filter`, `Fade`, `Shift`, etc.). |
+| **Select Cover Image** | Button | Opens a dialog to select the cover image to use when converting audio to video (audio+image -> video). |
+| **Invert Video Colors** | Dropdown (`ComboBox`) | Inverts the colors of the video output (when `Yes` is selected). |
+| **Video Grayscale** | Dropdown (`ComboBox`) | Converts the video output to black and white (grayscale) (when `Yes` is selected). |
+| **Completely Remove Video Audio** | Dropdown (`ComboBox`) | Completely removes the original audio channels from the video file (when `Yes` is selected). |
+| **Add External Audio (`Sync`)** | Button | Opens a dialog to select an external audio file to be added to the video as the main audio track. |
+| **Invert PDF** | Dropdown (`ComboBox`) | Inverts the colors of PDF pages (when `Yes` is selected). |
+| **PDF Grayscale** | Dropdown (`ComboBox`) | Converts PDF pages to black and white (grayscale). |
+| **Invert Image** | Dropdown (`ComboBox`) | Inverts the colors of the image output (when `Yes` is selected). |
+| **Image Grayscale** | Dropdown (`ComboBox`) | Converts the image output to black and white (grayscale). |
+| **Image Resolution** | Dropdown (`ComboBox`) | Adjusts the scaling ratio of the image output (`-5 = 25% smaller, 0 = Original, +5 = 250% larger`). |
