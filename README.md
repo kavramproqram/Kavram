@@ -1,6 +1,6 @@
 # Kavram
 
-**Kavram is a free and open-source archive platform that brings educational and media projects together under a single roof.
+** Kavram ** is a free and open-source archive platform that brings educational and media projects together under a single roof.
 
 It provides different tools such as text, drawing, sound, video, screen recording, and notes within a single system. You can edit the content you create, connect it with other content, and create mind maps through SPHERE to archive them in encrypted form.
 
