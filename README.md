@@ -1,6 +1,6 @@
 # Kavram
 
-**''Kavram'', eğitim ve medya çalışmalarını tek bir çatı altında toplayan, özgür ve açık kaynak kodlu bir arşiv platformudur.
+''Kavram'', eğitim ve medya çalışmalarını tek bir çatı altında toplayan, özgür ve açık kaynak kodlu bir arşiv platformudur.
 
 Metin, çizim, ses, video, ekran kaydı, ve notlar gibi farklı araçları tek bir sistem içerisinde sunar. Oluşturduğunuz içerikleri düzenleyebilir, birbirleriyle ilişkilendirebilir ve SPHERE üzerinden zihin haritaları oluşturarak şifreli şekilde arşivleyebilirsiniz.
 
