@@ -27,6 +27,7 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 
 
 
+
 | Program       | Ne işe yarar?            |
 | ------------- | ------------------------ |
 | **SPHERE**    | Ana ekran                |
