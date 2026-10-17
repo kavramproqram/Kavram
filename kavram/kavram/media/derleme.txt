@@ -1,0 +1,19 @@
+# media/derleme.txt
+# media (karma arşiv / medya): media_engine.cpp -> media_engine.so (aynı klasörde oluşur).
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd media && bash derleme.txt
+#
+# apt: ffmpeg libopencv-dev portaudio19-dev libportaudio2 libsndfile1-dev
+# pacman: ffmpeg opencv portaudio libsndfile
+# pip: PyQt5 numpy scipy opencv-python-headless librosa noisereduce pydub soundfile
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -std=c++20 -O2 -fPIC -shared media_engine.cpp -o media_engine.so \
+    $(pkg-config --cflags opencv4) -lopencv_core -lopencv_videoio -lopencv_imgproc \
+    $(pkg-config --cflags --libs portaudio-2.0) $(pkg-config --libs sndfile) \
+    -ldl -lpthread -Wno-deprecated-enum-enum-conversion
+echo "media: media_engine.so derlendi."

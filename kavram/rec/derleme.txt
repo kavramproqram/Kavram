@@ -1,0 +1,20 @@
+# rec/derleme.txt
+# rec (ekran ve ses kaydetme): rec_engine.cpp -> rec_engine (çalıştırılabilir dosya, aynı klasörde oluşur).
+# NOT: rec_engine bir .so değil, ayrı süreç olarak çalışan programdır (main() içerir).
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd rec && bash derleme.txt
+#
+# apt: ffmpeg g++ pkg-config libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglib2.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-pulseaudio pulseaudio-utils
+# apt-opsiyonel: gstreamer1.0-pipewire
+# pacman: ffmpeg gcc pkgconf gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav glib2 libpulse
+# pacman-opsiyonel: gst-plugin-pipewire
+# pip: PyQt5 numpy scipy opencv-python-headless librosa noisereduce soundfile pynput
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -std=c++17 -O2 -pthread rec_engine.cpp -o rec_engine \
+    $(pkg-config --cflags --libs gstreamer-1.0 gstreamer-app-1.0 gstreamer-video-1.0 gio-2.0)
+echo "rec: rec_engine derlendi."

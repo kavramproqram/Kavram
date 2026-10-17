@@ -1,0 +1,13 @@
+# ai/derleme.txt
+# ai (yapay hafıza): saf Python, C++ derlemesi gerekmez.
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd ai && bash derleme.txt
+#
+# pip: PyQt5
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+echo "ai: C++ derlemesi gerekmiyor."

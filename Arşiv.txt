@@ -1,0 +1,6 @@
+/kavram]
+└─$ ls
+ai         drawing  ikon       kurulum_arch.txt  media  sphere
+converter  export   kavram     kurulum_deb.txt   rec    terminal
+copy       filter   kavram.py  license           sound  text
+                                          

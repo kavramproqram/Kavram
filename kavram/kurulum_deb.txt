@@ -1,0 +1,46 @@
+bash -c "$(cat <<'KAVRAM_KURULUM'
+# KAVRAM KURULUM — Debian / Ubuntu / Linux Mint
+# Kullanım: kavram klasöründe terminal açın, bu dosyanın TÜM içeriğini kopyalayıp yapıştırın, Enter'a basın.
+# Yapılanlar: sistem paketleri -> sanal ortam (venv) -> Python kütüphaneleri -> C++ derlemeleri
+#             (.so dosyaları kendi klasörlerine düşer) -> Kavram otomatik başlar.
+[ -f kavram.py ] || { echo "HATA: Bu komutu kavram klasöründe (kavram.py'nin yanında) çalıştırın."; exit 1; }
+export KAVRAM_DIR="$PWD"
+
+echo "==> Sistem paketleri kuruluyor (sudo parolası istenebilir)"
+sudo apt-get update
+APT=$(sed -n 's/^# apt: *//p' */derleme.txt | tr '\n' ' ')
+sudo apt-get install -y $APT || { echo "HATA: Sistem paketleri kurulamadı"; exit 1; }
+for p in $(sed -n 's/^# apt-opsiyonel: *//p' */derleme.txt); do
+  sudo apt-get install -y "$p" || echo "Uyarı: opsiyonel paket kurulamadı: $p"
+done
+
+echo
+echo "==> Sanal ortam (venv) hazırlanıyor"
+python3 -m venv venv || { echo "HATA: venv oluşturulamadı"; exit 1; }
+./venv/bin/pip install --upgrade pip wheel || { echo "HATA: pip güncellenemedi"; exit 1; }
+PIP=$(sed -n 's/^# pip: *//p' */derleme.txt | tr '\n' ' ')
+./venv/bin/pip install $PIP || { echo "HATA: Python kütüphaneleri kurulamadı"; exit 1; }
+./venv/bin/python -c "import sys; sys.exit(0 if sys.version_info >= (3, 13) else 1)" && ./venv/bin/pip install audioop-lts || true
+
+echo
+echo "==> C++ motorları derleniyor (her program kendi klasöründe)"
+HATALI=""
+for d in */; do
+  d=${d%/}
+  [ -f "$d/derleme.txt" ] || continue
+  echo "--- $d"
+  ( cd "$d" && bash derleme.txt ) || HATALI="$HATALI $d"
+done
+chmod +x blender/blender.py 2>/dev/null || true
+mkdir -p export veri
+
+echo
+if [ -n "$HATALI" ]; then
+  echo "UYARI: Şu programların C++ derlemesi başarısız oldu:$HATALI"
+  echo "       Hata ayrıntısı yukarıda. Diğer programlar çalışmaya devam eder."
+fi
+echo "==> Kurulum bitti, Kavram başlatılıyor..."
+echo "    Sonraki açılışlar için kavram klasöründe:  python3 kavram.py"
+exec ./venv/bin/python kavram.py
+KAVRAM_KURULUM
+)"
