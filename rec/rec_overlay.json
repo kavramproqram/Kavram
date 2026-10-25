@@ -1,0 +1,13 @@
+{
+    "thickness": 40,
+    "overlay_visible": false,
+    "default_position": null,
+    "camera_active": false,
+    "camera_device": "",
+    "camera_resolution": "480p",
+    "preview_mirror": true,
+    "audio_source": "",
+    "windows_active": false,
+    "sound_active": false,
+    "keystroke_display_enabled": false
+}
