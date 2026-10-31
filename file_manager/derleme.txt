@@ -1,0 +1,19 @@
+# file_manager/derleme.txt
+# file_manager (File / Export / Klasör Seç penceresi): file_engine.c -> libfile_engine.so ve view_engine.c -> libview_engine.so
+# (ikisi de aynı klasörde oluşur). Derleme başarısız olsa bile pencere Python yedeğiyle çalışmaya devam eder.
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C kodunu derler.
+# Elle derlemek için:  cd file_manager && bash derleme.txt
+#
+# apt: gcc ffmpeg
+# pacman: gcc ffmpeg
+# pip: PyQt5
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+CC_BIN="$(command -v cc || command -v gcc || command -v clang)"
+"$CC_BIN" -std=c11 -O2 -fPIC -shared file_engine.c -o libfile_engine.so -pthread -lm
+"$CC_BIN" -std=c11 -O2 -fPIC -shared view_engine.c -o libview_engine.so -pthread -lm
+echo "file_manager: libfile_engine.so ve libview_engine.so derlendi."

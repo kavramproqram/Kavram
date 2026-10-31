@@ -1,0 +1,16 @@
+# filter/derleme.txt
+# filter (ses filtreleme): filter_engine.cpp -> filter_engine.so (aynı klasörde oluşur).
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd filter && bash derleme.txt
+#
+# apt: ffmpeg libportaudio2 libsndfile1
+# pacman: ffmpeg portaudio libsndfile
+# pip: PyQt5 numpy scipy librosa soundfile sounddevice pydub
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -O3 -std=c++17 -fPIC -shared filter_engine.cpp -o filter_engine.so -lm
+echo "filter: filter_engine.so derlendi."

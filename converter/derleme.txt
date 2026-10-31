@@ -1,0 +1,17 @@
+# converter/derleme.txt
+# converter (format dönüştürücü): converter_engine.cpp -> converter_engine.so (aynı klasörde oluşur).
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd converter && bash derleme.txt
+#
+# apt: ffmpeg libavformat-dev libavcodec-dev libavutil-dev libswresample-dev libswscale-dev
+# pacman: ffmpeg
+# pip: PyQt5 PyMuPDF Pillow
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -O2 -std=c++17 -shared -fPIC -Wl,-rpath,'$ORIGIN' -o converter_engine.so converter_engine.cpp -lm \
+    $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale)
+echo "converter: converter_engine.so derlendi."

@@ -1,0 +1,34 @@
+# media/derleme.txt
+# media (karma arşiv / medya düzenleme):
+#   media_engine.so  -> kütüphane (ölçüm, kesme, arşiv, yedek ses kaydı)   [aynı klasörde oluşur]
+#   media_recorder   -> kamera+mikrofon / mikrofon kaydı (GStreamer, ayrı süreç) [aynı klasörde oluşur]
+# media_engine.cpp tek dosyadır; media_recorder -DMEDIA_RECORDER_MAIN ile derlenir.
+# OpenCV artık gerekmez.
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd media && bash derleme.txt
+#
+# apt: ffmpeg g++ pkg-config portaudio19-dev libportaudio2 libsndfile1-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libglib2.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-plugins-bad gstreamer1.0-libav gstreamer1.0-pulseaudio pulseaudio-utils libpulse-mainloop-glib0
+# apt-opsiyonel: gstreamer1.0-pipewire
+# pacman: ffmpeg gcc pkgconf portaudio libsndfile gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad gst-libav glib2 libpulse
+# pacman-opsiyonel: gst-plugin-pipewire
+# pip: PyQt5 numpy scipy librosa noisereduce pydub soundfile
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -std=c++17 -O2 -fPIC -shared media_engine.cpp -o media_engine.so \
+    $(pkg-config --cflags --libs portaudio-2.0 sndfile) -ldl -lpthread
+echo "media: media_engine.so derlendi."
+
+# Kamera/mikrofon kayıt programı: derlenemezse media yine çalışır (ses kaydı yedek yöntemle; kamera kaydı kapalı kalır).
+set +e
+g++ -std=c++17 -O2 -pthread -static-libstdc++ -static-libgcc -DMEDIA_RECORDER_MAIN media_engine.cpp -o media_recorder \
+    $(pkg-config --cflags --libs gstreamer-1.0 gstreamer-app-1.0 gstreamer-video-1.0 gio-2.0)
+if [ $? -eq 0 ]; then
+    echo "media: media_recorder derlendi."
+else
+    echo "UYARI: media_recorder derlenemedi (GStreamer geliştirme paketleri eksik olabilir). Kamera kaydı çalışmaz."
+fi
+exit 0

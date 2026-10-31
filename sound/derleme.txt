@@ -1,0 +1,17 @@
+# sound/derleme.txt
+# sound (ses düzenleme): sound_engine.cpp -> sound_engine.so (aynı klasörde oluşur).
+#
+# Bu dosya hem okunabilir bilgi hem de çalıştırılabilir bash betiğidir.
+# Kurulum dosyası (kurulum_deb.txt / kurulum_arch.txt) aşağıdaki '# apt:', '# pacman:', '# pip:' satırlarını
+# okuyup kurar, ardından bu dosyayı bu klasörün içinde çalıştırarak C++ kodunu derler.
+# Elle derlemek için:  cd sound && bash derleme.txt
+#
+# apt: libportaudio2 portaudio19-dev libsndfile1-dev zlib1g-dev
+# pacman: portaudio libsndfile zlib
+# pip: PyQt5 numpy
+
+cd "$(dirname "$0")" 2>/dev/null || true
+set -e
+g++ -O3 -march=${KAVRAM_MARCH:-native} -std=c++17 -fPIC -shared -pthread sound_engine.cpp -o sound_engine.so \
+    $(pkg-config --cflags --libs portaudio-2.0 sndfile) -lz
+echo "sound: sound_engine.so derlendi."
