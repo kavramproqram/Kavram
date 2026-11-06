@@ -1,0 +1,43 @@
+bash -c "$(cat <<'KAVRAM_KURULUM'
+# KAVRAM KURULUM — OTOMATİK (Linux dağıtımını veya macOS'u kendisi tanır)
+# Kullanım: kavram klasöründe terminal açın, bu dosyanın TÜM içeriğini yapıştırın (veya:  bash kurulum_linux.txt ).
+# /etc/os-release'e bakıp uygun betiği çalıştırır:
+#   kurulum_deb.txt      Debian, Ubuntu, Linux Mint, Pop!_OS, Zorin, elementary, Kali ...
+#   kurulum_arch.txt     Arch, Manjaro, EndeavourOS, CachyOS, Garuda ...
+#   kurulum_fedora.txt   Fedora, Nobara, AlmaLinux, Rocky, CentOS Stream ...
+#   kurulum_opensuse.txt openSUSE Tumbleweed / Leap
+#   kurulum_void.txt     Void Linux
+#   kurulum_mac.txt      macOS (Apple Silicon / Intel)
+# (Windows için: baslat_win.bat dosyasına çift tıklayın.)
+[ -f kavram.py ] || { echo "HATA: Bu komutu kavram klasöründe (kavram.py'nin yanında) çalıştırın."; exit 1; }
+if [ "$(uname -s)" = "Darwin" ]; then
+  echo "==> macOS algılandı  ->  kurulum_mac.txt çalıştırılıyor"
+  exec bash kurulum_mac.txt
+fi
+T=""
+if [ -r /etc/os-release ]; then
+  . /etc/os-release
+  for d in $ID $ID_LIKE; do
+    case "$d" in
+      debian|ubuntu|linuxmint|pop|neon|raspbian) T=deb ;;
+      arch|manjaro|endeavouros|cachyos|garuda)   T=arch ;;
+      fedora|rhel|centos|almalinux|rocky|nobara) T=fedora ;;
+      opensuse*|suse|sles)                       T=opensuse ;;
+      void)                                      T=void ;;
+    esac
+    [ -n "$T" ] && break
+  done
+fi
+if [ -z "$T" ]; then
+  if   command -v apt-get    >/dev/null 2>&1; then T=deb
+  elif command -v pacman     >/dev/null 2>&1; then T=arch
+  elif command -v dnf        >/dev/null 2>&1; then T=fedora
+  elif command -v zypper     >/dev/null 2>&1; then T=opensuse
+  elif command -v xbps-install >/dev/null 2>&1; then T=void
+  fi
+fi
+[ -n "$T" ] && [ -f "kurulum_$T.txt" ] || { echo "HATA: Dağıtım tanınamadı (desteklenen: deb, arch, fedora, opensuse, void)."; echo "      Alpine ve NixOS şimdilik desteklenmiyor."; exit 1; }
+echo "==> Dağıtım türü: $T  ->  kurulum_$T.txt çalıştırılıyor"
+exec bash "kurulum_$T.txt"
+KAVRAM_KURULUM
+)"

@@ -1,0 +1,158 @@
+# =====================================================================================
+# KAVRAM KURULUM — Windows 10 / 11 (64 bit)            [PowerShell betiği]
+#
+# KULLANIM (en kolayı):   baslat_win.bat dosyasına çift tıklayın.
+# Elle:  kavram klasöründe PowerShell açın ve şunu yapıştırın:
+#     powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ([IO.File]::ReadAllText('kurulum_win.txt',[Text.Encoding]::UTF8))"
+#
+# Yapılanlar (internet gerekir, ilk kurulum 15-30 dk sürebilir):
+#   1. Python 3.12 (yoksa kurulur)               2. MSYS2 + MinGW (C++ motorlarını derlemek için)
+#   3. C++ motorları (ses / filtre / dönüştürücü)  4. Sanal ortam (venv) + Python kütüphaneleri
+#   5. FFmpeg (pakete eklenir)                    6. PyInstaller ile PAKETLEME
+# SONUÇ:  dist\kavram\kavram.exe   (+ dist\kavram-<sürüm>-windows-x64.zip)  — Python/MSYS2 gerektirmeden çalışır.
+#
+# Windows'ta şimdilik: text, drawing, sphere, copy, ai, filter, converter, sound, file_manager çalışır.
+# media ve rec programlarının ekran/kamera KAYIT özellikleri Linux'a özeldir (açılırlar, kayıt başlatılamaz).
+# =====================================================================================
+$ErrorActionPreference = 'Stop'
+try { [Console]::OutputEncoding = [Text.Encoding]::UTF8 } catch {}
+function Adim($m)  { Write-Host ""; Write-Host "==> $m" -ForegroundColor Cyan }
+function Uyari($m) { Write-Host "UYARI: $m" -ForegroundColor Yellow }
+function Hata($m)  { Write-Host "HATA: $m" -ForegroundColor Red; throw $m }
+
+try {
+    $KOK = (Get-Location).Path
+    if (-not (Test-Path "$KOK\kavram.py")) { Hata "Bu betiği kavram klasöründe (kavram.py'nin yanında) çalıştırın." }
+    if (-not [Environment]::Is64BitOperatingSystem) { Hata "64 bit Windows gerekir." }
+    if ([Environment]::OSVersion.Version.Build -lt 17763) { Hata "Windows 10 (1809) veya daha yeni bir sürüm gerekir." }
+    $env:KAVRAM_DIR = $KOK
+    $env:KAVRAM_OS = "win"
+    $VARWINGET = [bool](Get-Command winget -ErrorAction SilentlyContinue)
+
+    # ---------------------------------------------------------------- 1) Python 3.12
+    function Python-Bul {
+        foreach ($a in @("$env:LOCALAPPDATA\Programs\Python\Python312\python.exe", "$env:ProgramFiles\Python312\python.exe")) {
+            if (Test-Path $a) { return $a }
+        }
+        try {
+            $p = (& py -3.12 -c "import sys;print(sys.executable)" 2>$null)
+            if ($p -and (Test-Path $p)) { return $p }
+        } catch {}
+        return $null
+    }
+    $PY = Python-Bul
+    if (-not $PY) {
+        Adim "Python 3.12 kuruluyor"
+        if ($VARWINGET) {
+            try { winget install -e --id Python.Python.3.12 --scope user --silent --accept-package-agreements --accept-source-agreements } catch { Uyari "winget ile Python kurulamadı: $_" }
+            $PY = Python-Bul
+        }
+        if (-not $PY) {
+            $inst = "$env:TEMP\python-3.12.8-amd64.exe"
+            Invoke-WebRequest "https://www.python.org/ftp/python/3.12.8/python-3.12.8-amd64.exe" -OutFile $inst
+            Start-Process $inst -ArgumentList "/quiet", "InstallAllUsers=0", "PrependPath=1", "Include_launcher=1" -Wait
+            $PY = Python-Bul
+        }
+        if (-not $PY) { Hata "Python 3.12 kurulamadı. https://www.python.org/downloads/ adresinden elle kurup betiği yeniden çalıştırın." }
+    }
+    Write-Host "Python: $PY"
+
+    # ---------------------------------------------------------------- 2) MSYS2 (MinGW-w64)
+    $MSYS = "C:\msys64"
+    if (-not (Test-Path "$MSYS\usr\bin\bash.exe")) {
+        Adim "MSYS2 kuruluyor (C++ motorlarını derlemek için)"
+        if ($VARWINGET) {
+            try { winget install -e --id MSYS2.MSYS2 --silent --accept-package-agreements --accept-source-agreements } catch { Uyari "winget ile MSYS2 kurulamadı: $_" }
+        }
+        if (-not (Test-Path "$MSYS\usr\bin\bash.exe")) {
+            $inst = "$env:TEMP\msys2-x86_64-latest.exe"
+            Invoke-WebRequest "https://repo.msys2.org/distrib/msys2-x86_64-latest.exe" -OutFile $inst
+            Start-Process $inst -ArgumentList "in", "--confirm-command", "--accept-messages", "--root", "C:/msys64" -Wait
+        }
+        if (-not (Test-Path "$MSYS\usr\bin\bash.exe")) { Hata "MSYS2 kurulamadı. https://www.msys2.org adresinden elle kurup betiği yeniden çalıştırın." }
+    }
+    function Msys($cmd) {
+        $env:MSYSTEM = 'MINGW64'; $env:CHERE_INVOKING = '1'
+        & "$MSYS\usr\bin\bash.exe" -lc $cmd
+        if ($LASTEXITCODE -ne 0) { throw "MSYS2 komutu başarısız ($LASTEXITCODE): $cmd" }
+    }
+
+    # ---------------------------------------------------------------- 3) MinGW paketleri + C++ motorları
+    Adim "MSYS2 paketleri güncelleniyor ve kuruluyor"
+    try { Msys "pacman -Syu --noconfirm" } catch { Uyari "ilk güncelleme turu bitti (normal); ikinci tur çalıştırılıyor" }
+    try { Msys "pacman -Syu --noconfirm" } catch { Uyari "$_" }
+    Msys "pacman -S --needed --noconfirm mingw-w64-x86_64-gcc mingw-w64-x86_64-pkgconf mingw-w64-x86_64-portaudio mingw-w64-x86_64-libsndfile mingw-w64-x86_64-zlib mingw-w64-x86_64-ffmpeg"
+
+    Adim "C++ motorları derleniyor (sound / filter / converter)"
+    $motorOk = $true
+    try { Msys "bash ./derleme_win.txt" } catch { $motorOk = $false; Uyari "C++ motorları derlenemedi: $_" ; Uyari "İlgili özellikler (ses düzenleme, filtre, dönüştürücü) çalışmayabilir." }
+
+    # ---------------------------------------------------------------- 4) venv + Python kütüphaneleri
+    Adim "Sanal ortam (venv) ve Python kütüphaneleri"
+    if (-not (Test-Path "$KOK\venv\Scripts\python.exe")) { & $PY -m venv "$KOK\venv"; if ($LASTEXITCODE -ne 0) { Hata "venv oluşturulamadı" } }
+    $VPY = "$KOK\venv\Scripts\python.exe"
+    & $VPY -m pip install --upgrade pip wheel
+    $paketler = @()
+    foreach ($f in (Get-ChildItem "$KOK\*\derleme.txt")) {
+        foreach ($satir in (Get-Content $f.FullName -Encoding UTF8)) {
+            if ($satir -match '^# pip:\s*(.+)$') { $paketler += ($Matches[1].Trim() -split '\s+') }
+        }
+    }
+    $paketler = @($paketler | Where-Object { $_ } | Sort-Object -Unique) + @("pyinstaller")
+    Write-Host ("Kurulacak: " + ($paketler -join ' '))
+    & $VPY -m pip install @paketler
+    if ($LASTEXITCODE -ne 0) { Hata "Python kütüphaneleri kurulamadı (yukarıdaki hataya bakın)." }
+
+    Adim "Windows'a özel program dosyaları denetleniyor (text_win.py, rec_win.py ...)"
+    & $VPY "$KOK\yapilandir.py"
+    if ($LASTEXITCODE -ne 0) { Uyari "yapilandir.py çalışmadı (var olan dosyalar kullanılacak)." }
+
+    # ---------------------------------------------------------------- 5) FFmpeg + simge
+    Adim "FFmpeg hazırlanıyor (pakete eklenecek)"
+    New-Item -ItemType Directory -Force "$KOK\bin" | Out-Null
+    if (-not (Test-Path "$KOK\bin\ffmpeg.exe")) {
+        $zip = "$env:TEMP\ffmpeg-kavram.zip"; $tmp = "$env:TEMP\ffmpeg-kavram"
+        Invoke-WebRequest "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile $zip
+        Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
+        Expand-Archive $zip $tmp -Force
+        Get-ChildItem $tmp -Recurse -Include ffmpeg.exe, ffprobe.exe, ffplay.exe | Copy-Item -Destination "$KOK\bin" -Force
+    }
+    if (-not (Test-Path "$KOK\bin\ffmpeg.exe")) { Uyari "ffmpeg.exe alınamadı; ses/video dönüştürme için sistemde FFmpeg kurulu olmalı." }
+    if (-not (Test-Path "$KOK\ikon\kavram.ico")) {
+        & $VPY -c "from PIL import Image; im=Image.open(r'$KOK\ikon\kavram.png').convert('RGBA'); im.save(r'$KOK\ikon\kavram.ico', sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])"
+    }
+
+    # ---------------------------------------------------------------- 6) PyInstaller ile paketleme
+    Adim "Paketleniyor (PyInstaller) -> dist\"
+    Remove-Item "$KOK\dist", "$KOK\build_tmp" -Recurse -Force -ErrorAction SilentlyContinue
+    & $VPY -m PyInstaller --noconfirm --clean --distpath dist --workpath build_tmp kavram.spec
+    if ($LASTEXITCODE -ne 0) { Hata "PyInstaller başarısız oldu (yukarıdaki hataya bakın)." }
+    $EXE = "$KOK\dist\kavram\kavram.exe"
+    if (-not (Test-Path $EXE)) { Hata "dist\kavram\kavram.exe oluşmadı." }
+
+    $SURUM = "0.0.0"
+    $m = Select-String -Path "$KOK\kavram.py" -Pattern 'Kavram (\d+\.\d+\.\d+)' | Select-Object -First 1
+    if ($m) { $SURUM = $m.Matches[0].Groups[1].Value }
+    $ZIP = "$KOK\dist\kavram-$SURUM-windows-x64.zip"
+    Compress-Archive -Path "$KOK\dist\kavram" -DestinationPath $ZIP -Force
+    try {
+        $ws = New-Object -ComObject WScript.Shell
+        $lnk = $ws.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Desktop')) "Kavram.lnk"))
+        $lnk.TargetPath = $EXE; $lnk.WorkingDirectory = "$KOK\dist\kavram"
+        if (Test-Path "$KOK\ikon\kavram.ico") { $lnk.IconLocation = "$KOK\ikon\kavram.ico" }
+        $lnk.Save()
+    } catch { Uyari "Masaüstü kısayolu oluşturulamadı: $_" }
+
+    Adim "BİTTİ"
+    Write-Host "Çalıştırılabilir : $EXE"
+    Write-Host "Arşiv (zip)      : $ZIP"
+    if (-not $motorOk) { Uyari "C++ motorları derlenemediği için bazı özellikler çalışmayabilir." }
+    Write-Host "Kayıt denetimi (ekran/mikrofon/kamera): venv\Scripts\python kayit_testi.py"
+    Write-Host "Not: İmzasız .exe için Windows SmartScreen/Defender 'Yine de çalıştır' diyebilir."
+    Start-Process $EXE
+}
+catch {
+    Write-Host ""
+    Write-Host "KURULUM DURDU: $_" -ForegroundColor Red
+    Write-Host "Yukarıdaki hata iletisini kaydedip betiği yeniden çalıştırabilirsiniz (tamamlanan adımlar atlanır)."
+}

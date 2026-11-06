@@ -1,0 +1,25 @@
+# derleme_mac.txt — macOS için C++ motorlarını derler (Apple clang++ + Homebrew).
+#
+# kurulum_mac.txt bunu otomatik çalıştırır. Elle çalıştırmak için kavram klasöründe:
+#       bash derleme_mac.txt
+# Gerekli Homebrew paketleri:   brew install pkg-config portaudio libsndfile ffmpeg
+# (Xcode Command Line Tools için:  xcode-select --install)
+#
+# Derlenenler: sound_engine.dylib, filter_engine.dylib, converter_engine.dylib
+# Derlenmeyenler: media_engine / media_recorder / rec_engine (GStreamer + PipeWire/X11 — yalnızca Linux),
+#                 file_engine (Python yedeği kullanılır).
+cd "$(dirname "$0")" || exit 1
+set -e
+ARCH_BAYRAK=""
+[ -n "$KAVRAM_MARCH" ] && [ "$KAVRAM_MARCH" != "x86-64" ] && [ "$KAVRAM_MARCH" != "native" ] && ARCH_BAYRAK="-arch $KAVRAM_MARCH"
+BREW_ONEK="$(brew --prefix 2>/dev/null || echo /usr/local)"
+export PKG_CONFIG_PATH="$BREW_ONEK/lib/pkgconfig:$BREW_ONEK/share/pkgconfig:$PKG_CONFIG_PATH"
+CXX="${CXX:-clang++}"
+LIBFLAGS="-std=c++17 -dynamiclib -O2 -fPIC $ARCH_BAYRAK"
+
+echo "--- filter";    ( cd filter    && $CXX $LIBFLAGS filter_engine.cpp -o filter_engine.dylib -Wl,-install_name,@loader_path/filter_engine.dylib )
+echo "--- sound";     ( cd sound     && $CXX $LIBFLAGS -pthread sound_engine.cpp -o sound_engine.dylib -Wl,-install_name,@loader_path/sound_engine.dylib \
+                          $(pkg-config --cflags --libs portaudio-2.0 sndfile) -lz )
+echo "--- converter"; ( cd converter && $CXX $LIBFLAGS converter_engine.cpp -o converter_engine.dylib -Wl,-install_name,@loader_path/converter_engine.dylib \
+                          $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale) )
+echo "macOS motorları derlendi: filter_engine.dylib sound_engine.dylib converter_engine.dylib"

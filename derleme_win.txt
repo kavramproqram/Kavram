@@ -1,0 +1,33 @@
+# derleme_win.txt — Windows için C++ motorlarını derler (MSYS2 / MinGW-w64 içinde çalışır).
+#
+# kurulum_win.txt bunu otomatik çalıştırır. Elle çalıştırmak için "MSYS2 MINGW64" terminalinde kavram klasöründe:
+#       bash derleme_win.txt
+# Gerekli MSYS2 paketleri:
+#       pacman -S --needed mingw-w64-x86_64-gcc mingw-w64-x86_64-pkgconf mingw-w64-x86_64-portaudio \
+#                          mingw-w64-x86_64-libsndfile mingw-w64-x86_64-zlib mingw-w64-x86_64-ffmpeg
+#
+# Derlenenler (Windows'ta taşınabilir olanlar): sound_engine.dll, filter_engine.dll, converter_engine.dll
+# Derlenmeyenler: media_engine / media_recorder / rec_engine (GStreamer + PipeWire/X11 — yalnızca Linux),
+#                 file_engine (POSIX; Windows'ta Python yedeği kullanılır).
+# Motorların ihtiyaç duyduğu MinGW DLL'leri (portaudio, sndfile, ffmpeg ...) kendi klasörlerinin yanına kopyalanır;
+# böylece paketlenen kavram.exe başka bir bilgisayarda MSYS2 olmadan çalışır.
+cd "$(dirname "$0")" || exit 1
+set -e
+STAT="-static-libgcc -static-libstdc++"
+
+kopyala_bagimliliklar() {   # $1 = dll yolu
+  ldd "$1" | awk '/\/mingw64\//{print $3}' | sort -u | while read -r d; do
+    [ -f "$d" ] && cp -n "$d" "$(dirname "$1")/" || true
+  done
+}
+
+echo "--- filter";    ( cd filter    && g++ -O3 -std=c++17 -shared filter_engine.cpp -o filter_engine.dll $STAT -lm )
+echo "--- sound";     ( cd sound     && g++ -O3 -std=c++17 -shared -pthread sound_engine.cpp -o sound_engine.dll $STAT \
+                          $(pkg-config --cflags --libs portaudio-2.0 sndfile) -lz )
+echo "--- converter"; ( cd converter && g++ -O2 -std=c++17 -shared converter_engine.cpp -o converter_engine.dll $STAT -lm \
+                          $(pkg-config --cflags --libs libavformat libavcodec libavutil libswresample libswscale) )
+
+for dll in filter/filter_engine.dll sound/sound_engine.dll converter/converter_engine.dll; do
+  [ -f "$dll" ] && kopyala_bagimliliklar "$dll"
+done
+echo "Windows motorları derlendi: filter_engine.dll sound_engine.dll converter_engine.dll"

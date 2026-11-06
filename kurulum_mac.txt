@@ -1,0 +1,99 @@
+bash -c "$(cat <<'KAVRAM_KURULUM'
+# KAVRAM KURULUM — macOS 11 (Big Sur) ve üzeri, Apple Silicon (M1/M2/M3...) ve Intel
+# Kullanım: kavram klasöründe Terminal açın, bu dosyanın TÜM içeriğini yapıştırın (veya:  bash kurulum_mac.txt
+#           ya da Finder'da  baslat_mac.command  dosyasına çift tıklayın).
+# Yapılanlar: Xcode komut satırı araçları -> Homebrew -> sistem paketleri -> venv -> Python kütüphaneleri
+#             -> C++ motorları -> PAKETLEME:  dist/Kavram.app  +  dist/Kavram-<sürüm>-macos-<mimari>.dmg (ve .zip)
+#             -> Kavram.app açılır.
+# Mac'te şimdilik çalışanlar: text, drawing, sphere, copy, ai, filter, converter, sound, file_manager.
+# media ve rec programlarının ekran/kamera KAYIT özellikleri Linux'a özeldir (programlar açılır, kayıt başlatılamaz).
+[ -f kavram.py ] || { echo "HATA: Bu komutu kavram klasöründe (kavram.py'nin yanında) çalıştırın."; exit 1; }
+[ "$(uname -s)" = "Darwin" ] || { echo "HATA: Bu betik yalnızca macOS içindir (Linux için kurulum_linux.txt)."; exit 1; }
+SURUM_MAC=$(sw_vers -productVersion | cut -d. -f1)
+[ "$SURUM_MAC" -ge 11 ] 2>/dev/null || { echo "HATA: macOS 11 veya daha yeni bir sürüm gerekir (şu an: $(sw_vers -productVersion))."; exit 1; }
+MIMARI=$(uname -m)
+export KAVRAM_DIR="$PWD"
+export KAVRAM_OS=mac
+liste() { cat */derleme.txt 2>/dev/null | sed -n "s/^# $1: *//p" | tr ' ' '\n' | sed '/^$/d' | sort -u | tr '\n' ' '; }
+
+echo "==> Xcode komut satırı araçları denetleniyor"
+if ! xcode-select -p >/dev/null 2>&1; then
+  xcode-select --install
+  echo "Açılan pencereden 'Yükle'yi seçin. Kurulum bitince bu betiği YENİDEN çalıştırın."
+  exit 1
+fi
+
+echo "==> Homebrew denetleniyor"
+for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do [ -x "$b" ] && eval "$($b shellenv)"; done
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew kuruluyor (parola istenebilir)..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" || { echo "HATA: Homebrew kurulamadı (https://brew.sh)"; exit 1; }
+  for b in /opt/homebrew/bin/brew /usr/local/bin/brew; do [ -x "$b" ] && eval "$($b shellenv)"; done
+fi
+command -v brew >/dev/null 2>&1 || { echo "HATA: brew bulunamadı."; exit 1; }
+
+echo "==> Sistem paketleri kuruluyor (Homebrew)"
+brew install python@3.12 pkg-config portaudio libsndfile ffmpeg || { echo "HATA: Homebrew paketleri kurulamadı"; exit 1; }
+PYB="$(brew --prefix python@3.12)/bin/python3.12"
+[ -x "$PYB" ] || { echo "HATA: python3.12 bulunamadı ($PYB)"; exit 1; }
+
+echo
+echo "==> Sanal ortam (venv) hazırlanıyor"
+"$PYB" -m venv venv || { echo "HATA: venv oluşturulamadı"; exit 1; }
+./venv/bin/pip install --upgrade pip wheel || { echo "HATA: pip güncellenemedi"; exit 1; }
+PIP=$(liste pip)
+./venv/bin/pip install $PIP pyinstaller static-ffmpeg imageio-ffmpeg || { echo "HATA: Python kütüphaneleri kurulamadı"; exit 1; }
+
+echo
+echo "==> macOS'a özel program dosyaları denetleniyor (text_mac.py, rec_mac.py ...)"
+./venv/bin/python yapilandir.py || echo "Uyarı: yapilandir.py çalışmadı (var olan dosyalar kullanılacak)."
+
+echo
+echo "==> C++ motorları derleniyor (sound / filter / converter)"
+HATALI=""
+bash derleme_mac.txt || HATALI="evet"
+mkdir -p export veri bin
+[ -n "$HATALI" ] && echo "UYARI: C++ motorları derlenemedi (yukarıdaki hataya bakın). İlgili özellikler (ses, filtre, dönüştürücü) çalışmayabilir."
+
+echo
+echo "==> FFmpeg (pakete eklenecek) ve simge hazırlanıyor"
+# Statik ffmpeg + ffprobe (her Mac'te çalışır; medya motoru ffprobe'a da ihtiyaç duyar)
+if ./venv/bin/python -c "import shutil, static_ffmpeg.run as r; ff, fp = r.get_or_fetch_platform_executables_else_raise(); shutil.copy(ff, 'bin/ffmpeg'); shutil.copy(fp, 'bin/ffprobe')"; then
+  :
+else
+  echo "Uyarı: statik ffmpeg/ffprobe indirilemedi; yedek yöntem deneniyor."
+  ./venv/bin/python -c "import imageio_ffmpeg, shutil; shutil.copy(imageio_ffmpeg.get_ffmpeg_exe(), 'bin/ffmpeg')" || echo "Uyarı: imageio-ffmpeg de başarısız."
+  cp "$(brew --prefix)/bin/ffprobe" bin/ffprobe 2>/dev/null || echo "Uyarı: ffprobe pakete eklenemedi (Homebrew ffmpeg gerekir)."
+fi
+chmod +x bin/ffmpeg bin/ffprobe 2>/dev/null
+if [ ! -f ikon/kavram.icns ]; then
+  rm -rf /tmp/kavram.iconset; mkdir -p /tmp/kavram.iconset
+  for s in 16 32 128 256 512; do
+    sips -z $s $s ikon/kavram.png --out "/tmp/kavram.iconset/icon_${s}x${s}.png" >/dev/null 2>&1
+    sips -z $((s*2)) $((s*2)) ikon/kavram.png --out "/tmp/kavram.iconset/icon_${s}x${s}@2x.png" >/dev/null 2>&1
+  done
+  iconutil -c icns /tmp/kavram.iconset -o ikon/kavram.icns || echo "Uyarı: simge (.icns) üretilemedi; varsayılan simge kullanılacak."
+fi
+
+echo
+echo "==> Paketleniyor (PyInstaller) -> dist/Kavram.app"
+SURUM=$(sed -n 's/^# Kavram \([0-9][0-9.]*\).*/\1/p' kavram.py | head -1); SURUM=${SURUM:-0.0.0}
+export KAVRAM_SURUM="$SURUM"
+rm -rf dist build_tmp
+if ./venv/bin/python -m PyInstaller --noconfirm --clean --distpath dist --workpath build_tmp kavram.spec && [ -d dist/Kavram.app ]; then
+  rm -rf dist/kavram
+  codesign --force --deep --sign - dist/Kavram.app 2>/dev/null || echo "Uyarı: ad-hoc imzalama yapılamadı (Apple Silicon'da uygulama açılmayabilir)."
+  DMG="dist/Kavram-$SURUM-macos-$MIMARI.dmg"
+  hdiutil create -volname Kavram -srcfolder dist/Kavram.app -ov -format UDZO "$DMG" >/dev/null && echo "    DMG: $DMG" || echo "Uyarı: .dmg üretilemedi"
+  ditto -c -k --keepParent dist/Kavram.app "dist/Kavram-$SURUM-macos-$MIMARI.zip" && echo "    ZIP: dist/Kavram-$SURUM-macos-$MIMARI.zip" || true
+  echo "    Uygulama: dist/Kavram.app"
+  echo "    Kayıt denetimi (ekran/mikrofon/kamera):  ./venv/bin/python kayit_testi.py"
+  echo "    Not: İmzasız uygulama ilk açılışta engellenirse: Sağ tık -> Aç  (veya Sistem Ayarları -> Gizlilik ve Güvenlik -> 'Yine de aç')."
+  echo "==> Kurulum bitti, Kavram açılıyor..."
+  open dist/Kavram.app
+else
+  echo "UYARI: Paketleme başarısız oldu (yukarıdaki hataya bakın). Kavram kaynak koddan başlatılacak."
+  exec ./venv/bin/python kavram.py
+fi
+KAVRAM_KURULUM
+)"
