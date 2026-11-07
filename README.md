@@ -1,4 +1,29 @@
+<div align="center">
+
+<img src="ikon/kavram.png" alt="Kavram" width="120">
+
 # Kavram
+
+**Eğitim ve medya çalışmalarını tek çatı altında toplayan, özgür ve açık kaynaklı arşiv platformu**<br>
+**A free and open-source archive platform that brings education and media work under one roof**
+
+![Version](https://img.shields.io/badge/version-2.2.2-blue)
+![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)
+![PyQt5](https://img.shields.io/badge/UI-PyQt5-41CD52?logo=qt&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-supported-success?logo=linux&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows%2010%2F11-experimental-orange?logo=windows&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS%2011%2B-experimental-orange?logo=apple&logoColor=white)
+![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
+
+### [🇹🇷 Türkçe](#türkçe)  ·  [🇬🇧 English](#english)
+
+<img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
+
+</div>
+
+---
+
+# Türkçe
 
 **Kavram**, eğitim ve medya çalışmalarını tek bir çatı altında toplayan, özgür ve açık kaynak kodlu bir arşiv platformudur.
 
@@ -8,13 +33,7 @@ Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi 
 
 **10 entegre program + genişletilebilir program sistemi.**
 
-[Türkçe](#türkçe) · [English](#english)
-
-<img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
-
----
-
-# Türkçe
+**Bu sayfada:** [İş akışı](#i̇ş-akışı) · [Programlar](#programlar) · [Kurulum](#kurulum) · [Yapı](#yapı) · [SPHERE](#sphere) · [TEXT](#text) · [DRAWING](#drawing) · [SOUND](#sound) · [AI](#ai) · [MEDIA](#media) · [REC](#rec) · [COPY](#copy) · [FILTER](#filter) · [CONVERTER](#converter)
 
 ## İş Akışı
 
@@ -49,35 +68,61 @@ Bütün programlarda ortak kurallar:
 
 ---
 
-# Kurulum
+## Kurulum
 
 > **Not:** Linux Mint XFCE üzerinde kurulması önerilir.
 
-Komutları Kavram klasöründe (`kavram.py`'nin yanında) çalıştırın. Her komut sistem paketlerini kurar, C++ motorlarını derler, programı **paketler** (`dist/` klasörü) ve başlatır. Paket, **kendi işletim sisteminde** üretilir. İlk kurulum internet ister ve 10–30 dakika sürebilir.
+Komutları Kavram klasöründe (`kavram.py`'nin yanında) çalıştırın. Her komut şu adımları yapar: **sistem paketleri → sanal ortam (venv) → Python kütüphaneleri → C++ motorları → paketleme (`dist/`) → başlatma.** Paket, **kendi işletim sisteminde** üretilir (PyInstaller çapraz derleme yapmaz). İlk kurulum internet ister ve 10–30 dakika sürebilir.
 
 | İşletim sistemi | Komut | Oluşan paket |
 | --- | --- | --- |
 | **Linux** (dağıtımı kendisi tanır) | `bash baslat_linux.sh` | `dist/kavram/kavram` ve `.tar.gz` |
 | Debian · Ubuntu · Mint · Pop!_OS · Kali | `bash kurulum_deb.txt` | aynısı |
-| Arch · Manjaro · EndeavourOS | `bash kurulum_arch.txt` | aynısı |
-| Fedora · AlmaLinux · Rocky | `bash kurulum_fedora.txt` | aynısı |
-| openSUSE | `bash kurulum_opensuse.txt` | aynısı |
-| Void | `bash kurulum_void.txt` | aynısı |
-| **Windows 10 / 11** | `baslat_win.bat` dosyasına çift tıklayın | `dist\kavram\kavram.exe` ve `.zip` |
-| **macOS 11+** | `baslat_mac.command` dosyasına çift tıklayın (veya `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
+| Arch · Manjaro · EndeavourOS · CachyOS | `bash kurulum_arch.txt` | aynısı |
+| Fedora · Nobara · AlmaLinux · Rocky | `bash kurulum_fedora.txt` | aynısı (RPM Fusion otomatik eklenir) |
+| openSUSE Tumbleweed / Leap | `bash kurulum_opensuse.txt` | aynısı (Packman otomatik eklenir) |
+| Void Linux | `bash kurulum_void.txt` | aynısı |
+| **Windows 10 / 11** | `baslat_win.bat` dosyasına çift tıklayın | `dist\kavram\kavram.exe`, `.zip`, masaüstü kısayolu |
+| **macOS 11+** (Apple Silicon / Intel) | `baslat_mac.command` dosyasına çift tıklayın (veya `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
 
-> **Durum:** Linux'ta paket derlenip açıldığı doğrulandı. **Windows ve macOS deneysel:** kod ve betikler hazır, fakat gerçek bir Windows/Mac'te henüz denenmedi. Bir adım takılırsa çıktıyı *issue* olarak paylaşın. Fedora, openSUSE ve Void betikleri de kendi dağıtımlarında denenmedi.
+Linux betiklerini terminale **yapıştırarak** da çalıştırabilirsiniz.
 
-Windows/macOS'ta kayıt (ekran, mikrofon, kamera) çalışıyor mu diye bakmak için kurulumdan sonra:
+| Sistem | Durum |
+| --- | --- |
+| **Linux** | Destekleniyor. Paket derlenip açıldığı doğrulandı. |
+| **Windows 10/11** | **Deneysel.** Kod ve betikler hazır; Linux üzerinde taklitle denendi, gerçek Windows'ta henüz doğrulanmadı. |
+| **macOS 11+** | **Deneysel.** Aynı durum: gerçek Mac'te henüz doğrulanmadı. |
+
+> Bir adım takılırsa çıktıyı *issue* olarak paylaşın. Fedora, openSUSE ve Void betikleri de kendi dağıtımlarında henüz denenmedi (kurulamayan paket olursa betik uyarı verip devam eder). Alpine ve NixOS desteklenmiyor.
+
+Windows/macOS'ta ekran, mikrofon ve kamera kaydının çalıştığını kurulumdan sonra şu komutla denetleyebilirsiniz (aygıtları listeler, kısa deneme kaydı yapar, her adımı `OK` / `HATA` olarak yazar):
 
 ```bash
 venv\Scripts\python kayit_testi.py      # Windows
 ./venv/bin/python kayit_testi.py        # macOS
 ```
 
-Her program kendi klasöründe, işletim sistemine özel dosyalarıyla durur: `rec.py` (Linux), `rec_win.py` (Windows), `rec_mac.py` (macOS). Kavram çalıştığı sistemin dosyasını kendisi seçer.
-
 <img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
+
+## Yapı
+
+```text
+kavram/
+├── kavram.py              Çekirdek: program yükleyici ve editör değiştirici (Ctrl + Q)
+├── kavram_ui.py           Ortak tasarım: düğmeler, üst bar, 0,6 sn Türkçe ipuçları
+├── kavram_platform.py     Linux / Windows / macOS farkları
+├── kavram_capture.py      Windows/macOS kayıt altyapısı (FFmpeg + OpenCV + PortAudio)
+├── kavram.spec            Paketleme tarifi (PyInstaller)
+├── baslat_linux.sh · baslat_win.bat · baslat_mac.command     Sistem başlatıcıları
+├── kurulum_*.txt          Dağıtıma / sisteme özel kurulum betikleri
+├── text/ drawing/ sound/ media/ rec/ sphere/ ai/ copy/ filter/ converter/ file_manager/ terminal/
+│       └── her programın klasöründe:  rec.py (Linux) · rec_win.py (Windows) · rec_mac.py (macOS)
+└── ikon/                  Uygulama simgesi
+```
+
+- **Çalışma:** `kavram.py` açılır, işletim sistemini belirler ve her program için o sistemin dosyasını yükler (yoksa varsayılan `.py`'ye döner). Her program kendi klasöründe durur; C++ motorları ve `derleme.txt` de aynı klasördedir.
+- **Paketleme:** `kavram.spec` yalnızca çalışılan sistemin dosyalarını toplar ve `dist/` içinde paketi üretir.
+- **C++ motorları:** ses, filtre ve dönüştürücü motorları her sistemde derlenir. Medya ve ekran kaydı motorları (GStreamer / PipeWire / X11) yalnızca Linux'tadır; Windows/macOS'ta yerlerini FFmpeg, OpenCV ve PortAudio tabanlı Python altyapısı alır.
 
 ---
 
@@ -387,52 +432,423 @@ k Blender /home/lts/blender-5.2.0-linux-x64/blender
 | **PDF / Resim: ters çevir, gri ton** | Evet seçilirse çıktıya uygulanır. |
 | **Resim çözünürlüğü** | −5 = %25 küçült, 0 = orijinal, +5 = %250 büyüt. |
 
----
-
-## Lisans
+### Lisans
 
 GNU Genel Kamu Lisansı sürüm 3 veya (tercihinize bağlı) daha yenisi. Ayrıntı `kavram.py` dosyasının başındadır.
+
+[⬆ Başa dön](#kavram) · [🇬🇧 English](#english)
 
 ---
 
 # English
 
-**Kavram** is a free, open-source archive platform that brings educational and media work under one roof: text, drawing, sound, video, screen recording and notes in a single system. Content can be edited, linked, and archived in encrypted form as mind maps in **SPHERE**. You can also plug your own programs into it. **10 integrated programs + an extensible program system.**
+**Kavram** is a free, open-source archive platform that brings educational and media work under one roof.
 
-| Program | Purpose |
+It offers text, drawing, sound, video, screen recording and notes in a single system. You can edit what you create, link the pieces together, and build mind maps in **SPHERE** that are archived in encrypted form.
+
+Kavram is not only a set of ready-made programs. You can also plug in programs you develop yourself, so it is designed less as a classic application bundle and more as a platform on which you build your own working environment.
+
+**10 integrated programs + an extensible program system.**
+
+**On this page:** [Workflow](#workflow) · [Programs](#programs) · [Installation](#installation) · [Structure](#structure) · [Sphere](#sphere-home-screen) · [Text](#text-text-editor) · [Drawing](#drawing-drawing-and-animation) · [Sound](#sound-audio-editor) · [AI](#ai-artificial-memory) · [Media](#media-mixed-archive) · [Rec](#rec-recorder) · [Copy](#copy-notes) · [Filter](#filter-audio-filter) · [Converter](#converter-format-converter)
+
+## Workflow
+
+1. **Create files:** the required files are produced in the main programs.
+2. **Map them:** the produced files are laid out on the home screen as a map.
+3. **Export:** the mind map is exported in encrypted form (`Export`).
+
+> **Tip:** you can share the file you create without a password, or sell the access password.
+
+> **Important:** make sure any `.kitap` file you download comes from a trusted source.
+
+## Programs
+
+| Program | What it is for |
 | --- | --- |
-| **SPHERE** | Home screen: encrypted mind-map archive (`.kitap` export) |
+| **SPHERE** | Home screen |
 | **TEXT** | Text editing |
 | **DRAWING** | Drawing and animation |
-| **SOUND** | Audio editing and recording |
-| **AI** | Artificial memory (question-answer packets with media) |
-| **MEDIA** | Mixed audio + video archive / timeline |
+| **SOUND** | Audio editing |
+| **AI** | Artificial memory |
+| **MEDIA** | Mixed audio + video archive |
 | **REC** | Screen and audio recording |
-| **COPY** | Notes |
-| **FILTER** | Audio noise filtering |
+| **COPY** | Notebook |
+| **FILTER** | Audio filtering |
 | **CONVERTER** | Format conversion |
 
-Hover over any button for **0.6 seconds** to see what it does. The full button reference for every editor is in the Turkish section above.
+Rules shared by all programs:
 
-## Install
+- Hold the mouse over any button for **0.6 seconds** and a black box tells you what it does.
+- In the top bar, the right-most button (the program name: *Text*, *Sound*, *Rec* …) opens the `Ctrl + Q` menu; the **Export** next to it exports. When the window gets narrow these two buttons drop to a second row.
+- Buttons are 30×30 (icon) or 90×30 (text); if the text does not fit, the button widens by itself.
 
-Run the command in the Kavram folder (next to `kavram.py`). It installs system packages, builds the C++ engines, **packages** the program into `dist/`, and starts it. Each package is built **on its own operating system**.
+---
 
-| System | Command | Output |
+## Installation
+
+> **Note:** Linux Mint XFCE is the recommended platform.
+
+Run the commands in the Kavram folder (next to `kavram.py`). Every command performs these steps: **system packages → virtual environment (venv) → Python libraries → C++ engines → packaging (`dist/`) → launch.** The package is built **on its own operating system** (PyInstaller does not cross-compile). The first installation needs internet access and can take 10–30 minutes.
+
+| System | Command | Resulting package |
 | --- | --- | --- |
-| **Linux** (auto-detects distro) | `bash baslat_linux.sh` | `dist/kavram/kavram` + `.tar.gz` |
-| Debian / Ubuntu / Mint / Kali | `bash kurulum_deb.txt` | same |
-| Arch / Manjaro | `bash kurulum_arch.txt` | same |
-| Fedora / AlmaLinux / Rocky | `bash kurulum_fedora.txt` | same |
-| openSUSE | `bash kurulum_opensuse.txt` | same |
-| Void | `bash kurulum_void.txt` | same |
-| **Windows 10 / 11** | double-click `baslat_win.bat` | `dist\kavram\kavram.exe` + `.zip` |
-| **macOS 11+** | double-click `baslat_mac.command` (or `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
+| **Linux** (detects the distro itself) | `bash baslat_linux.sh` | `dist/kavram/kavram` and `.tar.gz` |
+| Debian · Ubuntu · Mint · Pop!_OS · Kali | `bash kurulum_deb.txt` | same |
+| Arch · Manjaro · EndeavourOS · CachyOS | `bash kurulum_arch.txt` | same |
+| Fedora · Nobara · AlmaLinux · Rocky | `bash kurulum_fedora.txt` | same (RPM Fusion is added automatically) |
+| openSUSE Tumbleweed / Leap | `bash kurulum_opensuse.txt` | same (Packman is added automatically) |
+| Void Linux | `bash kurulum_void.txt` | same |
+| **Windows 10 / 11** | double-click `baslat_win.bat` | `dist\kavram\kavram.exe`, `.zip`, desktop shortcut |
+| **macOS 11+** (Apple Silicon / Intel) | double-click `baslat_mac.command` (or `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
 
-> **Status:** Linux is verified (package built and launched). **Windows and macOS are experimental** — scripts and code are ready but not yet validated on real machines. Please open an issue with the output if a step fails. Linux Mint XFCE is the recommended platform.
+You can also **paste** the Linux scripts into a terminal.
 
-To check screen / microphone / camera capture on Windows or macOS after installing, run `venv\Scripts\python kayit_testi.py` (Windows) or `./venv/bin/python kayit_testi.py` (macOS).
+| System | Status |
+| --- | --- |
+| **Linux** | Supported. The package was built and launch-verified. |
+| **Windows 10/11** | **Experimental.** Code and scripts are ready; tested by simulation on Linux, not yet validated on real Windows. |
+| **macOS 11+** | **Experimental.** Same: not yet validated on a real Mac. |
 
-## License
+> If a step fails, please share the output as an *issue*. The Fedora, openSUSE and Void scripts have not yet been tried on their own distributions either (if a package cannot be installed, the script warns and continues). Alpine and NixOS are not supported.
+
+On Windows/macOS you can check that screen, microphone and camera capture work after installation with this command (it lists the devices, makes a short trial recording and prints each step as `OK` / `HATA`, i.e. error):
+
+```bash
+venv\Scripts\python kayit_testi.py      # Windows
+./venv/bin/python kayit_testi.py        # macOS
+```
+
+<img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
+
+## Structure
+
+```text
+kavram/
+├── kavram.py              Core: program loader and editor switcher (Ctrl + Q)
+├── kavram_ui.py           Shared design: buttons, top bar, 0.6 s tooltips
+├── kavram_platform.py     Linux / Windows / macOS differences
+├── kavram_capture.py      Windows/macOS recording backend (FFmpeg + OpenCV + PortAudio)
+├── kavram.spec            Packaging recipe (PyInstaller)
+├── baslat_linux.sh · baslat_win.bat · baslat_mac.command     Per-OS launchers
+├── kurulum_*.txt          Install scripts per distribution / system
+├── text/ drawing/ sound/ media/ rec/ sphere/ ai/ copy/ filter/ converter/ file_manager/ terminal/
+│       └── in each program folder:  rec.py (Linux) · rec_win.py (Windows) · rec_mac.py (macOS)
+└── ikon/                  Application icon
+```
+
+- **Runtime:** `kavram.py` starts, detects the operating system and loads that system's file for each program (falling back to the default `.py`). Every program lives in its own folder, together with its C++ engines and `derleme.txt`.
+- **Packaging:** `kavram.spec` collects only the current system's files and produces the package in `dist/`.
+- **C++ engines:** the sound, filter and converter engines are built on every system. The media and screen-recording engines (GStreamer / PipeWire / X11) exist only on Linux; on Windows/macOS a Python backend based on FFmpeg, OpenCV and PortAudio takes their place.
+
+---
+
+# Sphere: home screen
+
+The home screen is where mind maps are archived in encrypted form.
+
+<img width="1918" height="1047" alt="s1" src="https://github.com/user-attachments/assets/4e6782df-e53e-4245-a70f-131ed9d720e4" />
+
+<img width="1920" height="1047" alt="sphere" src="https://github.com/user-attachments/assets/bccf70d7-1060-4ec4-a2be-36493d3fe0f6" />
+
+## Button functions
+
+| Button | Function |
+| --- | --- |
+| **File** | Imports an archive and adds a tile (file). |
+| **Undo / Redo** | Reverts or re-applies the actions you made. |
+| **+** | Adds a tile. |
+| **List** | Opens the location list of the links. |
+| **Terminal** | Opens the terminal for commands. |
+| **/** | Shows / hides the grid in the background. |
+| **Export** | **Left click:** creates an XZ file (smaller, but takes longer to create).<br>**Right click:** saves as GZ (larger, but created faster).<br>The file is saved encrypted with the `.kitap` extension. |
+| **Sphere** | In every program it sits at the far right of the top bar under the program's name. Opens the `Ctrl + Q` menu. |
+
+### Terminal commands
+
+**1. `reset`** — wipes everything completely.
+
+**2. `ap image-path`** — changes the wallpaper.
+
+```text
+ap /home/lts/Pictures/resim4.png
+```
+
+### Adding external programs to the system
+
+**3. `name program-path`** — adds a program to the **lower** part of the `Ctrl + Q` menu (for helper programs).
+
+```text
+Zaman /home/lts/Kavram/Programlar/Zaman/Zaman
+```
+
+<img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
+
+**4. `k name program-path`** — adds a program to the **upper** part of the `Ctrl + Q` menu (for main programs). Adding files is also possible.
+
+```text
+k Blender /home/lts/blender-5.2.0-linux-x64/blender
+```
+
+<img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
+
+> **Important:** Kavram works like a small operating system, so when the main program is closed, every program attached to it closes automatically. For example Blender asks you to save before closing, but if you close Kavram, Blender closes without asking. Back up your files beforehand to avoid losing data.
+
+### Things to watch out for
+
+1. **Back up your files.** The chance of data loss is very low, but it is not zero.
+2. **The `reset` command** wipes everything when typed in the terminal.
+3. **`Ctrl + S`** works in the 7 main programs other than Sphere: it closes the open program and returns to the home screen. **It saves nothing.** For quick saving use the icon next to the **File** button in each editor. In Sphere that icon makes the current layout the default, so everything comes back the same way when the program is reopened.
+
+---
+
+# Text: text editor
+
+**Text editing program.** Creates and formats rich-text documents; organizes notes and code blocks.
+
+<img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
+
+| Button | Function |
+| :--- | :--- |
+| **File** | Opens the file open / import window. |
+| **Save** (disk icon) | Saves the open document. |
+| **Undo / Redo** | Goes back or forward in the edit history. |
+| **Font size** (number) | Click for the size list; the mouse wheel also changes it. |
+| **O** | Centers the typed lines (on / off). |
+| **A** | Makes the text bold (on / off). |
+| **Color** | Opens the text-color panel; chosen colors appear as HEX codes. |
+| **/** | Shows / hides the symbol panel. |
+| **I** | Starts / stops auto-scroll (reading mode). |
+| **Speed** (number) | Sets the scroll speed (the wheel also changes it). |
+| **Terminal** | Runs special delete commands (e.g. deleting a language or character group). |
+| **Search box, search, ↑, ↓** | Searches the text; moves forward / back between the matches. |
+| **Export** | Exports the document. |
+| **Text** | The program name. Opens the `Ctrl + Q` menu. |
+
+---
+
+# Drawing: drawing and animation
+
+**Drawing and animation program.** Offers page-by-page drawing, layers, color mixing, a grid and frame-by-frame animation.
+
+<img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
+
+| Button | Left click | Right click |
+| :--- | :--- | :--- |
+| **File** | Imports an image or project file. | Adds a reference image. |
+| **Save** | Saves the project. | — |
+| **Page number** | Opens the page menu (the wheel moves between pages). | — |
+| **+** / **−** | Adds a new page / deletes the current page. | — |
+| **Undo / Redo** | Reverts / re-applies the last action. | — |
+| **Pen style** | Changes the brush style. | — |
+| **O** | Turns navigation mode on / off. | Opens the canvas size / resolution window. |
+| **G** | Shows / hides the reference image. | Reference opacity and layer-position menu. |
+| **Mix angle** | Mix-angle menu (the wheel also changes it). | Mix-mode menu. |
+| **Color** | Opens the color-selection menu. | — |
+| **Eraser** | Turns eraser mode on / off. | Changes the background color. |
+| **R:** | Opens the brush / eraser size menu. | — |
+| **Drawing** | Opens the layer menu. | — |
+| **#** | Pins the active layer on top. | — |
+| **lm** | Turns Lazy Mouse on / off (slowed mouse for smooth lines). | Lazy Mouse settings menu. |
+| **/** | Turns pressure sensitivity on / off. | — |
+| **» «** | Turns vertical mirror mode on / off. | Turns horizontal mirror mode on / off. |
+| **Export** | Opens the export window. | Advanced export (FPS) menu. |
+| **Drawing** | The program name. Opens the `Ctrl + Q` menu. | — |
+
+---
+
+# Sound: audio editor
+
+**Audio editing program.** Cuts, deletes and records on a waveform.
+
+<img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
+
+| Button | Left click | Right click |
+| :--- | :--- | :--- |
+| **File** | Imports audio files (`.wav`) or a `.sound` package. | — |
+| **Save** (disk icon) | Saves the current audio or `.sound` package. | — |
+| **Undo / Redo** | Reverts / re-applies the last action (`Ctrl+Z`, `Ctrl+Shift+Z`). | — |
+| **Cut** | Cuts at the playhead. | — |
+| **::** | Automatically deletes every gap with the thickness (volume level) of the selected area. | — |
+| **Delete** | Deletes the selected audio sections. | — |
+| **Play** | Starts / pauses playback. | — |
+| **Record** | Starts / stops microphone recording. | — |
+| **I** | Turns post-recording filters on / off (persistent setting). | — |
+| **Waveform scale** (number) | Sets the waveform width (1–7). | — |
+| **Speed** | Changes the playback speed (0.1x – 3x). | — |
+| **Scroll step** | Sets the mouse-wheel scroll step (0.1 s – 30 s). | — |
+| **/** | Shows / hides the temporary text panel. | — |
+| **O** | Centers / left-aligns the text in the panel. | — |
+| **Font size** (number) | Sets the font size in the panel. | — |
+| **Export** | Exports the audio as `WAV`. | Exports the audio together with the text and settings as a `.sound` package. |
+| **Sound** | The program name. Opens the `Ctrl + Q` menu. | — |
+
+> **Note:** Recording uses the sound engine (PortAudio) on Linux, and the same engine's own build on Windows/macOS. macOS asks for microphone permission on the first recording.
+
+---
+
+# AI: artificial memory
+
+**Artificial memory.** Manages SQLite-based question-answer packets; you can attach audio (`.mp3`, `.wav`), images (`.png`, `.jpg`), video (`.mp4`) and external files to the answers. Search runs over the stored data in chat mode.
+
+<img width="1920" height="1043" alt="ai" src="https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04" />
+
+| Button | Function |
+| :--- | :--- |
+| **File** | Imports / opens a database or media files. |
+| **Save** | Saves changes, packets and the database. |
+| **New** | Creates a new, empty question-answer packet on the data page. |
+| **Chat** | Opens the chat (interaction and search) page. |
+| **Edit** | Opens the data-management (question-answer packets) page. |
+| **X** | Clears the messages on the chat screen. |
+| **_** | Leaves the full-screen / media view. |
+| **Font size** (number) | Changes the text size (click, menu or wheel). |
+| **S** | Clears the temporary `ai` working folder and the open data memory. |
+| **Export** | Exports the data packets and the linked media. |
+| **Ai** | The program name. Opens the `Ctrl + Q` menu. |
+
+---
+
+# Media: mixed archive
+
+**Mixed archive program made of audio and video.** Cuts, orders, saves and merges pieces into one file on a timeline.
+
+<img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
+
+| Button | Left click | Right click |
+| :--- | :--- | :--- |
+| **File** | Imports media files (video, audio, `.media` archive). | — |
+| **Save** (disk icon) | Saves the project quickly (overwrites if it was saved before, otherwise opens "save as"). | — |
+| **Undo / Redo** | Reverts / re-applies the last action. | — |
+| **Play** | Plays / pauses the selected piece. | — |
+| **/** | Turns sequential playback on / off (automatic hand-over between pieces). | — |
+| **Cut** | Splits the active piece in two at the playhead. | — |
+| **Delete** | Deletes the piece selected on the timeline. | — |
+| **Camera** | Turns on camera mode: camera + microphone recording (under development). | — |
+| **Sound** | Starts / stops audio recording with the microphone. | — |
+| **I** | Turns the noise filter on / off (persistent setting). | — |
+| **S** | Clears the `medya_cut` working folder and resets the timeline. | — |
+| **Seek interval** (drop-down) | Sets the wheel's forward / back seek step (2 s, 5 s, 1 min …). | — |
+| **Playback speed** (drop-down) | Changes the playback speed (0.5x, 1x, 2x …). | — |
+| **Export** | Exports all pieces as a `.media` archive (project save). | Renders the whole timeline into a single `.mkv` video. |
+| **Media** | The program name. Opens the `Ctrl + Q` menu. | — |
+
+> **Note:** Camera and microphone recording uses the C++ recorder on Linux, and OpenCV + PortAudio + FFmpeg on Windows/macOS. Camera / microphone permission is requested on first use.
+
+---
+
+# Rec: recorder
+
+**Screen and audio recording program.** Recording is taken in the background piece by piece (`s1.mkv`, `s2.mkv` …); **Export** merges them all in order.
+
+<img width="1918" height="1046" alt="r1" src="https://github.com/user-attachments/assets/9e91a992-8da1-4b17-b614-d4e0e4f235fa" />
+
+| Button | Function |
+| :--- | :--- |
+| **File** | Loads an external video (`.rec`, `.mp4`, `.mkv`) or audio (`.wav`) file into the player. |
+| **Camera** | Opens the floating camera window; the window appears in the screen recording (under development). |
+| **Windows** | Decides whether the screen is recorded. Its color changes when active; it can be turned off for audio-only recording. |
+| **Sound** | Turns microphone / system-audio recording on / off. On Linux it detects EasyEffects and default PulseAudio sources automatically. |
+| **I** | Turns the noise-suppression and audio-filter chain on / off (applied while exporting). |
+| **S** | Deletes everything and closes. |
+| **Thickness** (number) | Sets the thickness (30–50 px) of the floating window.<br>• Wheel: thickness<br>• Left click: puts the floating window back at the default position<br>• Right click: makes the current position the default |
+| **/** | Shows / hides the floating black panel that displays keystrokes and mouse clicks. |
+| **Z** | Shows / hides the live recording-time panel on screen. |
+| **Duration** (drop-down) | Recording limit (1–30 min): recording pauses automatically when it is reached. |
+| **Segment** (drop-down) | Sets how many seconds pass before a new piece file is created in the background. |
+| **Play / Pause** | Starts / pauses recording or playback (global shortcut: `Ctrl + M`). |
+| **X** | Closes the open-file playback bar and resets the player. |
+| **Segment X** (menu) | Lists the accumulated recording pieces; delete one by one or with **All**. |
+| **Export** | Merges all pieces in order, optionally applies the audio filter, and saves as MKV / WAV. |
+| **Rec** | The program name. Opens the `Ctrl + Q` menu. |
+
+> **Note:** Designed to work on older computers; there is a time limit. Test on your own computer before creating large files.
+>
+> **Windows / macOS:** screen recording uses FFmpeg (`gdigrab` / `avfoundation`) and the camera uses OpenCV. There is no live screen preview or audio-level panel; recording speaker audio needs a virtual audio device (Windows: Stereo Mix / VB-Cable, macOS: BlackHole). macOS asks for **Screen Recording**, Camera and Microphone permissions.
+
+<img width="1920" height="1045" alt="R" src="https://github.com/user-attachments/assets/bbb4c6c4-e8c5-41cf-9273-8ffed6543335" />
+
+---
+
+# Copy: notes
+
+**Notebook program.** Stores colored notes, image / text galleries and PDF pages.
+
+<img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
+
+| Button | Function |
+| :--- | :--- |
+| **File** | Opens a `.copya` project file. |
+| **Save** (disk icon) | Saves the project (opens "save as" if there is no file yet). |
+| **+** | Adds a new empty note. |
+| **Gallery** | Picks images, `.txt` and `.txr` files and adds them as a gallery note. |
+| **Document** | Imports a `PDF` or `PNF` (Drawing) file page by page as a gallery note. |
+| **#** (page number) | Menu for moving between items in the expanded gallery. |
+| **I** | Starts / stops auto-scroll (reading mode). |
+| **Speed** (number) | Auto-scroll speed menu. |
+| **Size** (number) | Sets the page size in document mode. |
+| **X** | Deletes the expanded note. |
+| **_** | Shrinks the expanded note. |
+| **/** | Copies the note's content to the clipboard (file path for images, plain text for text). |
+| **Export** | Exports the project as a `.copya` archive. |
+| **Copy** | The program name. Opens the `Ctrl + Q` menu. |
+
+---
+
+# Filter: audio filter
+
+**Audio and video filtering.** Processes audio and video files with spectral noise reduction, smart VAD (voice activity detection) and multi-layer filtering.
+
+- **x1 filter (spectral cleaning):** 2-stage noise reduction; strength setting 1–9.
+- **x2 filter (smart low-frequency muting):** mutes noise regions below the frequency you set between 30–200 Hz.
+- **Noise profiles:** targeted profiles created by the user (up to 8).
+- **Video support:** extracts audio from a video, filters it, and merges the processed audio back into the video (FFmpeg).
+- **Audio editing panel:** overall volume, background-music level, pitch, speed, music length after the end.
+- **Persistent music:** saves the background music and adds it automatically every time.
+- **5-second preview** and a **report panel** showing the last 5 operations.
+
+<img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
+
+| Button | Left click | Right click |
+| :--- | :--- | :--- |
+| **File** | Loads an audio or video file. | — |
+| **::** | Picks an audio file for a noise profile (up to 8). | — |
+| **/** | Shows / hides the audio editing panel. | — |
+| **Process** | Applies the active filters to the selected file. | — |
+| **Reset** | Resets the settings if the panel is open; otherwise returns all profiles to defaults (x1 strength = 5, x2 cutoff = 75 Hz). | — |
+| **Play** | Plays a 5-second preview of the filtered audio; click again to pause. | — |
+| **Music** | Picks background music (temporary). | Makes the selected music persistent or cancels it. |
+| **Export** | Saves the filtered audio (WAV, MP3, FLAC) or video (original format). | — |
+
+> **Note:** Filter is linked to **Sound, Media and Rec**. If you turn on the **I** icon in the top bar of these three programs, the file is filtered while audio is being recorded.
+
+---
+
+# Converter: format converter
+
+**File format conversion program.** Converts audio, video, PDF and image files.
+
+<img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
+
+| Control | Function |
+| :--- | :--- |
+| **File** | Selects the file to convert (audio, video, PDF, image). |
+| **Convert** | Converts the selected file using the settings below. |
+| **Reset** | Returns all conversion settings to their defaults. |
+| **Export** | Saves the output file to the chosen location. |
+| **Format** | Output format (`.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg` …). |
+| **Change frequency / New frequency (Hz)** | Turns audio sample-rate change on / off; the target Hz value is entered. |
+| **Audio speed** | 0.10x – 4.0x. |
+| **Audio pitch** | −6 to +6 semitones. |
+| **Audio effect** | Normalize, Compress, Filter, Fade, Shift, etc. |
+| **Choose cover image** | Picks the cover image used when turning audio into video. |
+| **Video: invert colors / grayscale / remove audio** | Applied to the output when Yes is selected. |
+| **Add external audio (Sync)** | Picks an external audio file to be added to the video as the main audio. |
+| **PDF / Image: invert, grayscale** | Applied to the output when Yes is selected. |
+| **Image resolution** | −5 = shrink 25%, 0 = original, +5 = enlarge 250%. |
+
+### License
 
 GNU General Public License version 3 or (at your option) any later version — see the header of `kavram.py`.
+
+[⬆ Back to top](#kavram) · [🇹🇷 Türkçe](#türkçe)
