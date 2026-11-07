@@ -1,489 +1,437 @@
-<div align="center">
-
-<img src="ikon/kavram.png" alt="Kavram" width="120">
-
 # Kavram
 
-**Ortak tasarım dilli, çok editörlü masaüstü çalışma ortamı**<br>
-**A multi-editor desktop workspace with one shared design language**
+**Kavram**, eğitim ve medya çalışmalarını tek bir çatı altında toplayan, özgür ve açık kaynak kodlu bir arşiv platformudur.
 
-![Sürüm / Version](https://img.shields.io/badge/version-2.2.2-blue)
-![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)
-![UI](https://img.shields.io/badge/UI-PyQt5-41CD52?logo=qt&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-supported-success?logo=linux&logoColor=white)
-![Windows](https://img.shields.io/badge/Windows%2010%2F11-experimental-orange?logo=windows&logoColor=white)
-![macOS](https://img.shields.io/badge/macOS%2011%2B-experimental-orange?logo=apple&logoColor=white)
-![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
+Metin, çizim, ses, video, ekran kaydı ve notlar gibi farklı araçları tek bir sistem içerisinde sunar. Oluşturduğunuz içerikleri düzenleyebilir, birbirleriyle ilişkilendirebilir ve **SPHERE** üzerinden zihin haritaları oluşturarak şifreli şekilde arşivleyebilirsiniz.
 
-[**Türkçe**](#türkçe) · [**English**](#english)
+Kavram yalnızca hazır programlardan oluşmaz. İhtiyaçlarınıza göre kendi geliştirdiğiniz programları da sisteme dahil edebilirsiniz. Bu yönüyle Kavram, klasik bir uygulama paketinden çok, kendi çalışma ortamınızı oluşturabileceğiniz bir platform olarak tasarlanmıştır.
 
-</div>
+**10 entegre program + genişletilebilir program sistemi.**
+
+[Türkçe](#türkçe) · [English](#english)
+
+<img width="3450" height="1880" alt="sh" src="https://github.com/user-attachments/assets/2f3a8157-ee17-4cf0-97b0-be832fb5480b" />
 
 ---
 
 # Türkçe
 
-## İçindekiler
+## İş Akışı
 
-- [Kavram nedir?](#kavram-nedir)
-- [Durum](#durum)
-- [Hızlı kurulum](#hızlı-kurulum)
-- [Kurulum betikleri](#kurulum-betikleri)
-- [Program yapısı](#program-yapısı)
-- [İş akışı](#i̇ş-akışı)
-- [İşletim sistemine özel dosyalar](#i̇şletim-sistemine-özel-dosyalar)
-- [Ortak tasarım dili](#ortak-tasarım-dili)
-- [Windows ve macOS'ta kayıt](#windows-ve-macosta-kayıt)
-- [Geliştirici notları](#geliştirici-notları)
-- [Lisans](#lisans)
+1. **Dosya Üretimi:** Esas programlarda gerekli dosyalar oluşturulur.
+2. **Haritalandırma:** Üretilen bu dosyalar ana ekranda haritalandırılır.
+3. **Dışa Aktarma:** Zihin haritası şifrelenmiş biçimde dışa aktarılır (`Export`).
 
-## Kavram nedir?
+> **İpucu:** Oluşturduğunuz dosyayı şifresiz olarak doğrudan paylaşabilir veya erişim şifresini satabilirsiniz.
 
-Kavram, tek bir çekirdek (`kavram.py`) altında çalışan, **12 küçük editör/araçtan** oluşan bir masaüstü uygulamasıdır.
-Hepsi aynı renkleri, aynı düğme tasarımını ve aynı üst barı kullanır; böylece tek bir sistemin parçaları gibi görünürler.
-Sağ üst köşedeki **Export** ve **editör adı** düğmeleriyle editörler arasında geçiş yapılır.
+> **Önemli Not:** İndirdiğiniz `.kitap` uzantılı dosyaların güvenilir bir kaynaktan olduğundan lütfen emin olun.
 
-| Program | Ne yapar |
-|---|---|
-| **text** | Metin düzenleme (`.txr`), sembol paneli, otomatik kaydırma / okuma modu, arama |
-| **drawing** | 2B çizim ve kare kare animasyon editörü: ızgara, katmanlar, renk karıştırma, video arka plan |
-| **sound** | Ses düzenleme ve kayıt: dalga formu, kes / sil, filtre bağlantısı (C++ motor, PortAudio) |
-| **media** | Karma medya / arşiv düzenleme: zaman çizelgesi, kamera + mikrofon kaydı, kesme, arşivleme |
-| **rec** | Ekran, kamera ve ses kaydedici: segmentli kayıt, yüzen kamera, tuş gösterimi |
-| **sphere** | Kare/kutu sahnesi; karelere editör bağlama, `.kitap` şifreli dışa/içe aktarma (AES-GCM + PBKDF2), terminal komutlarıyla çoklu şifre alanı |
-| **ai** | Yapay hafıza programı: hafıza paketleri, sohbet, veri düzenleme |
-| **copy** | Not / kopyalama galerisi: renkli notlar, panoya kopyalama |
-| **filter** | Ses temizleme: gürültü profili, gürültü azaltma, önizleme |
-| **converter** | Evrensel dönüştürücü (FFmpeg tabanlı C++ motor) |
-| **file_manager** | `File` / `Export` penceresi: klasör gezinme, yer imleri, önizleme |
-| **terminal** | Yerleşik komut penceresi |
+## Programlar
 
-## Durum
+| Program | Ne işe yarar? |
+| --- | --- |
+| **SPHERE** | Ana ekran |
+| **TEXT** | Metin düzenleme |
+| **DRAWING** | Çizim ve animasyon |
+| **SOUND** | Ses düzenleme |
+| **AI** | Yapay hafıza |
+| **MEDIA** | Ses + video karma arşivi |
+| **REC** | Ekran ve ses kaydı |
+| **COPY** | Not defteri |
+| **FILTER** | Ses filtreleme |
+| **CONVERTER** | Format dönüştürme |
 
-| Sistem | Durum | Not |
-|---|---|---|
-| **Linux** | Destekleniyor | Paket (`dist/kavram/kavram`) derlenip açıldığı doğrulandı. Kullanılan ana sistem. |
-| **Windows 10/11** | Deneysel | Kod ve betikler hazır; Linux üzerinde taklitle ve parça parça denendi, **gerçek Windows'ta henüz doğrulanmadı**. |
-| **macOS 11+** | Deneysel | Aynı durum: **gerçek Mac'te henüz doğrulanmadı**. |
+Bütün programlarda ortak kurallar:
 
-> Windows ve macOS'ta ilk çalıştırmada bir adımın takılması olasıdır. Çıktıyı bir *issue* olarak paylaşırsanız düzeltilir.
-> Ekran/kamera/mikrofon kayıt altyapısını gerçek cihazda denemek için: [`kayit_testi.py`](#windows-ve-macosta-kayıt).
+- Her düğmenin üzerinde fare **0,6 saniye** durunca, siyah zeminli bir kutuda ne işe yaradığı yazar.
+- Üst çubukta, en sağdaki düğme (programın adı: *Text*, *Sound*, *Rec* …) `Ctrl + Q` menüsünü açar; yanındaki **Export** dışa aktarır. Pencere daralırsa bu iki düğme alt satıra iner.
+- Düğmeler 30×30 (simge) veya 90×30 (yazılı) boyuttadır; yazı sığmazsa düğme kendiliğinden genişler.
 
-## Hızlı kurulum
+---
 
-Kavram klasöründe (yani `kavram.py`'nin yanında) işletim sisteminize uygun **başlatıcıyı** çalıştırın.
-Başlatıcı sistem paketlerini kurar, sanal ortamı (venv) hazırlar, C++ motorlarını derler, programı **paketler** (`dist/`) ve başlatır.
+# Kurulum
 
-| Sistem | Çalıştırın | Üretilen |
-|---|---|---|
-| Linux | `bash baslat_linux.sh` | `dist/kavram/kavram` + `dist/*.tar.gz` |
-| Windows | `baslat_win.bat` dosyasına çift tıklayın | `dist\kavram\kavram.exe` + `.zip` + masaüstü kısayolu |
-| macOS | `baslat_mac.command` dosyasına çift tıklayın | `dist/Kavram.app` + `.dmg` + `.zip` |
+> **Not:** Linux Mint XFCE üzerinde kurulması önerilir.
 
-Her paket **kendi işletim sisteminde** üretilmelidir (PyInstaller çapraz derleme yapmaz).
-İlk kurulum internet gerektirir ve 10–30 dakika sürebilir.
+Komutları Kavram klasöründe (`kavram.py`'nin yanında) çalıştırın. Her komut sistem paketlerini kurar, C++ motorlarını derler, programı **paketler** (`dist/` klasörü) ve başlatır. Paket, **kendi işletim sisteminde** üretilir. İlk kurulum internet ister ve 10–30 dakika sürebilir.
 
-Paketsiz, doğrudan kaynaktan çalıştırmak için:
+| İşletim sistemi | Komut | Oluşan paket |
+| --- | --- | --- |
+| **Linux** (dağıtımı kendisi tanır) | `bash baslat_linux.sh` | `dist/kavram/kavram` ve `.tar.gz` |
+| Debian · Ubuntu · Mint · Pop!_OS · Kali | `bash kurulum_deb.txt` | aynısı |
+| Arch · Manjaro · EndeavourOS | `bash kurulum_arch.txt` | aynısı |
+| Fedora · AlmaLinux · Rocky | `bash kurulum_fedora.txt` | aynısı |
+| openSUSE | `bash kurulum_opensuse.txt` | aynısı |
+| Void | `bash kurulum_void.txt` | aynısı |
+| **Windows 10 / 11** | `baslat_win.bat` dosyasına çift tıklayın | `dist\kavram\kavram.exe` ve `.zip` |
+| **macOS 11+** | `baslat_mac.command` dosyasına çift tıklayın (veya `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
+
+> **Durum:** Linux'ta paket derlenip açıldığı doğrulandı. **Windows ve macOS deneysel:** kod ve betikler hazır, fakat gerçek bir Windows/Mac'te henüz denenmedi. Bir adım takılırsa çıktıyı *issue* olarak paylaşın. Fedora, openSUSE ve Void betikleri de kendi dağıtımlarında denenmedi.
+
+Windows/macOS'ta kayıt (ekran, mikrofon, kamera) çalışıyor mu diye bakmak için kurulumdan sonra:
 
 ```bash
-python3 -m venv venv && ./venv/bin/pip install PyQt5 PyMuPDF Pillow numpy scipy librosa noisereduce \
-    soundfile sounddevice pydub opencv-python-headless pycryptodome pynput
-./venv/bin/python kavram.py
+venv\Scripts\python kayit_testi.py      # Windows
+./venv/bin/python kayit_testi.py        # macOS
 ```
 
-(Windows'ta `venv\Scripts\python kavram.py`.) Tam ve güncel paket listesi her klasördeki `derleme.txt` başlıklarındaki `# pip:` satırlarındadır.
+Her program kendi klasöründe, işletim sistemine özel dosyalarıyla durur: `rec.py` (Linux), `rec_win.py` (Windows), `rec_mac.py` (macOS). Kavram çalıştığı sistemin dosyasını kendisi seçer.
 
-## Kurulum betikleri
+<img width="1920" height="1049" alt="3" src="https://github.com/user-attachments/assets/0b8b71af-737a-4387-a516-77c0fa217e6c" />
 
-Her dağıtımın paket adları farklı olduğu için ayrı betikler vardır. Hepsi aynı adımları izler:
-**sistem paketleri → venv → Python kütüphaneleri → C++ motorları → paketleme → başlatma.**
+---
 
-| Dosya | Hedef |
-|---|---|
-| `kurulum_linux.txt` | **Otomatik**: `/etc/os-release`'e bakıp aşağıdakilerden uygununu çalıştırır (macOS'u da tanır) |
-| `kurulum_deb.txt` | Debian, Ubuntu, Linux Mint, Pop!_OS, Zorin, elementary, Kali |
-| `kurulum_arch.txt` | Arch, Manjaro, EndeavourOS, CachyOS, Garuda |
-| `kurulum_fedora.txt` | Fedora, Nobara, AlmaLinux, Rocky, CentOS Stream (RPM Fusion otomatik eklenir) |
-| `kurulum_opensuse.txt` | openSUSE Tumbleweed / Leap (Packman otomatik eklenir) |
-| `kurulum_void.txt` | Void Linux |
-| `kurulum_mac.txt` | macOS (Xcode araçları → Homebrew → paketler → `.app` / `.dmg`) |
-| `kurulum_win.txt` | Windows (PowerShell: Python 3.12 → MSYS2/MinGW → motorlar → venv → FFmpeg → PyInstaller) |
-| `derleme_win.txt`, `derleme_mac.txt` | Windows / macOS için C++ motor derlemesi |
-| `paketle.sh` | Linux paketleme (PyInstaller; `--sadece-paket`, `--kur` seçenekleri) |
+# SPHERE
 
-Linux betiklerini terminale **yapıştırarak** ya da `bash kurulum_deb.txt` biçiminde çalıştırabilirsiniz.
-Fedora, openSUSE ve Void betikleri ilgili dağıtımlarda henüz denenmemiştir (yalnızca sözdizimi doğrulandı);
-kurulamayan paket olursa betik uyarı verip devam eder.
+## Ana Ekran
 
-<details>
-<summary><b>Yeni bir dağıtım nasıl eklenir?</b></summary>
+Ana ekran, zihin haritalarının şifreli olarak arşivlendiği yerdir.
 
-1. Her programın `derleme.txt` dosyasının başlığına `# <yönetici>: paket1 paket2 ...` satırı ekleyin.
-2. `paketle.sh` içindeki paket yöneticisi `case` bloğuna bir kol ekleyin.
-3. `kurulum_<ad>.txt` dosyasını mevcut bir betikten kopyalayıp sistem paketleri bölümünü değiştirin.
-4. `kurulum_linux.txt` içindeki dağıtım eşlemesine kimliği ekleyin.
+<img width="1918" height="1047" alt="s1" src="https://github.com/user-attachments/assets/4e6782df-e53e-4245-a70f-131ed9d720e4" />
 
-</details>
+<img width="1920" height="1047" alt="sphere" src="https://github.com/user-attachments/assets/bccf70d7-1060-4ec4-a2be-36493d3fe0f6" />
 
-## Program yapısı
+## Butonlarının İşlevleri
+
+| Buton | İşlevi |
+| --- | --- |
+| **File** | İçeri arşiv almak ve kare (dosya) eklemek için kullanılır. |
+| **Geri Al / İleri Al** | Yapılan işlemleri geri alır veya yeniden uygular. |
+| **+** | Kare ekler. |
+| **Liste** | Bağlantıların konum listesini açar. |
+| **Terminal** | Terminal komutlarını kullanmak için açılır. |
+| **/** | Arka plandaki gridli yapıyı açar / kapatır. |
+| **Export** | **Sol tık:** XZ formatında dosya oluşturur (dosya daha küçük, ama oluşması daha uzun sürer).<br>**Sağ tık:** GZ formatında kaydeder (dosya daha büyük, ama daha hızlı oluşur).<br>Dosya `.kitap` uzantısıyla, şifreli olarak kaydedilir. |
+| **Sphere** | Bütün programlarda üst barın en sağında, programın adıyla bulunur. `Ctrl + Q` menüsünü açar. |
+
+### Terminal Komutları
+
+**1. `reset`** — Her şeyi tamamen siler.
+
+**2. `ap resim konumu`** — Duvar kâğıdını değiştirir.
 
 ```text
-kavram/
-├── kavram.py                  Çekirdek: klasör düzeni, program yükleyici, editör değiştirici
-├── kavram_ui.py               Ortak tasarım: tema, KButton, ToolbarLayout, 0,6 sn Türkçe ipuçları
-├── kavram_platform.py         Linux / Windows / macOS farkları + dosya sonekleri (_win, _mac)
-├── kavram_capture.py          Windows/macOS kayıt altyapısı (FFmpeg + OpenCV + PortAudio) ve MediaCore
-├── yapilandir.py              Varsayılan dosyadan _win / _mac sürümlerini üretir
-├── kayit_testi.py             Windows/macOS ekran-mikrofon-kamera denetimi
-├── kavram.spec                PyInstaller tarifi (işletim sistemine göre dosya seçer)
-├── rthook_kavram.py           Paketli sürümde kullanıcı veri klasörleri / DLL yolları
-├── paketle.sh                 Linux paketleme
-├── baslat_linux.sh  baslat_win.bat  baslat_mac.command        Sistem başlatıcıları
-├── kurulum_*.txt  derleme_win.txt  derleme_mac.txt            Kurulum ve derleme betikleri
-├── ikon/                      Uygulama simgesi
-├── KAVRAM_UI_NOTLARI.md       Tasarım ve platform notları (ayrıntı)
-│
-├── text/      text.py      text_win.py      text_mac.py       ┐
-├── drawing/   drawing.py   drawing_win.py   drawing_mac.py    │  Her program kendi klasöründe;
-├── sound/     sound.py     sound_win.py     sound_mac.py      │  .py = Linux (varsayılan),
-├── media/     media.py     media_win.py     media_mac.py      │  _win.py = Windows, _mac.py = macOS.
-├── rec/       rec.py       rec_win.py       rec_mac.py        │  Motor kaynakları ve derleme.txt
-├── sphere/    sphere.py    sphere_kare.py   (+ _win / _mac)   │  aynı klasördedir.
-├── ai/  copy/  filter/  converter/  file_manager/  terminal/  ┘
-└── export/  veri/             Kullanıcı verileri (çalışırken oluşur)
+ap /home/lts/Pictures/resim4.png
 ```
 
-**C++ motorları** (her biri kendi klasöründe, `derleme.txt` ile derlenir):
+### Harici Programları Sisteme Dahil Etme
 
-| Motor | Görev | Platform |
-|---|---|---|
-| `sound_engine` | Ses oynatma / kayıt / düzenleme (PortAudio, libsndfile, zlib) | Linux · Windows · macOS |
-| `filter_engine` | Gürültü azaltma hesapları | Linux · Windows · macOS |
-| `converter_engine` | FFmpeg tabanlı dönüştürme | Linux · Windows · macOS |
-| `media_engine`, `media_recorder` | Medya işlemleri, kamera/mikrofon kaydı (GStreamer) | yalnızca Linux (diğerlerinde `MediaCore`, Python) |
-| `rec_engine` | Ekran/kamera kaydı (PipeWire / X11) | yalnızca Linux (diğerlerinde FFmpeg + OpenCV) |
-| `file_engine` | Klasör tarama + görünüm matematiği (tek `libfile_engine.so`) | Linux · macOS (Windows'ta Python yedeği) |
+**3. `isim program konumu`** — `Ctrl + Q` menüsünün **alt** kısmına bir program ekler (yardımcı programlar için).
 
-## İş akışı
-
-```mermaid
-flowchart LR
-    A[Başlatıcı<br/>baslat_*] --> B[Sistem paketleri]
-    B --> C[venv + pip]
-    C --> D[yapilandir.py<br/>eksik _win/_mac dosyaları]
-    D --> E[C++ motorları<br/>derleme.txt]
-    E --> F[PyInstaller<br/>kavram.spec]
-    F --> G[(dist/)]
-    G --> H[Kavram açılır]
+```text
+Zaman /home/lts/Kavram/Programlar/Zaman/Zaman
 ```
 
-**Çalışma zamanı:**
+<img width="1920" height="1049" alt="Z" src="https://github.com/user-attachments/assets/a569dba7-1714-42cd-8502-16d0bd917692" />
 
-1. `kavram.py` açılır; `venv` varsa programı onunla yeniden başlatır, Linux'ta Qt platformunu (`xcb`) ayarlar.
-2. `kavram_platform.py` işletim sistemini belirler ve dosya sonekini seçer (`""`, `_win`, `_mac`).
-3. Çekirdeğin yükleyicisi (`_ProgramBulucu`) `kavram_<ad>` adını `<ad>/<ad><sonek>.py` dosyasına çözer; o sistemin dosyası yoksa varsayılana döner. `sphere_kare` gibi yan modüller aynı kuralla seçilir.
-4. Her editör bir Qt penceresidir; ortak üst bar (`ToolbarLayout`), düğmeler (`KButton`) ve ipuçları `kavram_ui.py`'den gelir.
-5. Motorlar `ctypes` ile yüklenir (`.so` / `.dll` / `.dylib`); yoksa Python yedeği devreye girer.
-6. Kullanıcı verileri: kaynaktan çalışırken `kavram/export`, `kavram/veri`; paketli sürümde Linux `~/.local/share/kavram`,
-   Windows `%LOCALAPPDATA%\kavram`, macOS `~/Library/Application Support/kavram`.
+**4. `k isim program konumu`** — `Ctrl + Q` menüsünün **üst** kısmına bir program ekler (ana programlar için). Dosya eklemek de mümkündür.
 
-**Paketleme:** `kavram.spec` yalnızca çalışılan sistemin dosyalarını toplar (diğer sistemlerin `_win`/`_mac` dosyaları ve varyantı olan varsayılan dosya pakete girmez),
-motorları ve (Windows'ta) yan DLL'leri ekler, FFmpeg'i `bin/` altından alır ve `dist/` içinde klasör (onedir) üretir.
-
-## İşletim sistemine özel dosyalar
-
-| Sistem | Dosya | Örnek |
-|---|---|---|
-| Linux (varsayılan) | `<ad>.py` | `rec/rec.py` |
-| Windows | `<ad>_win.py` | `rec/rec_win.py` |
-| macOS | `<ad>_mac.py` | `rec/rec_mac.py` |
-
-- `yapilandir.py` varsayılan dosyadan sistem dosyalarını **üretir** ve sisteme göre yapılandırır (platform sabitleri sabitlenir, çalışmayacak dallar budanır, `.dll`/`.dylib` adları yazılır, başlık eklenir). Var olan dosyalara dokunmaz.
-  `--zorla` yeniden üretir, `--denetle` eksik/eskimiş olanları listeler. Kayıt altyapısı eklenmiş `rec_*` / `media_*` dosyaları `--zorla` ile bile korunur (`--cok-zorla` ezer).
-- Sonekleri değiştirmek için tek yer: `kavram_platform.py` içindeki `SONEKLER`.
-- Başka sistemin kodunu denemek için (yalnızca arayüz/yükleme denemesi): `KAVRAM_OS=win` veya `KAVRAM_OS=mac`.
-
-## Ortak tasarım dili
-
-- **Düğmeler:** kare düğme 30×30, yazılı düğme 90×30; 8 px köşe, `#555` çerçeve. Yazı sığmazsa düğme **kendiliğinden genişler**, yazı asla kesilmez; yazı değişirse yeniden ölçülür.
-- **İki taraflı üst bar:** sol grup "diğer düğmeler", sağ köşe grubu "Export + editör adı". Pencere daralınca sağ grup alt satıra düşer, gerekirse sol grup da satır atlar; bar yüksekliği buna göre uzar (tek satırda 40 px).
-- **İpuçları:** düğmenin üstünde fare **0,6 saniye** durunca **siyah zemin / beyaz yazı** ile Türkçe açıklama çıkar. Metinler `kavram_ui.py` içindeki `TIPS_ATTR` (düğme öznitelik adı) ve `TIPS_TEXT` (düğme yazısı) sözlüklerindedir.
-- Yeni düğme: `from kavram_ui import KButton` → `b = KButton("Ad"); b.setFixedSize(90, 30)`. Üst bar: `kui.ToolbarLayout(frame)` (`addStretch()` sol/sağ ayırıcıdır).
-
-## Windows ve macOS'ta kayıt
-
-Linux'taki C++ kayıt motorları (GStreamer / PipeWire / X11) diğer sistemlerde yoktur; yerine `kavram_capture.py` kullanılır:
-
-| Özellik | Linux | Windows | macOS |
-|---|---|---|---|
-| Ekran kaydı (rec) | `rec_engine` / FFmpeg x11grab | FFmpeg `gdigrab` | FFmpeg `avfoundation` |
-| Mikrofon (rec) | PipeWire / Pulse | FFmpeg `dshow` | FFmpeg `avfoundation` |
-| Yüzen kamera (rec) | C++ + paylaşımlı bellek | OpenCV (DirectShow) | OpenCV (AVFoundation) |
-| Kamera + mikrofon (media) | `media_recorder` | OpenCV + PortAudio + FFmpeg | aynı |
-| Medya motoru (media) | `media_engine.so` | `MediaCore` (Python) | aynı |
-| Ses kaydı (sound) | `sound_engine` (PortAudio) | `sound_engine.dll` (MME) | `sound_engine.dylib` (CoreAudio) |
-
-**Bilinen sınırlar (Windows / macOS):** canlı ekran önizlemesi ve ses seviyesi paneli (rec) yoktur; hoparlör (sistem sesi) kaydı için sanal ses aygıtı gerekir (Windows: Stereo Mix / VB-Cable, macOS: BlackHole).
-macOS'ta Kamera, Mikrofon ve **Ekran Kaydı** izni istenir; Windows'ta Ayarlar → Gizlilik → Kamera / Mikrofon.
-
-Denetim aracı (kurulumdan sonra):
-
-```bash
-venv\Scripts\python kayit_testi.py        # Windows
-./venv/bin/python kayit_testi.py          # macOS
+```text
+k Blender /home/lts/blender-5.2.0-linux-x64/blender
 ```
 
-Aygıtları listeler, 3 sn ekran / 2 sn mikrofon / kamera denemesi yapar ve her adımı `OK` / `HATA` olarak yazar.
+<img width="1920" height="1050" alt="bl" src="https://github.com/user-attachments/assets/2749222e-e76c-43ec-b58f-aa33c5370315" />
 
-## Geliştirici notları
+> **Önemli:** Kavram bir tür işletim sistemi gibi çalıştığı için ana program kapatılırsa ona bağlı bütün programlar otomatik kapanır. Örneğin Blender kapatılmadan önce dosyayı kaydetmenizi ister; ama Kavram'ı kapatırsanız Blender hiçbir şey sormadan kapanır. Veri kaybı yaşamamak için dosyalarınızı önceden yedekleyin.
 
-| Ortam değişkeni | Etkisi |
-|---|---|
-| `KAVRAM_OS` | `linux` / `win` / `mac`: işletim sistemi seçimini zorlar (deneme) |
-| `KAVRAM_DEBUG=1` | Sessizce yutulan hataları `stderr`'e yazar |
-| `KAVRAM_UI_EKSIK=1` | Açıklaması olmayan düğmeleri listeler |
-| `KAVRAM_MARCH` | Motor derleme mimarisi (`x86-64` taşınabilir, `native` en hızlı) |
-| `KAVRAM_KONSOL=1` | Windows paketinde konsol penceresini açık tutar (hata ayıklama) |
-| `KAVRAM_DIR`, `KAVRAM_VERI`, `KAVRAM_SURUM` | Çekirdek klasörü, veri klasörü, sürüm metni |
+### Dikkat Edilmesi Gerekenler
 
-- **Güvenlik:** `.kitap` ve arşiv açma işlemleri güvenli tar çıkarıcıyla (dış dizin, mutlak yol, symlink/hardlink reddedilir); ayar dosyaları atomik yazılır; sessiz hata yutma yerine `KAVRAM_DEBUG` günlüğü vardır.
-- Tasarım ve platform notlarının ayrıntısı: [`KAVRAM_UI_NOTLARI.md`](KAVRAM_UI_NOTLARI.md).
-- Alpine ve NixOS desteklenmiyor (Alpine'de musl nedeniyle PyQt tekerlekleri çalışmaz).
+1. **Dosyalarınızı yedekleyin.** Veri kaybı ihtimali çok düşük olsa da sıfır değildir.
+2. **`reset` komutu** terminale yazıldığında her şey silinir.
+3. **`Ctrl + S`** Sphere dışındaki 7 ana programda geçerlidir: açık programı kapatır ve ana ekrana döner. **Hiçbir şeyi kaydetmez.** Hızlı kaydetme için her editörde **File** butonunun yanındaki ikonu kullanın. Sphere'de bu ikon, o anki düzeni varsayılan yapar; program yeniden açılınca her şey aynı şekilde gelir.
+
+---
+
+# TEXT
+
+**Metin düzenleme programı.** Zengin metin belgeleri oluşturur, biçimlendirir; not ve kod bloklarını düzenler.
+
+<img width="1920" height="1049" alt="T1" src="https://github.com/user-attachments/assets/665de852-5ba9-4185-b21a-39a42a75a2bc" />
+
+| Buton | İşlevi |
+| :--- | :--- |
+| **File** | Dosya açma / içeri aktarma penceresini açar. |
+| **Kaydet** (disk ikonu) | Açık belgeyi kaydeder. |
+| **Geri Al / Yinele** | Düzenleme geçmişinde geri veya ileri gider. |
+| **Yazı boyutu** (rakam) | Tıklayınca boyut listesi açılır; fare tekerleği ile de değişir. |
+| **O** | Yazılan satırları ortalar (açık / kapalı). |
+| **A** | Yazıyı kalın yapar (açık / kapalı). |
+| **Color** | Yazı rengi panelini açar; seçilen renkler HEX kodlarıyla görünür. |
+| **/** | Sembol panelini açar / kapatır. |
+| **I** | Otomatik kaydırma (okuma modu) başlatır / durdurur. |
+| **Hız** (rakam) | Kaydırma hızını ayarlar (tekerlekle de değişir). |
+| **Terminal** | Özel silme komutlarını çalıştırır (örn. dil veya karakter grubu silme). |
+| **Arama kutusu, ara, ↑, ↓** | Metinde arar; bulunan sonuçlar arasında ileri / geri gider. |
+| **Export** | Belgeyi dışa aktarır. |
+| **Text** | Programın adı. `Ctrl + Q` menüsünü açar. |
+
+---
+
+# DRAWING
+
+**Çizim ve animasyon programı.** Sayfa sayfa çizim, katmanlar, renk karıştırma, ızgara ve kare kare animasyon sunar.
+
+<img width="1920" height="1050" alt="d1" src="https://github.com/user-attachments/assets/f4d11e07-ac0c-4ff9-b1f0-672a7c87cf5c" />
+
+| Buton | Sol tık | Sağ tık |
+| :--- | :--- | :--- |
+| **File** | Görsel veya proje dosyası içe aktarır. | Referans görsel ekler. |
+| **Kaydet** | Projeyi kaydeder. | — |
+| **Sayfa numarası** | Sayfa menüsünü açar (tekerlekle sayfalar arasında gezilir). | — |
+| **+** / **−** | Yeni sayfa ekler / mevcut sayfayı siler. | — |
+| **Geri Al / Yinele** | Son işlemi geri alır / yineler. | — |
+| **Kalem stili** | Fırça stilini değiştirir. | — |
+| **O** | Gezinme modunu açar / kapatır. | Tuval boyutu / çözünürlük penceresini açar. |
+| **G** | Referans görseli gösterir / gizler. | Referans saydamlığı ve katman konumu menüsü. |
+| **Mix açısı** | Karışım açısı menüsü (tekerlekle de değişir). | Karışım modu menüsü. |
+| **Color** | Renk seçimi menüsünü açar. | — |
+| **Eraser** | Silgi modunu açar / kapatır. | Arka plan rengini değiştirir. |
+| **R:** | Fırça / silgi boyutu menüsünü açar. | — |
+| **Çizim** | Katman menüsünü açar. | — |
+| **#** | Aktif katmanı en üstte sabitler. | — |
+| **lm** | Lazy Mouse modunu açar / kapatır (yavaşlatılmış fare, düzgün çizgi). | Lazy Mouse ayar menüsü. |
+| **/** | Basınç hassasiyetini açar / kapatır. | — |
+| **» «** | Dikey ayna modunu açar / kapatır. | Yatay ayna modunu açar / kapatır. |
+| **Export** | Dışa aktarım penceresini açar. | Gelişmiş dışa aktarım (FPS) menüsü. |
+| **Drawing** | Programın adı. `Ctrl + Q` menüsünü açar. | — |
+
+---
+
+# SOUND
+
+**Ses düzenleme programı.** Dalga formu üzerinde kesme, silme ve kayıt yapar.
+
+<img width="1920" height="1047" alt="Ekran görüntüsü_2026-08-28_10-42-08" src="https://github.com/user-attachments/assets/33505066-7391-4be6-a0f7-0f3c17ae7406" />
+
+| Buton | Sol tık | Sağ tık |
+| :--- | :--- | :--- |
+| **File** | Ses dosyalarını (`.wav`) veya `.sound` paketini içe aktarır. | — |
+| **Kaydet** (disk ikonu) | Geçerli sesi veya `.sound` paketini kaydeder. | — |
+| **Geri Al / Yinele** | Son işlemi geri alır / yineler (`Ctrl+Z`, `Ctrl+Shift+Z`). | — |
+| **Cut** | Oynatma başlığının bulunduğu yerden keser. | — |
+| **::** | Seçili alanın kalınlığındaki (ses düzeyi) tüm boşlukları otomatik siler. | — |
+| **Delete** | Seçili ses bölümlerini siler. | — |
+| **Play** | Oynatmayı başlatır / duraklatır. | — |
+| **Record** | Mikrofon kaydını başlatır / durdurur. | — |
+| **I** | Kayıt sonrası filtreleri açar / kapatır (kalıcı ayar). | — |
+| **Dalga ölçeği** (rakam) | Dalga formu genişliğini ayarlar (1–7). | — |
+| **Hız** | Oynatma hızını değiştirir (0,1x – 3x). | — |
+| **Kaydırma adımı** | Fare tekerleği ile kaydırma adımını ayarlar (0,1 sn – 30 sn). | — |
+| **/** | Geçici metin panelini açar / kapatır. | — |
+| **O** | Paneldeki metni ortalar / sola yaslar. | — |
+| **Yazı boyutu** (rakam) | Paneldeki yazı boyutunu ayarlar. | — |
+| **Export** | Sesi `WAV` olarak dışa aktarır. | Sesi metin ve ayarlarla birlikte `.sound` paketi olarak dışa aktarır. |
+| **Sound** | Programın adı. `Ctrl + Q` menüsünü açar. | — |
+
+> **Not:** Kayıt, Linux'ta ses motoru (PortAudio) ile, Windows/macOS'ta aynı motorun kendi sürümüyle yapılır. macOS'ta ilk kayıtta mikrofon izni istenir.
+
+---
+
+# AI
+
+**Yapay hafıza.** SQLite tabanlı soru-cevap paketlerini yönetir; yanıtlara ses (`.mp3`, `.wav`), resim (`.png`, `.jpg`), video (`.mp4`) ve harici dosya ekleyebilirsiniz. Kayıtlı veriler üzerinde sohbet modunda arama yapılır.
+
+<img width="1920" height="1043" alt="ai" src="https://github.com/user-attachments/assets/63637946-2309-4697-ba3b-3ac3395fff04" />
+
+| Buton | İşlevi |
+| :--- | :--- |
+| **File** | Veritabanı veya medya dosyalarını içeri aktarır / açar. |
+| **Kaydet** | Değişiklikleri, paketleri ve veritabanını kaydeder. |
+| **New** | Veri sayfasında yeni, boş bir soru-cevap paketi oluşturur. |
+| **Chat** | Sohbet (etkileşim ve arama) sayfasını açar. |
+| **Edit** | Veri yönetimi (soru-cevap paketleri) sayfasını açar. |
+| **X** | Sohbet ekranındaki mesajları temizler. |
+| **_** | Tam ekran / medya görünümünden çıkar. |
+| **Yazı boyutu** (rakam) | Metin boyutunu değiştirir (tıklama, menü veya tekerlek). |
+| **S** | Geçici `ai` çalışma klasörünü ve açık veri belleğini temizler. |
+| **Export** | Veri paketlerini ve bağlı medyayı dışa aktarır. |
+| **Ai** | Programın adı. `Ctrl + Q` menüsünü açar. |
+
+---
+
+# MEDIA
+
+**Ses ve videolardan oluşan karma arşiv programı.** Zaman çizelgesinde parçaları keser, sıralar, kaydeder ve tek dosyaya birleştirir.
+
+<img width="1920" height="1049" alt="M" src="https://github.com/user-attachments/assets/2aa5206d-dedb-4256-b859-ffb58721ae99" />
+
+| Buton | Sol tık | Sağ tık |
+| :--- | :--- | :--- |
+| **File** | Medya dosyalarını (video, ses, `.media` arşivi) içe aktarır. | — |
+| **Kaydet** (disk ikonu) | Projeyi hızlıca kaydeder (daha önce kaydedildiyse üzerine yazar, değilse "farklı kaydet" açar). | — |
+| **Geri Al / Yinele** | Son işlemi geri alır / yineler. | — |
+| **Play** | Seçili parçayı oynatır / duraklatır. | — |
+| **/** | Sıralı oynatmayı açar / kapatır (parçalar arası otomatik geçiş). | — |
+| **Cut** | Aktif parçayı oynatma başlığının bulunduğu yerden ikiye böler. | — |
+| **Delete** | Zaman çizelgesinde seçili parçayı siler. | — |
+| **Camera** | Kamera modunu açar: kamera + mikrofon kaydı (geliştirme aşamasında). | — |
+| **Sound** | Mikrofon ile ses kaydını başlatır / durdurur. | — |
+| **I** | Gürültü filtresini açar / kapatır (kalıcı ayar). | — |
+| **S** | `medya_cut` çalışma klasörünü temizler, zaman çizelgesini sıfırlar. | — |
+| **Seek aralığı** (açılır kutu) | Tekerlekle ileri / geri sarma adımını ayarlar (2 sn, 5 sn, 1 dk …). | — |
+| **Oynatma hızı** (açılır kutu) | Oynatma hızını değiştirir (0,5x, 1x, 2x …). | — |
+| **Export** | Bütün parçaları `.media` arşivi olarak dışa aktarır (proje kaydı). | Bütün zaman çizelgesini tek bir `.mkv` videoya render eder. |
+| **Media** | Programın adı. `Ctrl + Q` menüsünü açar. | — |
+
+> **Not:** Kamera ve mikrofon kaydı Linux'ta C++ kaydedici ile, Windows/macOS'ta OpenCV + PortAudio + FFmpeg ile yapılır. İlk açılışta kamera / mikrofon izni istenir.
+
+---
+
+# REC
+
+**Ekran ve ses kaydetme programı.** Kayıt, arka planda parça parça (`s1.mkv`, `s2.mkv` …) alınır; **Export** hepsini sırayla birleştirir.
+
+<img width="1918" height="1046" alt="r1" src="https://github.com/user-attachments/assets/9e91a992-8da1-4b17-b614-d4e0e4f235fa" />
+
+| Buton | İşlevi |
+| :--- | :--- |
+| **File** | Harici bir video (`.rec`, `.mp4`, `.mkv`) veya ses (`.wav`) dosyasını oynatıcıya yükler. |
+| **Camera** | Yüzen kamera penceresini açar; pencere ekran kaydına girer (geliştirme aşamasında). |
+| **Windows** | Ekran kaydı alınıp alınmayacağını belirler. Aktifken rengi değişir; yalnızca ses kaydı için kapatılabilir. |
+| **Sound** | Mikrofon / sistem sesi kaydını açar / kapatır. Linux'ta EasyEffects ve varsayılan PulseAudio kaynaklarını otomatik algılar. |
+| **I** | Gürültü engelleme ve ses filtresi zincirini açar / kapatır (dışa aktarırken uygulanır). |
+| **S** | Her şeyi siler ve kapatır. |
+| **Kalınlık** (rakam) | Yüzen pencerenin kalınlığını (30–50 px) ayarlar.<br>• Tekerlek: kalınlık<br>• Sol tık: yüzen pencereyi varsayılan konuma getirir<br>• Sağ tık: mevcut konumu varsayılan yapar |
+| **/** | Klavye tuşlarını ve fare tıklamalarını ekranda gösteren yüzen siyah paneli açar / kapatır. |
+| **Z** | Ekrandaki canlı kayıt süresi panelini açar / kapatır. |
+| **Süre** (açılır menü) | Kayıt limiti (1–30 dk): süreye ulaşınca kayıt otomatik duraklar. |
+| **Segment** (açılır menü) | Arka planda kaç saniyede bir yeni parça dosyası oluşacağını belirler. |
+| **Play / Pause** | Kaydı veya oynatmayı başlatır / duraklatır (genel kısayol: `Ctrl + M`). |
+| **X** | Açık dosya oynatma çubuğunu kapatır, oynatıcıyı sıfırlar. |
+| **Segment X** (menü) | Biriken kayıt parçalarını listeler; tek tek veya **Hepsi** ile siler. |
+| **Export** | Bütün parçaları sırayla birleştirir, isteğe bağlı ses filtresini uygular, MKV / WAV olarak kaydeder. |
+| **Rec** | Programın adı. `Ctrl + Q` menüsünü açar. |
+
+> **Not:** Eski bilgisayarlarda çalışacak şekilde tasarlanmıştır; süre sınırı vardır. Büyük dosyalar oluşturmadan önce kendi bilgisayarınızda deneyin.
+>
+> **Windows / macOS:** ekran kaydı FFmpeg ile (`gdigrab` / `avfoundation`), kamera OpenCV ile yapılır. Canlı ekran önizlemesi ve ses seviyesi paneli yoktur; hoparlör sesini kaydetmek için sanal ses aygıtı (Windows: Stereo Mix / VB-Cable, macOS: BlackHole) gerekir. macOS'ta **Ekran Kaydı**, Kamera ve Mikrofon izinleri istenir.
+
+<img width="1920" height="1045" alt="R" src="https://github.com/user-attachments/assets/bbb4c6c4-e8c5-41cf-9273-8ffed6543335" />
+
+---
+
+# COPY
+
+**Not defteri programı.** Renkli notlar, görsel / metin galerileri ve PDF sayfaları saklar.
+
+<img width="1920" height="1043" alt="N" src="https://github.com/user-attachments/assets/34d80842-0917-4ae5-8d5c-5f28b30d7e00" />
+
+| Buton | İşlevi |
+| :--- | :--- |
+| **File** | `.copya` proje dosyasını açar. |
+| **Kaydet** (disk ikonu) | Projeyi kaydeder (dosya yoksa "farklı kaydet" açar). |
+| **+** | Yeni boş not ekler. |
+| **Galeri** | Görselleri, `.txt` ve `.txr` dosyalarını seçip galeri notu olarak ekler. |
+| **Belge** | `PDF` veya `PNF` (Drawing) dosyasını sayfa sayfa galeri notu olarak içe aktarır. |
+| **#** (sayfa numarası) | Genişletilmiş galerideki öğeler arasında gezinme menüsü. |
+| **I** | Otomatik kaydırmayı (okuma modu) başlatır / durdurur. |
+| **Hız** (rakam) | Otomatik kaydırma hızı menüsü. |
+| **Boyut** (rakam) | Belge modunda sayfa boyutunu ayarlar. |
+| **X** | Genişletilmiş notu siler. |
+| **_** | Genişletilmiş notu küçültür. |
+| **/** | Notun içeriğini panoya kopyalar (resimde dosya yolu, metinde düz metin). |
+| **Export** | Projeyi `.copya` arşivi olarak dışa aktarır. |
+| **Copy** | Programın adı. `Ctrl + Q` menüsünü açar. |
+
+---
+
+# FILTER
+
+**Ses ve video filtreleme.** Spektral gürültü azaltma, akıllı VAD (ses aktivite tespiti) ve çok katmanlı filtreleme ile ses ve video dosyalarını işler.
+
+- **x1 filtresi (spektral temizleme):** 2 aşamalı gürültü azaltma; güç ayarı 1–9.
+- **x2 filtresi (akıllı alt frekans susturma):** 30–200 Hz arasında belirlenen frekansın altındaki gürültü bölgelerini susturur.
+- **Gürültü profilleri:** Kullanıcının oluşturduğu hedefli profiller (en fazla 8).
+- **Video desteği:** Videodan ses çıkarır, filtreler ve işlenmiş sesi videoyla birleştirir (FFmpeg).
+- **Ses düzenleme paneli:** Genel ses, arka plan müziği şiddeti, pitch, hız, bitiş sonrası müzik süresi.
+- **Kalıcı müzik:** Arka plan müziğini kaydedip her seferinde otomatik ekler.
+- **5 saniyelik önizleme** ve son 5 işlemi gösteren **rapor paneli**.
+
+<img width="1920" height="1048" alt="F" src="https://github.com/user-attachments/assets/c6763870-86d7-4973-b307-0e94eecca578" />
+
+| Buton | Sol tık | Sağ tık |
+| :--- | :--- | :--- |
+| **File** | Ses veya video dosyası yükler. | — |
+| **::** | Gürültü profili için ses dosyası seçer (en fazla 8). | — |
+| **/** | Ses düzenleme panelini açar / kapatır. | — |
+| **Process** | Aktif filtreleri seçili dosyaya uygular. | — |
+| **Reset** | Panel açıksa ayarları sıfırlar; kapalıysa bütün profilleri varsayılana döndürür (x1 güç = 5, x2 kesim = 75 Hz). | — |
+| **Play** | Filtrelenmiş sesin 5 saniyelik önizlemesini çalar; tekrar tıklayınca duraklar. | — |
+| **Müzik** | Arka plan müziği seçer (geçici). | Seçili müziği kalıcı yapar veya iptal eder. |
+| **Export** | Filtrelenmiş sesi (WAV, MP3, FLAC) veya videoyu (orijinal format) kaydeder. | — |
+
+> **Not:** Filter, **Sound, Media ve Rec** ile bağlantılıdır. Bu üç programın üst barındaki **I** ikonunu açarsanız, ses kaydı alınırken dosya filtrelenir.
+
+---
+
+# CONVERTER
+
+**Dosya format değiştirme programı.** Ses, video, PDF ve resim dosyalarını dönüştürür.
+
+<img width="1920" height="1027" alt="C" src="https://github.com/user-attachments/assets/87a96bb1-d300-48c4-a062-9aaf4cf3e815" />
+
+| Kontrol | İşlevi |
+| :--- | :--- |
+| **File** | Dönüştürülecek dosyayı (ses, video, PDF, resim) seçer. |
+| **Convert** | Seçilen dosyayı, aşağıdaki ayarlara göre dönüştürür. |
+| **Reset** | Bütün dönüştürme ayarlarını varsayılana döndürür. |
+| **Export** | Çıktı dosyasını seçilen konuma kaydeder. |
+| **Format** | Çıktı formatı (`.wav`, `.mp3`, `.mp4`, `.pdf`, `.jpg` …). |
+| **Frekans değiştir / Yeni frekans (Hz)** | Ses örnekleme frekansını değiştirmeyi açar / kapatır; hedef Hz değeri girilir. |
+| **Ses hızı** | 0,10x – 4,0x. |
+| **Ses perdesi** | −6 ile +6 ton arası. |
+| **Ses efekti** | Normalleştir, Sıkıştır, Filtre, Fade, Kaydırma vb. |
+| **Kapak resmi seç** | Sesi videoya çevirirken kullanılacak kapak resmini seçer. |
+| **Video: renkleri ters çevir / gri ton / sesi sil** | Evet seçilirse çıktıya uygulanır. |
+| **Harici ses ekle (Sync)** | Videoya ana ses olarak eklenecek harici ses dosyasını seçer. |
+| **PDF / Resim: ters çevir, gri ton** | Evet seçilirse çıktıya uygulanır. |
+| **Resim çözünürlüğü** | −5 = %25 küçült, 0 = orijinal, +5 = %250 büyüt. |
+
+---
 
 ## Lisans
 
-GNU Genel Kamu Lisansı sürüm 3 veya (tercihinize bağlı) daha yenisi — ayrıntı `kavram.py` başlığındadır.
+GNU Genel Kamu Lisansı sürüm 3 veya (tercihinize bağlı) daha yenisi. Ayrıntı `kavram.py` dosyasının başındadır.
 
 ---
 
 # English
 
-## Contents
+**Kavram** is a free, open-source archive platform that brings educational and media work under one roof: text, drawing, sound, video, screen recording and notes in a single system. Content can be edited, linked, and archived in encrypted form as mind maps in **SPHERE**. You can also plug your own programs into it. **10 integrated programs + an extensible program system.**
 
-- [What is Kavram?](#what-is-kavram)
-- [Status](#status)
-- [Quick install](#quick-install)
-- [Install scripts](#install-scripts)
-- [Project structure](#project-structure)
-- [Workflow](#workflow)
-- [OS-specific files](#os-specific-files)
-- [Shared design language](#shared-design-language)
-- [Recording on Windows and macOS](#recording-on-windows-and-macos)
-- [Developer notes](#developer-notes)
-- [License](#license)
+| Program | Purpose |
+| --- | --- |
+| **SPHERE** | Home screen: encrypted mind-map archive (`.kitap` export) |
+| **TEXT** | Text editing |
+| **DRAWING** | Drawing and animation |
+| **SOUND** | Audio editing and recording |
+| **AI** | Artificial memory (question-answer packets with media) |
+| **MEDIA** | Mixed audio + video archive / timeline |
+| **REC** | Screen and audio recording |
+| **COPY** | Notes |
+| **FILTER** | Audio noise filtering |
+| **CONVERTER** | Format conversion |
 
-## What is Kavram?
+Hover over any button for **0.6 seconds** to see what it does. The full button reference for every editor is in the Turkish section above.
 
-Kavram is a desktop application made of **12 small editors/tools** running under a single core (`kavram.py`).
-They all share the same colors, the same button design and the same top bar, so they look like parts of one system.
-The **Export** and **editor-name** buttons in the top-right corner switch between editors.
+## Install
 
-| Program | What it does |
-|---|---|
-| **text** | Text editing (`.txr`), symbol panel, auto-scroll / reading mode, search |
-| **drawing** | 2D drawing and frame-by-frame animation: grid, layers, color mixing, video background |
-| **sound** | Audio editing and recording: waveform, cut / delete, filter hook (C++ engine, PortAudio) |
-| **media** | Mixed media / archive editing: timeline, camera + microphone recording, cutting, archiving |
-| **rec** | Screen, camera and audio recorder: segmented recording, floating camera, key display |
-| **sphere** | Box/tile scene; attach editors to tiles, encrypted `.kitap` export/import (AES-GCM + PBKDF2), multi-password areas via terminal commands |
-| **ai** | Artificial-memory program: memory packets, chat, data editing |
-| **copy** | Notes / copy gallery: colored notes, copy to clipboard |
-| **filter** | Audio cleaning: noise profile, noise reduction, preview |
-| **converter** | Universal converter (FFmpeg-based C++ engine) |
-| **file_manager** | `File` / `Export` window: folder browsing, bookmarks, preview |
-| **terminal** | Built-in command window |
+Run the command in the Kavram folder (next to `kavram.py`). It installs system packages, builds the C++ engines, **packages** the program into `dist/`, and starts it. Each package is built **on its own operating system**.
 
-## Status
+| System | Command | Output |
+| --- | --- | --- |
+| **Linux** (auto-detects distro) | `bash baslat_linux.sh` | `dist/kavram/kavram` + `.tar.gz` |
+| Debian / Ubuntu / Mint / Kali | `bash kurulum_deb.txt` | same |
+| Arch / Manjaro | `bash kurulum_arch.txt` | same |
+| Fedora / AlmaLinux / Rocky | `bash kurulum_fedora.txt` | same |
+| openSUSE | `bash kurulum_opensuse.txt` | same |
+| Void | `bash kurulum_void.txt` | same |
+| **Windows 10 / 11** | double-click `baslat_win.bat` | `dist\kavram\kavram.exe` + `.zip` |
+| **macOS 11+** | double-click `baslat_mac.command` (or `bash kurulum_mac.txt`) | `dist/Kavram.app`, `.dmg`, `.zip` |
 
-| System | Status | Note |
-|---|---|---|
-| **Linux** | Supported | The package (`dist/kavram/kavram`) was built and launch-verified. Main development platform. |
-| **Windows 10/11** | Experimental | Code and scripts are ready; tested piecewise and by simulation on Linux, **not yet validated on real Windows**. |
-| **macOS 11+** | Experimental | Same: **not yet validated on a real Mac**. |
+> **Status:** Linux is verified (package built and launched). **Windows and macOS are experimental** — scripts and code are ready but not yet validated on real machines. Please open an issue with the output if a step fails. Linux Mint XFCE is the recommended platform.
 
-> On Windows and macOS a step may stumble on the first run. Please share the output as an *issue* and it will be fixed.
-> To check screen/camera/microphone capture on a real device, see [`kayit_testi.py`](#recording-on-windows-and-macos).
-
-## Quick install
-
-In the Kavram folder (next to `kavram.py`) run the **launcher** for your operating system.
-It installs system packages, prepares a virtual environment (venv), compiles the C++ engines, **packages** the program (`dist/`) and starts it.
-
-| System | Run | Output |
-|---|---|---|
-| Linux | `bash baslat_linux.sh` | `dist/kavram/kavram` + `dist/*.tar.gz` |
-| Windows | double-click `baslat_win.bat` | `dist\kavram\kavram.exe` + `.zip` + desktop shortcut |
-| macOS | double-click `baslat_mac.command` | `dist/Kavram.app` + `.dmg` + `.zip` |
-
-Each package must be built **on its own operating system** (PyInstaller does not cross-compile).
-The first install needs internet access and can take 10–30 minutes.
-
-To run directly from source without packaging:
-
-```bash
-python3 -m venv venv && ./venv/bin/pip install PyQt5 PyMuPDF Pillow numpy scipy librosa noisereduce \
-    soundfile sounddevice pydub opencv-python-headless pycryptodome pynput
-./venv/bin/python kavram.py
-```
-
-(On Windows: `venv\Scripts\python kavram.py`.) The complete, current package list is in the `# pip:` header lines of each folder's `derleme.txt`.
-
-## Install scripts
-
-Package names differ per distribution, so there is one script each. All follow the same steps:
-**system packages → venv → Python libraries → C++ engines → packaging → launch.**
-
-| File | Target |
-|---|---|
-| `kurulum_linux.txt` | **Automatic**: reads `/etc/os-release` and runs the matching script below (also recognizes macOS) |
-| `kurulum_deb.txt` | Debian, Ubuntu, Linux Mint, Pop!_OS, Zorin, elementary, Kali |
-| `kurulum_arch.txt` | Arch, Manjaro, EndeavourOS, CachyOS, Garuda |
-| `kurulum_fedora.txt` | Fedora, Nobara, AlmaLinux, Rocky, CentOS Stream (RPM Fusion added automatically) |
-| `kurulum_opensuse.txt` | openSUSE Tumbleweed / Leap (Packman added automatically) |
-| `kurulum_void.txt` | Void Linux |
-| `kurulum_mac.txt` | macOS (Xcode tools → Homebrew → packages → `.app` / `.dmg`) |
-| `kurulum_win.txt` | Windows (PowerShell: Python 3.12 → MSYS2/MinGW → engines → venv → FFmpeg → PyInstaller) |
-| `derleme_win.txt`, `derleme_mac.txt` | C++ engine builds for Windows / macOS |
-| `paketle.sh` | Linux packaging (PyInstaller; `--sadece-paket`, `--kur` options) |
-
-You can **paste** the Linux scripts into a terminal or run them as `bash kurulum_deb.txt`.
-The Fedora, openSUSE and Void scripts have not yet been tried on those distributions (syntax-checked only);
-if a package cannot be installed, the script warns and continues.
-
-<details>
-<summary><b>How to add a new distribution</b></summary>
-
-1. Add a `# <manager>: pkg1 pkg2 ...` line to the header of each program's `derleme.txt`.
-2. Add a branch for the package manager in the `case` block of `paketle.sh`.
-3. Copy `kurulum_<name>.txt` from an existing script and change the system-packages section.
-4. Add the distribution id to the mapping in `kurulum_linux.txt`.
-
-</details>
-
-## Project structure
-
-```text
-kavram/
-├── kavram.py                  Core: folder layout, program loader, editor switcher
-├── kavram_ui.py               Shared design: theme, KButton, ToolbarLayout, 0.6 s Turkish tooltips
-├── kavram_platform.py         Linux / Windows / macOS differences + file suffixes (_win, _mac)
-├── kavram_capture.py          Windows/macOS capture backend (FFmpeg + OpenCV + PortAudio) and MediaCore
-├── yapilandir.py              Generates _win / _mac variants from the default files
-├── kayit_testi.py             Windows/macOS screen-microphone-camera check
-├── kavram.spec                PyInstaller recipe (selects files per operating system)
-├── rthook_kavram.py           Packaged build: user data folders / DLL paths
-├── paketle.sh                 Linux packaging
-├── baslat_linux.sh  baslat_win.bat  baslat_mac.command        Per-OS launchers
-├── kurulum_*.txt  derleme_win.txt  derleme_mac.txt            Install and build scripts
-├── ikon/                      Application icon
-├── KAVRAM_UI_NOTLARI.md       Design and platform notes (details)
-│
-├── text/      text.py      text_win.py      text_mac.py       ┐
-├── drawing/   drawing.py   drawing_win.py   drawing_mac.py    │  Each program has its own folder;
-├── sound/     sound.py     sound_win.py     sound_mac.py      │  .py = Linux (default),
-├── media/     media.py     media_win.py     media_mac.py      │  _win.py = Windows, _mac.py = macOS.
-├── rec/       rec.py       rec_win.py       rec_mac.py        │  Engine sources and derleme.txt
-├── sphere/    sphere.py    sphere_kare.py   (+ _win / _mac)   │  live in the same folder.
-├── ai/  copy/  filter/  converter/  file_manager/  terminal/  ┘
-└── export/  veri/             User data (created at runtime)
-```
-
-**C++ engines** (each in its own folder, built with `derleme.txt`):
-
-| Engine | Purpose | Platform |
-|---|---|---|
-| `sound_engine` | Audio playback / recording / editing (PortAudio, libsndfile, zlib) | Linux · Windows · macOS |
-| `filter_engine` | Noise-reduction math | Linux · Windows · macOS |
-| `converter_engine` | FFmpeg-based conversion | Linux · Windows · macOS |
-| `media_engine`, `media_recorder` | Media operations, camera/microphone recording (GStreamer) | Linux only (elsewhere: Python `MediaCore`) |
-| `rec_engine` | Screen/camera recording (PipeWire / X11) | Linux only (elsewhere: FFmpeg + OpenCV) |
-| `file_engine` | Directory scanning + view math (single `libfile_engine.so`) | Linux · macOS (Python fallback on Windows) |
-
-## Workflow
-
-```mermaid
-flowchart LR
-    A[Launcher<br/>baslat_*] --> B[System packages]
-    B --> C[venv + pip]
-    C --> D[yapilandir.py<br/>missing _win/_mac files]
-    D --> E[C++ engines<br/>derleme.txt]
-    E --> F[PyInstaller<br/>kavram.spec]
-    F --> G[(dist/)]
-    G --> H[Kavram starts]
-```
-
-**At runtime:**
-
-1. `kavram.py` starts; if a `venv` exists it re-launches itself with it, and on Linux it sets the Qt platform (`xcb`).
-2. `kavram_platform.py` detects the operating system and picks the file suffix (`""`, `_win`, `_mac`).
-3. The core's loader (`_ProgramBulucu`) resolves `kavram_<name>` to `<name>/<name><suffix>.py`, falling back to the default file if the OS-specific one is missing. Side modules such as `sphere_kare` follow the same rule.
-4. Each editor is a Qt window; the shared top bar (`ToolbarLayout`), buttons (`KButton`) and tooltips come from `kavram_ui.py`.
-5. Engines are loaded with `ctypes` (`.so` / `.dll` / `.dylib`); if missing, a Python fallback takes over.
-6. User data: when running from source, `kavram/export` and `kavram/veri`; in the packaged build, Linux `~/.local/share/kavram`,
-   Windows `%LOCALAPPDATA%\kavram`, macOS `~/Library/Application Support/kavram`.
-
-**Packaging:** `kavram.spec` collects only the current system's files (the other systems' `_win`/`_mac` files, and default files that have a variant, are left out),
-adds the engines and (on Windows) their side DLLs, takes FFmpeg from `bin/`, and produces a folder build (onedir) in `dist/`.
-
-## OS-specific files
-
-| System | File | Example |
-|---|---|---|
-| Linux (default) | `<name>.py` | `rec/rec.py` |
-| Windows | `<name>_win.py` | `rec/rec_win.py` |
-| macOS | `<name>_mac.py` | `rec/rec_mac.py` |
-
-- `yapilandir.py` **generates** the OS files from the default file and configures them per system (platform constants are fixed, dead branches pruned, `.dll`/`.dylib` names written, a header added). It never touches existing files.
-  `--zorla` regenerates, `--denetle` lists missing/stale files. `rec_*` / `media_*` files that already carry the capture backend are protected even with `--zorla` (`--cok-zorla` overrides).
-- To change the suffixes there is a single place: `SONEKLER` in `kavram_platform.py`.
-- To try another system's code (UI/loading smoke test only): `KAVRAM_OS=win` or `KAVRAM_OS=mac`.
-
-## Shared design language
-
-- **Buttons:** square buttons 30×30, text buttons 90×30; 8 px corners, `#555` border. If the text does not fit the button **grows by itself** and never clips; it re-measures when the text changes.
-- **Two-sided top bar:** the left group holds "everything else", the right-corner group holds "Export + editor name". When the window narrows, the right group drops to a second row (right-aligned), and if needed the left group wraps too; the bar height grows accordingly (40 px on one row).
-- **Tooltips:** hovering a button for **0.6 seconds** shows a Turkish description on a **black background with white text**. The texts live in `kavram_ui.py` in the `TIPS_ATTR` (button attribute name) and `TIPS_TEXT` (button text) dictionaries.
-- New button: `from kavram_ui import KButton` → `b = KButton("Name"); b.setFixedSize(90, 30)`. Top bar: `kui.ToolbarLayout(frame)` (`addStretch()` is the left/right separator).
-
-## Recording on Windows and macOS
-
-The Linux C++ recording engines (GStreamer / PipeWire / X11) do not exist on other systems; `kavram_capture.py` replaces them:
-
-| Feature | Linux | Windows | macOS |
-|---|---|---|---|
-| Screen recording (rec) | `rec_engine` / FFmpeg x11grab | FFmpeg `gdigrab` | FFmpeg `avfoundation` |
-| Microphone (rec) | PipeWire / Pulse | FFmpeg `dshow` | FFmpeg `avfoundation` |
-| Floating camera (rec) | C++ + shared memory | OpenCV (DirectShow) | OpenCV (AVFoundation) |
-| Camera + microphone (media) | `media_recorder` | OpenCV + PortAudio + FFmpeg | same |
-| Media engine (media) | `media_engine.so` | `MediaCore` (Python) | same |
-| Audio recording (sound) | `sound_engine` (PortAudio) | `sound_engine.dll` (MME) | `sound_engine.dylib` (CoreAudio) |
-
-**Known limits (Windows / macOS):** no live screen preview or audio-level panel (rec); recording speaker (system) audio needs a virtual audio device (Windows: Stereo Mix / VB-Cable, macOS: BlackHole).
-macOS asks for Camera, Microphone and **Screen Recording** permission; on Windows see Settings → Privacy → Camera / Microphone.
-
-Check tool (after installation):
-
-```bash
-venv\Scripts\python kayit_testi.py        # Windows
-./venv/bin/python kayit_testi.py          # macOS
-```
-
-It lists the devices, runs a 3 s screen / 2 s microphone / camera trial and prints each step as `OK` / `HATA` (error).
-
-## Developer notes
-
-| Environment variable | Effect |
-|---|---|
-| `KAVRAM_OS` | `linux` / `win` / `mac`: forces the operating-system choice (testing) |
-| `KAVRAM_DEBUG=1` | Prints silently swallowed errors to `stderr` |
-| `KAVRAM_UI_EKSIK=1` | Lists buttons that have no tooltip |
-| `KAVRAM_MARCH` | Engine build architecture (`x86-64` portable, `native` fastest) |
-| `KAVRAM_KONSOL=1` | Keeps the console window open in the Windows package (debugging) |
-| `KAVRAM_DIR`, `KAVRAM_VERI`, `KAVRAM_SURUM` | Core folder, data folder, version string |
-
-- **Security:** `.kitap` and archive extraction use a safe tar extractor (outside-directory, absolute paths, symlinks/hardlinks rejected); settings files are written atomically; swallowed errors go to the `KAVRAM_DEBUG` log instead of vanishing.
-- Detailed design and platform notes: [`KAVRAM_UI_NOTLARI.md`](KAVRAM_UI_NOTLARI.md).
-- Alpine and NixOS are not supported (on Alpine the PyQt wheels do not work because of musl).
+To check screen / microphone / camera capture on Windows or macOS after installing, run `venv\Scripts\python kayit_testi.py` (Windows) or `./venv/bin/python kayit_testi.py` (macOS).
 
 ## License
 
