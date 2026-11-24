@@ -326,7 +326,7 @@ k Blender /home/lts/blender-5.2.0-linux-x64/blender
 
 **Ekran ve ses kaydetme programı.** Kayıt, arka planda parça parça (`s1.mkv`, `s2.mkv` …) alınır; **Export** hepsini sırayla birleştirir.
 
-<img width="1918" height="1046" alt="r1" src="https://github.com/user-attachments/assets/9e91a992-8da1-4b17-b614-d4e0e4f235fa" />
+<img width="1913" height="1037" alt="qwa1" src="https://github.com/user-attachments/assets/65849fea-2f95-429d-aac9-d7fb6fa31d1f" />
 
 | Buton | İşlevi |
 | :--- | :--- |
